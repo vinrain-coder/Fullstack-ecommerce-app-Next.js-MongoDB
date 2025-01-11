@@ -17,6 +17,9 @@ const initialState: Cart = {
 interface CartState {
   cart: Cart;
   addItem: (item: OrderItem, quantity: number) => Promise<string>;
+  updateItem: (item: OrderItem, quantity: number) => Promise<void>;
+  removeItem: (item: OrderItem) => void; // RemoveItem method is declared but not implemented in the provided code
+  init: () => void; // Ensure `init` is part of the interface
 }
 
 const useCartStore = create(
@@ -26,6 +29,7 @@ const useCartStore = create(
 
       addItem: async (item: OrderItem, quantity: number) => {
         const { items } = get().cart;
+
         const existItem = items.find(
           (x) =>
             x.product === item.product &&
@@ -38,7 +42,7 @@ const useCartStore = create(
             throw new Error("Not enough items in stock");
           }
         } else {
-          if (item.countInStock < item.quantity) {
+          if (item.countInStock < quantity) {
             throw new Error("Not enough items in stock");
           }
         }
@@ -53,23 +57,81 @@ const useCartStore = create(
             )
           : [...items, { ...item, quantity }];
 
+        const calculatedValues = await calculateDeliveryDateAndPrice({
+          items: updatedCartItems,
+        });
+
         set({
           cart: {
             ...get().cart,
             items: updatedCartItems,
-            ...(await calculateDeliveryDateAndPrice({
-              items: updatedCartItems,
-            })),
+            ...calculatedValues,
           },
         });
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        return updatedCartItems.find(
+        const addedItem = updatedCartItems.find(
           (x) =>
             x.product === item.product &&
             x.color === item.color &&
             x.size === item.size
-        )?.clientId!;
+        );
+
+        if (!addedItem) {
+          throw new Error("Failed to add the item to the cart.");
+        }
+
+        return addedItem.clientId!;
+      },
+
+      updateItem: async (item: OrderItem, quantity: number) => {
+        const { items } = get().cart;
+
+        const exist = items.find(
+          (x) =>
+            x.product === item.product &&
+            x.color === item.color &&
+            x.size === item.size
+        );
+
+        if (!exist) return;
+
+        const updatedCartItems = items.map((x) =>
+          x.product === item.product &&
+          x.color === item.color &&
+          x.size === item.size
+            ? { ...exist, quantity }
+            : x
+        );
+
+        const calculatedValues = await calculateDeliveryDateAndPrice({
+          items: updatedCartItems,
+        });
+
+        set({
+          cart: {
+            ...get().cart,
+            items: updatedCartItems,
+            ...calculatedValues,
+          },
+        });
+      },
+
+      removeItem: (item: OrderItem) => {
+        const { items } = get().cart;
+
+        const updatedCartItems = items.filter(
+          (x) =>
+            x.product !== item.product ||
+            x.color !== item.color ||
+            x.size !== item.size
+        );
+
+        set({
+          cart: {
+            ...get().cart,
+            items: updatedCartItems,
+          },
+        });
       },
 
       init: () => set({ cart: initialState }),
@@ -80,4 +142,5 @@ const useCartStore = create(
     }
   )
 );
+
 export default useCartStore;
