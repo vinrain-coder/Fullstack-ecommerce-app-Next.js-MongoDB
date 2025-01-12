@@ -10,7 +10,14 @@ export const connectToDatabase = async (
 
   if (!MONGODB_URI) throw new Error("MONGODB_URI is missing");
 
-  cached.promise = cached.promise || mongoose.connect(MONGODB_URI);
+  // Add options for Mongoose connection
+  const options = {
+    retryWrites: true, // Explicitly set this to true or false
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  };
+
+  cached.promise = cached.promise || mongoose.connect(MONGODB_URI, options);
 
   cached.conn = await cached.promise;
 
