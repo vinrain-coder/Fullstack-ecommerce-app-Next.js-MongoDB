@@ -15,6 +15,11 @@ export const FREE_SHIPPING_MIN_PRICE = Number(
 
 export const AVAILABLE_PAYMENT_METHODS = [
   {
+    name: "Mpesa",
+    commission: 0,
+    isDefault: true,
+  },
+  {
     name: "Paypal",
     commission: 0,
     isDefault: true,
@@ -24,11 +29,7 @@ export const AVAILABLE_PAYMENT_METHODS = [
     commission: 0,
     isDefault: true,
   },
-  {
-    name: "Mpesa",
-    commission: 0,
-    isDefault: true,
-  },
+
   {
     name: "Cash on delivery",
     commission: 0,
