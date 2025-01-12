@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
-import { Cart, OrderItem } from "@/types";
-import { calculateDeliveryDateAndPrice } from "@/lib/actions/order.actions";
+import { Cart, OrderItem, ShippingAddress } from '@/types'
+import { calculateDeliveryDateAndPrice } from '@/lib/actions/order.actions'
 
 const initialState: Cart = {
   items: [],
@@ -11,15 +11,19 @@ const initialState: Cart = {
   shippingPrice: undefined,
   totalPrice: 0,
   paymentMethod: undefined,
+  shippingAddress: undefined,
   deliveryDateIndex: undefined,
-};
+}
 
 interface CartState {
-  cart: Cart;
-  addItem: (item: OrderItem, quantity: number) => Promise<string>;
-  updateItem: (item: OrderItem, quantity: number) => Promise<void>;
-  removeItem: (item: OrderItem) => void; // RemoveItem method is declared but not implemented in the provided code
-  init: () => void; // Ensure `init` is part of the interface
+  cart: Cart
+  addItem: (item: OrderItem, quantity: number) => Promise<string>
+  updateItem: (item: OrderItem, quantity: number) => Promise<void>
+  removeItem: (item: OrderItem) => void
+  clearCart: () => void
+  setShippingAddress: (shippingAddress: ShippingAddress) => Promise<void>
+  setPaymentMethod: (paymentMethod: string) => void
+  setDeliveryDateIndex: (index: number) => Promise<void>
 }
 
 const useCartStore = create(
@@ -28,22 +32,21 @@ const useCartStore = create(
       cart: initialState,
 
       addItem: async (item: OrderItem, quantity: number) => {
-        const { items } = get().cart;
-
+        const { items, shippingAddress } = get().cart
         const existItem = items.find(
           (x) =>
             x.product === item.product &&
             x.color === item.color &&
             x.size === item.size
-        );
+        )
 
         if (existItem) {
           if (existItem.countInStock < quantity + existItem.quantity) {
-            throw new Error("Not enough items in stock");
+            throw new Error('Not enough items in stock')
           }
         } else {
-          if (item.countInStock < quantity) {
-            throw new Error("Not enough items in stock");
+          if (item.countInStock < item.quantity) {
+            throw new Error('Not enough items in stock')
           }
         }
 
@@ -55,92 +58,124 @@ const useCartStore = create(
                 ? { ...existItem, quantity: existItem.quantity + quantity }
                 : x
             )
-          : [...items, { ...item, quantity }];
-
-        const calculatedValues = await calculateDeliveryDateAndPrice({
-          items: updatedCartItems,
-        });
+          : [...items, { ...item, quantity }]
 
         set({
           cart: {
             ...get().cart,
             items: updatedCartItems,
-            ...calculatedValues,
+            ...(await calculateDeliveryDateAndPrice({
+              items: updatedCartItems,
+              shippingAddress,
+            })),
           },
-        });
-
-        const addedItem = updatedCartItems.find(
+        })
+        const foundItem = updatedCartItems.find(
           (x) =>
             x.product === item.product &&
             x.color === item.color &&
             x.size === item.size
-        );
-
-        if (!addedItem) {
-          throw new Error("Failed to add the item to the cart.");
+        )
+        if (!foundItem) {
+          throw new Error('Item not found in cart')
         }
-
-        return addedItem.clientId!;
+        return foundItem.clientId
       },
-
       updateItem: async (item: OrderItem, quantity: number) => {
-        const { items } = get().cart;
-
+        const { items, shippingAddress } = get().cart
         const exist = items.find(
           (x) =>
             x.product === item.product &&
             x.color === item.color &&
             x.size === item.size
-        );
-
-        if (!exist) return;
-
+        )
+        if (!exist) return
         const updatedCartItems = items.map((x) =>
           x.product === item.product &&
           x.color === item.color &&
           x.size === item.size
-            ? { ...exist, quantity }
+            ? { ...exist, quantity: quantity }
             : x
-        );
-
-        const calculatedValues = await calculateDeliveryDateAndPrice({
-          items: updatedCartItems,
-        });
-
+        )
         set({
           cart: {
             ...get().cart,
             items: updatedCartItems,
-            ...calculatedValues,
+            ...(await calculateDeliveryDateAndPrice({
+              items: updatedCartItems,
+              shippingAddress,
+            })),
           },
-        });
+        })
       },
-
-      removeItem: (item: OrderItem) => {
-        const { items } = get().cart;
-
+      removeItem: async (item: OrderItem) => {
+        const { items, shippingAddress } = get().cart
         const updatedCartItems = items.filter(
           (x) =>
             x.product !== item.product ||
             x.color !== item.color ||
             x.size !== item.size
-        );
-
+        )
         set({
           cart: {
             ...get().cart,
             items: updatedCartItems,
+            ...(await calculateDeliveryDateAndPrice({
+              items: updatedCartItems,
+              shippingAddress,
+            })),
           },
-        });
+        })
       },
+      setShippingAddress: async (shippingAddress: ShippingAddress) => {
+        const { items } = get().cart
+        set({
+          cart: {
+            ...get().cart,
+            shippingAddress,
+            ...(await calculateDeliveryDateAndPrice({
+              items,
+              shippingAddress,
+            })),
+          },
+        })
+      },
+      setPaymentMethod: (paymentMethod: string) => {
+        set({
+          cart: {
+            ...get().cart,
+            paymentMethod,
+          },
+        })
+      },
+      setDeliveryDateIndex: async (index: number) => {
+        const { items, shippingAddress } = get().cart
 
+        set({
+          cart: {
+            ...get().cart,
+            ...(await calculateDeliveryDateAndPrice({
+              items,
+              shippingAddress,
+              deliveryDateIndex: index,
+            })),
+          },
+        })
+      },
+      clearCart: () => {
+        set({
+          cart: {
+            ...get().cart,
+            items: [],
+          },
+        })
+      },
       init: () => set({ cart: initialState }),
     }),
 
     {
-      name: "cart-store",
+      name: 'cart-store',
     }
   )
-);
-
-export default useCartStore;
+)
+export default useCartStore
