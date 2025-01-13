@@ -4,7 +4,7 @@ import { formatNumberWithDecimal } from "./utils";
 // Common
 const MongoId = z
   .string()
-  .regex(/^[0-9a-fA-F]{24}$/, { message: 'Invalid MongoDB ID' })
+  .regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid MongoDB ID" });
 
 const Price = (field: string) =>
   z.coerce
@@ -13,6 +13,19 @@ const Price = (field: string) =>
       (value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(value)),
       `${field} must have exactly two decimal places (e.g., 49.99)`
     );
+
+export const ReviewInputSchema = z.object({
+  product: MongoId,
+  user: MongoId,
+  isVerifiedPurchase: z.boolean(),
+  title: z.string().min(1, "Title is required"),
+  comment: z.string().min(1, "Comment is required"),
+  rating: z.coerce
+    .number()
+    .int()
+    .min(1, "Rating must be at least 1")
+    .max(5, "Rating must be at most 5"),
+});
 
 // product schema
 export const ProductInputSchema = z.object({
@@ -93,9 +106,9 @@ export const OrderInputSchema = z.object({
   ]),
   items: z
     .array(OrderItemSchema)
-    .min(1, 'Order must contain at least one item'),
+    .min(1, "Order must contain at least one item"),
   shippingAddress: ShippingAddressSchema,
-  paymentMethod: z.string().min(1, 'Payment method is required'),
+  paymentMethod: z.string().min(1, "Payment method is required"),
   paymentResult: z
     .object({
       id: z.string(),
@@ -104,21 +117,21 @@ export const OrderInputSchema = z.object({
       pricePaid: z.string(),
     })
     .optional(),
-  itemsPrice: Price('Items price'),
-  shippingPrice: Price('Shipping price'),
-  taxPrice: Price('Tax price'),
-  totalPrice: Price('Total price'),
+  itemsPrice: Price("Items price"),
+  shippingPrice: Price("Shipping price"),
+  taxPrice: Price("Tax price"),
+  totalPrice: Price("Total price"),
   expectedDeliveryDate: z
     .date()
     .refine(
       (value) => value > new Date(),
-      'Expected delivery date must be in the future'
+      "Expected delivery date must be in the future"
     ),
   isDelivered: z.boolean().default(false),
   deliveredAt: z.date().optional(),
   isPaid: z.boolean().default(false),
   paidAt: z.date().optional(),
-})
+});
 
 // cart schema
 export const CartSchema = z.object({
