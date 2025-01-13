@@ -22,10 +22,10 @@ import ProductPrice from '../product/product-price'
 
 export default function OrderDetailsForm({
   order,
-//   isAdmin,
+  // isAdmin,
 }: {
   order: IOrder
-  isAdmin: boolean
+  // isAdmin: boolean
 }) {
   const {
     shippingAddress,

@@ -685,9 +685,9 @@ const CheckoutForm = () => {
 
               <Card className='hidden md:block '>
                 <CardContent className='p-4 flex flex-col md:flex-row justify-between items-center gap-3'>
-                  {/* <Button onClick={handlePlaceOrder} className='rounded-full'>
+                  <Button onClick={handlePlaceOrder} className='rounded-full'>
                     Place Your Order
-                  </Button> */}
+                  </Button>
                   <div className='flex-1'>
                     <p className='font-bold text-lg'>
                       Order Total: <ProductPrice price={totalPrice} plain />
