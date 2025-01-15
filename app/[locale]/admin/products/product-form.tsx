@@ -261,36 +261,50 @@ const ProductForm = ({
               <FormItem className="w-full">
                 <FormLabel>Images</FormLabel>
                 <Card>
-                  <CardContent className="space-y-2 mt-2 min-h-48">
-                    <div className="flex justify-start items-center space-x-2">
-                      {images.map((image: string) => (
-                        <Image
-                          key={image}
-                          src={image}
-                          alt="product image"
-                          className="w-20 h-20 object-cover object-center rounded-sm"
-                          width={100}
-                          height={100}
-                        />
+                  <CardContent className="space-y-4 mt-4 min-h-[200px]">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {images.map((image: string, index: number) => (
+                        <div
+                          key={index}
+                          className="relative flex flex-col items-center space-y-2"
+                        >
+                          <Image
+                            src={image}
+                            alt={`Product image ${index + 1}`}
+                            className="w-28 h-28 object-cover rounded-lg shadow-md"
+                            width={112}
+                            height={112}
+                          />
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="absolute top-0 right-0 transform -translate-x-1/2 -translate-y-1/2"
+                            onClick={() => {
+                              const updatedImages = images.filter(
+                                (_, i) => i !== index
+                              );
+                              form.setValue("images", updatedImages);
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
                       ))}
-                      <FormControl>
-                        <UploadButton
-                          endpoint="imageUploader"
-                          onClientUploadComplete={(res: { url: string }[]) => {
-                            form.setValue("images", [...images, res[0].url]);
-                          }}
-                          onUploadError={(error: Error) => {
-                            toast({
-                              variant: "destructive",
-                              description: `ERROR! ${error.message}`,
-                            });
-                          }}
-                        />
-                      </FormControl>
                     </div>
+                    <UploadButton
+                      endpoint="imageUploader"
+                      onClientUploadComplete={(res: { url: string }[]) => {
+                        form.setValue("images", [...images, res[0].url]);
+                      }}
+                      onUploadError={(error: Error) => {
+                        toast({
+                          variant: "destructive",
+                          description: `ERROR! ${error.message}`,
+                        });
+                      }}
+                    />
                   </CardContent>
                 </Card>
-
                 <FormMessage />
               </FormItem>
             )}
