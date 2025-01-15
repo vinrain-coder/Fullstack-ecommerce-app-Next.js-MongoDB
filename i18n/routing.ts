@@ -4,7 +4,7 @@ import { defineRouting } from "next-intl/routing";
 
 export const routing = defineRouting({
   locales: i18n.locales.map((locale) => locale.code),
-  defaultLocale: "en-US",
+  defaultLocale: "en-KE",
   localePrefix: "as-needed",
   pathnames: {
     // If all locales use the same pathname, a single
