@@ -5,7 +5,7 @@ export const i18n = {
     { code: "sw", name: "Swahili", icon: "sw" },
     { code: "ar", name: "العربية", icon: "🇸🇦" },
   ],
-  defaultLocale: "en-US",
+  defaultLocale: "en-KE",
 };
 
 export const getDirection = (locale: string) => {
