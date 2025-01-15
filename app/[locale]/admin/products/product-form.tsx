@@ -25,6 +25,8 @@ import { ProductInputSchema, ProductUpdateSchema } from "@/lib/validator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toSlug } from "@/lib/utils";
 import { IProductInput } from "@/types";
+import { Plus, X } from "lucide-react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const productDefaultValues: IProductInput =
   process.env.NODE_ENV === "development"
@@ -262,47 +264,98 @@ const ProductForm = ({
                 <FormLabel>Images</FormLabel>
                 <Card>
                   <CardContent className="space-y-4 mt-4 min-h-[200px]">
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      {images.map((image: string, index: number) => (
-                        <div
-                          key={index}
-                          className="relative flex flex-col items-center space-y-2"
-                        >
-                          <Image
-                            src={image}
-                            alt={`Product image ${index + 1}`}
-                            className="w-28 h-28 object-cover rounded-lg shadow-md"
-                            width={112}
-                            height={112}
-                          />
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="absolute top-0 right-0 transform -translate-x-1/2 -translate-y-1/2"
-                            onClick={() => {
-                              const updatedImages = images.filter(
-                                (_, i) => i !== index
-                              );
-                              form.setValue("images", updatedImages);
-                            }}
+                    {/* Drag-and-Drop Context */}
+                    <DragDropContext
+                      onDragEnd={(result) => {
+                        const { source, destination } = result;
+                        if (!destination) return;
+
+                        // Reorder images array
+                        const reorderedImages = Array.from(images);
+                        const [removed] = reorderedImages.splice(
+                          source.index,
+                          1
+                        );
+                        reorderedImages.splice(destination.index, 0, removed);
+                        form.setValue("images", reorderedImages);
+                      }}
+                    >
+                      <Droppable droppableId="images">
+                        {(provided) => (
+                          <div
+                            className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
                           >
-                            Remove
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                    <UploadButton
-                      endpoint="imageUploader"
-                      onClientUploadComplete={(res: { url: string }[]) => {
-                        form.setValue("images", [...images, res[0].url]);
-                      }}
-                      onUploadError={(error: Error) => {
-                        toast({
-                          variant: "destructive",
-                          description: `ERROR! ${error.message}`,
-                        });
-                      }}
-                    />
+                            {images.map((image: string, index: number) => (
+                              <Draggable
+                                key={image}
+                                draggableId={image}
+                                index={index}
+                              >
+                                {(provided) => (
+                                  <div
+                                    className="relative flex flex-col items-center space-y-2"
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {/* Image */}
+                                    <Image
+                                      src={image}
+                                      alt={`Product image ${index + 1}`}
+                                      className="w-28 h-28 object-cover rounded-lg shadow-md"
+                                      width={112}
+                                      height={112}
+                                    />
+                                    {/* Remove Button */}
+                                    <button
+                                      type="button"
+                                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition"
+                                      onClick={() => {
+                                        const updatedImages = images.filter(
+                                          (_, i) => i !== index
+                                        );
+                                        form.setValue("images", updatedImages);
+                                      }}
+                                    >
+                                      <X size={16} />
+                                    </button>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                            {/* Upload Button */}
+                            <div className="flex flex-col items-center justify-center space-y-2">
+                              <UploadButton
+                                endpoint="imageUploader"
+                                onClientUploadComplete={(
+                                  res: { url: string }[]
+                                ) => {
+                                  form.setValue("images", [
+                                    ...images,
+                                    res[0].url,
+                                  ]);
+                                }}
+                                onUploadError={(error: Error) => {
+                                  toast({
+                                    variant: "destructive",
+                                    description: `ERROR! ${error.message}`,
+                                  });
+                                }}
+                              />
+                              <div className="flex items-center justify-center w-28 h-28 bg-gray-100 border border-dashed rounded-lg cursor-pointer hover:bg-gray-200 transition">
+                                <Plus size={24} className="text-gray-500" />
+                              </div>
+                              <span className="text-sm text-gray-500">
+                                Add Image
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
                   </CardContent>
                 </Card>
                 <FormMessage />
