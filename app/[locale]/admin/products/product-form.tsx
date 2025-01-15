@@ -27,6 +27,7 @@ import { toSlug } from "@/lib/utils";
 import { IProductInput } from "@/types";
 import { Plus, X } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import ProductPrice from "@/components/shared/product/product-price";
 
 const productDefaultValues: IProductInput =
   process.env.NODE_ENV === "development"
@@ -217,25 +218,51 @@ const ProductForm = ({
               <FormItem className="w-full">
                 <FormLabel>List Price</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter product list price" {...field} />
+                  <div className="relative">
+                    {/* Render ProductPrice as a prefix */}
+                    <span className="absolute left-3 top-2.5 text-gray-500">
+                      <ProductPrice price={form.getValues("listPrice")} />
+                    </span>
+
+                    {/* Input Field */}
+                    <Input
+                      placeholder="Enter product list price"
+                      {...field}
+                      className="pl-10" // Adjust padding for the prefix
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="price"
+            name="listPrice"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Net Price</FormLabel>
+                <FormLabel>List Price</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter product price" {...field} />
+                  <div className="relative">
+                    {/* Render ProductPrice as a prefix */}
+                    <span className="absolute left-3 top-2.5 text-gray-500">
+                      <ProductPrice price={form.getValues("price")} />
+                    </span>
+
+                    {/* Input Field */}
+                    <Input
+                      placeholder="Enter net price"
+                      {...field}
+                      className="pl-10" // Adjust padding for the prefix
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="countInStock"
