@@ -1305,7 +1305,7 @@ We also provide helpful resources such as order tracking, product guides, and FA
           convertRate: 132,
         },
       ],
-      defaultCurrency: "KES",
+      defaultCurrency: "USD",
       availablePaymentMethods: [
         { name: "PayPal", commission: 0 },
         { name: "Stripe", commission: 0 },

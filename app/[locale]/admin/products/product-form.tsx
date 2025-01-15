@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -27,6 +27,7 @@ import { toSlug } from "@/lib/utils";
 import { IProductInput } from "@/types";
 import { Plus, X } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useState } from "react";
 
 const productDefaultValues: IProductInput =
   process.env.NODE_ENV === "development"
@@ -217,39 +218,20 @@ const ProductForm = ({
               <FormItem className="w-full">
                 <FormLabel>List Price</FormLabel>
                 <FormControl>
-                  <div className="relative">
-                    
-
-                    {/* Input Field */}
-                    <Input
-                      placeholder="Enter product list price"
-                      {...field}
-                      className="pl-10" // Adjust padding for the prefix
-                    />
-                  </div>
+                  <Input placeholder="Enter product list price" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
-            name="listPrice"
+            name="price"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>List Price</FormLabel>
+                <FormLabel>Net Price</FormLabel>
                 <FormControl>
-                  <div className="relative">
-                    
-
-                    {/* Input Field */}
-                    <Input
-                      placeholder="Enter net price"
-                      {...field}
-                      className="pl-10" // Adjust padding for the prefix
-                    />
-                  </div>
+                  <Input placeholder="Enter product price" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -439,4 +421,77 @@ const ProductForm = ({
   );
 };
 
-export default ProductForm;
+// New CurrencyConverter Component
+const CurrencyConverter = () => {
+  const [kesAmount, setKesAmount] = useState<string>("");
+  const [usdAmount, setUsdAmount] = useState<string>("");
+
+  // Define a static exchange rate (or replace with an API fetch)
+  const exchangeRate = 0.007; // Example: 1 KES = 0.007 USD
+
+  const handleKesAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    // Update KES amount
+    setKesAmount(value);
+
+    // Parse the input and calculate the USD amount dynamically
+    const numericValue = parseFloat(value);
+    if (!isNaN(numericValue)) {
+      setUsdAmount((numericValue * exchangeRate).toFixed(2)); // Update USD amount dynamically
+    } else {
+      setUsdAmount(""); // Reset USD amount if input is invalid
+    }
+  };
+
+  return (
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle>Currency Converter</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Amount in KES
+          </label>
+          <Input
+            type="text"
+            placeholder="Enter KES amount"
+            value={kesAmount}
+            onChange={handleKesAmountChange}
+            className="mt-1"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Amount in USD
+          </label>
+          <Input
+            type="text"
+            value={usdAmount}
+            placeholder="Converted USD amount"
+            readOnly
+            className="mt-1 bg-gray-100"
+          />
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+// Layout Integration
+export default function ProductPage() {
+  return (
+    <div className="flex flex-col gap-8 lg:flex-row">
+      {/* Product Form */}
+      <div className="flex-1">
+        <ProductForm type="Create" />
+      </div>
+
+      {/* Currency Converter */}
+      <div className="flex-shrink-0">
+        <CurrencyConverter />
+      </div>
+    </div>
+  );
+}
