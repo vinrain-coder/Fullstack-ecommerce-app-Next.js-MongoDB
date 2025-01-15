@@ -22,6 +22,7 @@ import React, { useEffect, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { formatDateTime, formatId } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import ProductPrice from "@/components/shared/product/product-price";
 
 type ProductListDataProps = {
   products: IProduct[];
@@ -133,7 +134,9 @@ const ProductList = () => {
                       {product.name}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-right">${product.price}</TableCell>
+                  <TableCell className="text-right">
+                    <ProductPrice price={product.price} plain />
+                  </TableCell>
                   <TableCell>{product.category}</TableCell>
                   <TableCell>{product.countInStock}</TableCell>
                   <TableCell>{product.avgRating}</TableCell>
