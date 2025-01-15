@@ -5,14 +5,13 @@ import Menu from "./menu";
 import Search from "./search";
 import data from "@/lib/data";
 import Sidebar from "./sidebar";
-import { APP_NAME } from "@/lib/constants";
-// import { getSetting } from '@/lib/actions/setting.actions'
-// import { getTranslations } from 'next-intl/server'
+import { getSetting } from "@/lib/actions/setting.actions";
+import { getTranslations } from "next-intl/server";
 
 export default async function Header() {
   const categories = await getAllCategories();
-  // const { site } = await getSetting()
-  // const t = await getTranslations()
+  const { site } = await getSetting();
+  const t = await getTranslations();
   return (
     <header className="bg-black  text-white">
       <div className="px-2">
@@ -23,12 +22,12 @@ export default async function Header() {
               className="flex items-center header-button font-extrabold text-2xl m-1 "
             >
               <Image
-                src="/icons/logo.svg"
+                src={site.logo}
                 width={40}
                 height={40}
-                alt={`${APP_NAME} logo`}
+                alt={`${site.name} logo`}
               />
-              {APP_NAME}
+              {site.name}
             </Link>
           </div>
 
@@ -50,7 +49,7 @@ export default async function Header() {
               key={menu.href}
               className="header-button !p-2 "
             >
-              {menu.name}
+              {t("Header." + menu.name)}
             </Link>
           ))}
         </div>

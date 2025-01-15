@@ -2,7 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { IProduct } from "@/lib/db/models/product.model";
 
 import Rating from "./rating";
@@ -72,7 +77,6 @@ const ProductCard = ({
       />
     </div>
   );
-
   const AddButton = () => (
     <div className="w-full text-center">
       <AddToCart
@@ -101,8 +105,8 @@ const ProductCard = ({
         <>
           <div className="p-3 flex-1 text-center">
             <ProductDetails />
-            {!hideAddToCart && <AddButton />}
           </div>
+          {!hideAddToCart && <AddButton />}
         </>
       )}
     </div>
@@ -116,7 +120,7 @@ const ProductCard = ({
           <CardContent className="p-3 flex-1  text-center">
             <ProductDetails />
           </CardContent>
-          <CardFooter className='p-3'>
+          <CardFooter className="p-3">
             {!hideAddToCart && <AddButton />}
           </CardFooter>
         </>

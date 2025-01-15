@@ -1,31 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
-import Image from 'next/image'
-import { useState } from 'react'
+"use client";
+import Image from "next/image";
+import { useState } from "react";
 
 const ImageHover = ({
   src,
   hoverSrc,
   alt,
 }: {
-  src: string
-  hoverSrc: string
-  alt: string
+  src: string;
+  hoverSrc: string;
+  alt: string;
 }) => {
-  const [isHovered, setIsHovered] = useState(false)
-  let hoverTimeout: any
+  const [isHovered, setIsHovered] = useState(false);
+  let hoverTimeout: any;
   const handleMouseEnter = () => {
-    hoverTimeout = setTimeout(() => setIsHovered(true), 1000) // 1 second delay
-  }
+    hoverTimeout = setTimeout(() => setIsHovered(true), 1000); // 1 second delay
+  };
 
   const handleMouseLeave = () => {
-    clearTimeout(hoverTimeout)
-    setIsHovered(false)
-  }
+    clearTimeout(hoverTimeout);
+    setIsHovered(false);
+  };
 
   return (
     <div
-      className='relative h-52'
+      className="relative h-52"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -33,22 +33,22 @@ const ImageHover = ({
         src={src}
         alt={alt}
         fill
-        sizes='80vw'
+        sizes="80vw"
         className={`object-contain transition-opacity duration-500 ${
-          isHovered ? 'opacity-0' : 'opacity-100'
+          isHovered ? "opacity-0" : "opacity-100"
         }`}
       />
       <Image
         src={hoverSrc}
         alt={alt}
         fill
-        sizes='80vw'
+        sizes="80vw"
         className={`absolute inset-0 object-contain transition-opacity duration-500 ${
-          isHovered ? 'opacity-100' : 'opacity-0'
+          isHovered ? "opacity-100" : "opacity-0"
         }`}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ImageHover
+export default ImageHover;

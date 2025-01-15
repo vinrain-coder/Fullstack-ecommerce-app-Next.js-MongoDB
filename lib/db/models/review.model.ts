@@ -1,16 +1,16 @@
-import { IReviewInput } from '@/types'
-import { Document, Model, model, models, Schema } from 'mongoose'
+import { IReviewInput } from "@/types";
+import { Document, Model, model, models, Schema } from "mongoose";
 
 export interface IReview extends Document, IReviewInput {
-  _id: string
-  createdAt: Date
-  updatedAt: Date
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 const reviewSchema = new Schema<IReview>(
   {
     user: {
       type: Schema.Types.ObjectId as unknown as typeof String,
-      ref: 'User',
+      ref: "User",
     },
     isVerifiedPurchase: {
       type: Boolean,
@@ -19,7 +19,7 @@ const reviewSchema = new Schema<IReview>(
     },
     product: {
       type: Schema.Types.ObjectId as unknown as typeof String,
-      ref: 'Product',
+      ref: "Product",
     },
     rating: {
       type: Number,
@@ -39,9 +39,9 @@ const reviewSchema = new Schema<IReview>(
   {
     timestamps: true,
   }
-)
+);
 
 const Review =
-  (models.Review as Model<IReview>) || model<IReview>('Review', reviewSchema)
+  (models.Review as Model<IReview>) || model<IReview>("Review", reviewSchema);
 
-export default Review
+export default Review;

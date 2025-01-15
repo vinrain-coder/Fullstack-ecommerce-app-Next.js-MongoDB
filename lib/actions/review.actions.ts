@@ -2,6 +2,7 @@
 
 import mongoose from 'mongoose'
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 
 import { auth } from '@/auth'
 
@@ -10,14 +11,14 @@ import Product from '../db/models/product.model'
 import Review, { IReview } from '../db/models/review.model'
 import { formatError } from '../utils'
 import { ReviewInputSchema } from '../validator'
-import { IReviewDetails, IReviewInput } from '@/types'
-import { PAGE_SIZE } from '../constants'
+import { IReviewDetails } from '@/types'
+import { getSetting } from './setting.actions'
 
 export async function createUpdateReview({
   data,
   path,
 }: {
-  data: IReviewInput
+  data: z.infer<typeof ReviewInputSchema>
   path: string
 }) {
   try {
@@ -110,8 +111,10 @@ export async function getReviews({
   limit?: number
   page: number
 }) {
- 
-  limit = limit || PAGE_SIZE
+  const {
+    common: { pageSize },
+  } = await getSetting()
+  limit = limit || pageSize
   await connectToDatabase()
   const skipAmount = (page - 1) * limit
   const reviews = await Review.find({ product: productId })

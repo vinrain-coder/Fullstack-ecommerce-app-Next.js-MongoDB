@@ -45,7 +45,7 @@ export const toSlug = (text: string): string =>
     .replace(/-+/g, "-");
 
 const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
-  currency: "KES",
+  currency: "USD",
   style: "currency",
   minimumFractionDigits: 2,
 });
@@ -69,7 +69,7 @@ export const formatError = (error: any): string => {
   if (error.name === "ZodError") {
     const fieldErrors = Object.keys(error.errors).map((field) => {
       const errorMessage = error.errors[field].message;
-      return `${error.errors[field].path}: ${errorMessage}`;
+      return `${error.errors[field].path}: ${errorMessage}`; // field: errorMessage
     });
     return fieldErrors.join(". ");
   } else if (error.name === "ValidationError") {
@@ -82,6 +82,7 @@ export const formatError = (error: any): string => {
     const duplicateField = Object.keys(error.keyValue)[0];
     return `${duplicateField} already exists`;
   } else {
+    // return 'Something went wrong. please try again'
     return typeof error.message === "string"
       ? error.message
       : JSON.stringify(error.message);

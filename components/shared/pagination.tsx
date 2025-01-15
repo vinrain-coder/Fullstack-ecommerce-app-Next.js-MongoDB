@@ -1,60 +1,60 @@
-'use client'
+"use client";
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import React from 'react'
+import { useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
-import { formUrlQuery } from '@/lib/utils'
+import { formUrlQuery } from "@/lib/utils";
 
-import { Button } from '../ui/button'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-// import { useTranslations } from 'next-intl'
+import { Button } from "../ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type PaginationProps = {
-  page: number | string
-  totalPages: number
-  urlParamName?: string
-}
+  page: number | string;
+  totalPages: number;
+  urlParamName?: string;
+};
 
 const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const onClick = (btnType: string) => {
-    const pageValue = btnType === 'next' ? Number(page) + 1 : Number(page) - 1
+    const pageValue = btnType === "next" ? Number(page) + 1 : Number(page) - 1;
 
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
-      key: urlParamName || 'page',
+      key: urlParamName || "page",
       value: pageValue.toString(),
-    })
+    });
 
-    router.push(newUrl, { scroll: true })
-  }
+    router.push(newUrl, { scroll: true });
+  };
 
-//   const t = useTranslations()
+  const t = useTranslations();
   return (
-    <div className='flex items-center gap-2'>
+    <div className="flex items-center gap-2">
       <Button
-        size='lg'
-        variant='outline'
-        onClick={() => onClick('prev')}
+        size="lg"
+        variant="outline"
+        onClick={() => onClick("prev")}
         disabled={Number(page) <= 1}
-        className='w-24'
+        className="w-24"
       >
-        <ChevronLeft /> {'Previous'}
+        <ChevronLeft /> {t("Search.Previous")}
       </Button>
-      {'page'} {page} {'of'} {totalPages}
+      {t("Search.Page")} {page} {t("Search.of")} {totalPages}
       <Button
-        size='lg'
-        variant='outline'
-        onClick={() => onClick('next')}
+        size="lg"
+        variant="outline"
+        onClick={() => onClick("next")}
         disabled={Number(page) >= totalPages}
-        className='w-24'
+        className="w-24"
       >
-        Next <ChevronRight />
+        {t("Search.Next")} <ChevronRight />
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { Cart, OrderItem, ShippingAddress } from '@/types'
-import { calculateDeliveryDateAndPrice } from '@/lib/actions/order.actions'
+import { calcDeliveryDateAndPrice } from '@/lib/actions/order.actions'
 
 const initialState: Cart = {
   items: [],
@@ -64,7 +64,7 @@ const useCartStore = create(
           cart: {
             ...get().cart,
             items: updatedCartItems,
-            ...(await calculateDeliveryDateAndPrice({
+            ...(await calcDeliveryDateAndPrice({
               items: updatedCartItems,
               shippingAddress,
             })),
@@ -101,7 +101,7 @@ const useCartStore = create(
           cart: {
             ...get().cart,
             items: updatedCartItems,
-            ...(await calculateDeliveryDateAndPrice({
+            ...(await calcDeliveryDateAndPrice({
               items: updatedCartItems,
               shippingAddress,
             })),
@@ -120,7 +120,7 @@ const useCartStore = create(
           cart: {
             ...get().cart,
             items: updatedCartItems,
-            ...(await calculateDeliveryDateAndPrice({
+            ...(await calcDeliveryDateAndPrice({
               items: updatedCartItems,
               shippingAddress,
             })),
@@ -133,7 +133,7 @@ const useCartStore = create(
           cart: {
             ...get().cart,
             shippingAddress,
-            ...(await calculateDeliveryDateAndPrice({
+            ...(await calcDeliveryDateAndPrice({
               items,
               shippingAddress,
             })),
@@ -154,7 +154,7 @@ const useCartStore = create(
         set({
           cart: {
             ...get().cart,
-            ...(await calculateDeliveryDateAndPrice({
+            ...(await calcDeliveryDateAndPrice({
               items,
               shippingAddress,
               deliveryDateIndex: index,
