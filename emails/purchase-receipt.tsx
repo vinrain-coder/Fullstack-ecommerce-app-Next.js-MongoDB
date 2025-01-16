@@ -14,7 +14,6 @@ import {
   Text,
 } from "@react-email/components";
 
-import { formatCurrency } from "@/lib/utils";
 import { IOrder } from "@/lib/db/models/order.model";
 import { getSetting } from "@/lib/actions/setting.actions";
 
@@ -97,7 +96,7 @@ export default async function PurchaseReceiptEmail({
                     Price Paid
                   </Text>
                   <Text className="mt-0 mr-4">
-                    {formatCurrency(order.totalPrice)}
+                    Ksh.{order.totalPrice}
                   </Text>
                 </Column>
               </Row>
@@ -127,7 +126,7 @@ export default async function PurchaseReceiptEmail({
                     </Link>
                   </Column>
                   <Column align="right" className="align-top">
-                    <Text className="m-0 ">{formatCurrency(item.price)}</Text>
+                    <Text className="m-0 ">Ksh.{item.price}</Text>
                   </Column>
                 </Row>
               ))}
@@ -140,7 +139,7 @@ export default async function PurchaseReceiptEmail({
                 <Row key={name} className="py-1">
                   <Column align="right">{name}:</Column>
                   <Column align="right" width={70} className="align-top">
-                    <Text className="m-0">{formatCurrency(price)}</Text>
+                    <Text className="m-0">Ksh.{price}</Text>
                   </Column>
                 </Row>
               ))}
