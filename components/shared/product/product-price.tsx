@@ -1,6 +1,6 @@
 "use client";
 import useSettingStore from "@/hooks/use-setting-store";
-import { cn, round2 } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useFormatter, useTranslations } from "next-intl";
 
 const ProductPrice = ({
@@ -21,25 +21,25 @@ const ProductPrice = ({
   const { getCurrency } = useSettingStore();
   const currency = getCurrency();
   const t = useTranslations();
-  const convertedPrice = round2(currency.convertRate * price);
-  const convertedListPrice = round2(currency.convertRate * listPrice);
 
   const format = useFormatter();
-  const discountPercent = Math.round(
-    100 - (convertedPrice / convertedListPrice) * 100
-  );
-  const stringValue = convertedPrice.toString();
+  const discountPercent = Math.round(100 - (price / listPrice) * 100);
+
+  // Format only the main price with commas
+  const formattedPrice = new Intl.NumberFormat().format(price);
+
+  const stringValue = formattedPrice.toString();
   const [intValue, floatValue] = stringValue.includes(".")
     ? stringValue.split(".")
     : [stringValue, ""];
 
   return plain ? (
-    format.number(convertedPrice, {
+    format.number(price, {
       style: "currency",
       currency: currency.code,
       currencyDisplay: "narrowSymbol",
     })
-  ) : convertedListPrice == 0 ? (
+  ) : listPrice == 0 ? (
     <div className={cn("text-3xl", className)}>
       <span className="text-xs align-super">{currency.symbol}</span>
       {intValue}
@@ -64,14 +64,7 @@ const ProductPrice = ({
           <span className="text-xs align-super">{floatValue}</span>
         </div>
         <div className="text-muted-foreground text-xs py-2">
-          {t("Product.Was")}:{" "}
-          <span className="line-through">
-            {format.number(convertedListPrice, {
-              style: "currency",
-              currency: currency.code,
-              currencyDisplay: "narrowSymbol",
-            })}
-          </span>
+          {t("Product.Was")}: <span className="line-through">{listPrice}</span>
         </div>
       </div>
     </div>
@@ -87,13 +80,7 @@ const ProductPrice = ({
       </div>
       <div className="text-muted-foreground text-xs py-2">
         {t("Product.List price")}:{" "}
-        <span className="line-through">
-          {format.number(convertedListPrice, {
-            style: "currency",
-            currency: currency.code,
-            currencyDisplay: "narrowSymbol",
-          })}
-        </span>
+        <span className="line-through">{listPrice}</span>
       </div>
     </div>
   );

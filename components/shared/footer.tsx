@@ -16,8 +16,7 @@ export default function Footer() {
   const router = useRouter();
   const pathname = usePathname();
   const {
-    setting: { site, availableCurrencies, currency },
-    setCurrency,
+    setting: { site },
   } = useSettingStore();
   const { locales } = i18n;
 
@@ -127,7 +126,7 @@ export default function Footer() {
                   ))}
                 </SelectContent>
               </Select>
-              <Select
+              {/* <Select
                 value={currency}
                 onValueChange={(value) => {
                   setCurrency(value);
@@ -146,7 +145,7 @@ export default function Footer() {
                       </SelectItem>
                     ))}
                 </SelectContent>
-              </Select>
+              </Select> */}
             </div>
           </div>
         </div>

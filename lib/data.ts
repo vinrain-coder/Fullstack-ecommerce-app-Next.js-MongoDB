@@ -1244,7 +1244,7 @@ We also provide helpful resources such as order tracking, product guides, and FA
   settings: [
     {
       common: {
-        freeShippingMinPrice: 35,
+        freeShippingMinPrice: 5000,
         isMaintenanceMode: false,
         defaultTheme: "Light",
         defaultColor: "Gold",
@@ -1305,7 +1305,7 @@ We also provide helpful resources such as order tracking, product guides, and FA
           convertRate: 132,
         },
       ],
-      defaultCurrency: "USD",
+      defaultCurrency: "KES",
       availablePaymentMethods: [
         { name: "PayPal", commission: 0 },
         { name: "Stripe", commission: 0 },
@@ -1317,20 +1317,20 @@ We also provide helpful resources such as order tracking, product guides, and FA
         {
           name: "Tomorrow",
           daysToDeliver: 1,
-          shippingPrice: 12.9,
-          freeShippingMinPrice: 0,
+          shippingPrice: 400,
+          freeShippingMinPrice:5000,
         },
         {
           name: "Next 3 Days",
           daysToDeliver: 3,
-          shippingPrice: 6.9,
-          freeShippingMinPrice: 0,
+          shippingPrice: 350,
+          freeShippingMinPrice:5000,
         },
         {
           name: "Next 5 Days",
           daysToDeliver: 5,
-          shippingPrice: 4.9,
-          freeShippingMinPrice: 35,
+          shippingPrice: 300,
+          freeShippingMinPrice: 5000,
         },
       ],
       defaultDeliveryDate: "Next 5 Days",
