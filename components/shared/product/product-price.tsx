@@ -64,7 +64,8 @@ const ProductPrice = ({
           <span className="text-xs align-super">{floatValue}</span>
         </div>
         <div className="text-muted-foreground text-xs py-2">
-          {t("Product.Was")}: <span className="line-through">{listPrice}</span>
+          {t("Product.Was")}: Ksh.
+          <span className="line-through">{listPrice}</span>
         </div>
       </div>
     </div>
