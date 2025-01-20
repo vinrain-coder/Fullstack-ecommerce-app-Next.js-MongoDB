@@ -504,23 +504,28 @@ const ProductForm = ({
                             {provided.placeholder}
                             {/* Upload Button */}
                             <div className="flex flex-col items-center justify-center space-y-2">
-                              <UploadButton
-                                endpoint="imageUploader"
-                                onClientUploadComplete={(
-                                  res: { url: string }[]
-                                ) => {
-                                  form.setValue("images", [
-                                    ...images,
-                                    res[0].url,
-                                  ]);
-                                }}
-                                onUploadError={(error: Error) => {
-                                  toast({
-                                    variant: "destructive",
-                                    description: `ERROR! ${error.message}`,
-                                  });
-                                }}
-                              />
+  <UploadButton
+    endpoint="imageUploader"
+    multiple // Allow multiple uploads
+    onClientUploadComplete={(res: { url: string }[]) => {
+      if (res && res.length > 0) {
+        const newImages = res.map((file) => file.url);
+        form.setValue("images", [...images, ...newImages]); // Append uploaded images
+      }
+    }}
+    onUploadError={(error: Error) => {
+      toast({
+        variant: "destructive",
+        description: `ERROR! ${error.message}`,
+      });
+    }}
+  />
+  <div className="flex items-center justify-center w-28 h-28 bg-gray-100 border border-dashed rounded-lg cursor-pointer hover:bg-gray-200 transition">
+    <Plus size={24} className="text-gray-500" />
+  </div>
+  <span className="text-sm text-gray-500">Add Images</span>
+</div>
+          
                               <div className="flex items-center justify-center w-28 h-28 bg-gray-100 border border-dashed rounded-lg cursor-pointer hover:bg-gray-200 transition">
                                 <Plus size={24} className="text-gray-500" />
                               </div>
@@ -549,7 +554,7 @@ const ProductForm = ({
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Tell us a little bit about yourself"
+                    placeholder="Enter the product description"
                     className="resize-none"
                     {...field}
                   />
