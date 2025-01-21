@@ -33,6 +33,7 @@ import { IProductInput } from "@/types";
 import { ImagePlus, Trash, Upload, X } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useState } from "react";
+import ImageUploader from "./image-uploader";
 
 const handleKeyDown = (e: React.KeyboardEvent) => {
   if (e.key === "Enter") {
@@ -136,156 +137,6 @@ const ProductForm = ({
     }
   }
   const images = form.watch("images");
-
-  const ImageGallery = ({
-    onSelect,
-  }: {
-    onSelect: (selectedImages: string[]) => void;
-  }) => {
-    // Logic for opening the gallery and selecting multiple images
-    return (
-      <div>
-        <input
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={(e) => {
-            const files = e.target.files;
-            if (files) {
-              const selectedImages = Array.from(files).map((file) =>
-                URL.createObjectURL(file)
-              );
-              onSelect(selectedImages); // Send selected images back to parent component
-            }
-          }}
-        />
-      </div>
-    );
-  };
-
-  const ImageUploader = () => {
-    const { control, setValue, getValues } = useFormContext();
-    const [images, setImages] = useState<string[]>(getValues("images") || []);
-    const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-
-    const handleOnDragEnd = (result: any) => {
-      if (!result.destination) return;
-      const reorderedImages = Array.from(images);
-      const [movedImage] = reorderedImages.splice(result.source.index, 1);
-      reorderedImages.splice(result.destination.index, 0, movedImage);
-      setImages(reorderedImages);
-      setValue("images", reorderedImages);
-    };
-
-    const handleRemoveImage = (index: number) => {
-      const updatedImages = images.filter((_, i) => i !== index);
-      setImages(updatedImages);
-      setValue("images", updatedImages);
-    };
-
-    const handleUploadComplete = (res: { url: string }[]) => {
-      const uploadedImages = res.map((file) => file.url);
-      const updatedImages = [...images, ...uploadedImages];
-      setImages(updatedImages);
-      setValue("images", updatedImages);
-    };
-
-    const handleOpenGallery = () => {
-      setIsGalleryOpen(true);
-    };
-
-    const handleGalleryClose = () => {
-      setIsGalleryOpen(false);
-    };
-
-    const handleImageSelection = (selectedImages: string[]) => {
-      const updatedImages = [...images, ...selectedImages];
-      setImages(updatedImages);
-      setValue("images", updatedImages);
-      setIsGalleryOpen(false); // Close gallery after selecting images
-    };
-
-    return (
-      <Controller
-        name="images"
-        control={control}
-        render={() => (
-          <div className="flex flex-col gap-4">
-            <Card>
-              <CardContent className="space-y-4 p-4 min-h-[150px]">
-                {images.length > 0 && (
-                  <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable
-                      droppableId="images"
-                      direction="horizontal"
-                      isDropDisabled={false} // Ensure this is a boolean
-                    >
-                      {(provided) => (
-                        <div
-                          className="flex space-x-2"
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                        >
-                          {images.map((image, index) => (
-                            <Draggable
-                              key={image}
-                              draggableId={image}
-                              index={index}
-                              isDragDisabled={false} // Ensure this is also a boolean
-                            >
-                              {(provided) => (
-                                <div
-                                  className="relative"
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <Image
-                                    src={image}
-                                    alt={`Image ${index}`}
-                                    width={100}
-                                    height={100}
-                                    className="rounded"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => handleRemoveImage(index)}
-                                    className="absolute top-0 right-0 text-red-500"
-                                  >
-                                    <X />
-                                  </button>
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                )}
-
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={(e) => {
-                      e.preventDefault(); // Prevent form submission
-                      handleOpenGallery(); // Open gallery on click
-                    }}
-                  >
-                    <ImagePlus className="mr-2 w-4 h-4" /> Add Images
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {isGalleryOpen && <ImageGallery onSelect={handleImageSelection} />}
-          </div>
-        )}
-      />
-    );
-  };
 
   return (
     <FormProvider {...form}>
@@ -593,7 +444,52 @@ const ProductForm = ({
           />
         </div>
 
-        <ImageUploader />
+        <ImageUploader form={form} />
+
+        {/* <div className="flex flex-col gap-5 md:flex-row">
+          <FormField
+            control={form.control}
+            name="images"
+            render={() => (
+              <FormItem className="w-full">
+                <FormLabel>Images</FormLabel>
+                <Card>
+                  <CardContent className="space-y-2 mt-2 min-h-48">
+                    <div className="flex justify-start items-center space-x-2">
+                      {images.map((image: string) => (
+                        <Image
+                          key={image}
+                          src={image}
+                          alt="product image"
+                          className="w-20 h-20 object-cover object-center rounded-sm"
+                          width={100}
+                          height={100}
+                        />
+                      ))}
+                      <FormControl>
+                        <UploadButton
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res: { url: string }[]) => {
+                            form.setValue("images", [...images, res[0].url]);
+                          }}
+                          onUploadError={(error: Error) => {
+                            toast({
+                              variant: "destructive",
+                              description: `ERROR! ${error.message}`,
+                            });
+                          }}
+                        />
+                      </FormControl>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div> */}
+
         <div>
           <FormField
             control={form.control}
