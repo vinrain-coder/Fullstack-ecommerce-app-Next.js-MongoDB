@@ -35,7 +35,7 @@ const nextConfig: NextConfig = withNextIntl()({
     return [
       {
         // Apply caching headers for product details pages with dynamic slug
-        source: "/:locale((en|fr))/product/:slug", // Handle different locales for product pages
+        source: "/product/:slug", // Handle different locales for product pages
         headers: [
           {
             key: "Cache-Control",
