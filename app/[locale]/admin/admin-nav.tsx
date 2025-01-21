@@ -32,12 +32,14 @@ const links = [
     href: "/admin/settings",
   },
 ];
+
 export function AdminNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname();
   const t = useTranslations("Admin");
+
   return (
     <nav
       className={cn(
@@ -51,8 +53,10 @@ export function AdminNav({
           key={item.href}
           href={item.href}
           className={cn(
-            "",
-            pathname.includes(item.href) ? "" : "text-muted-foreground"
+            "px-4 py-2 rounded-lg hover:text-primary active:bg-gray-300 transition duration-200", // Add padding and hover styles
+            pathname.includes(item.href)
+              ? "font-semibold text-primary"
+              : "text-muted-foreground"
           )}
         >
           {t(item.title)}

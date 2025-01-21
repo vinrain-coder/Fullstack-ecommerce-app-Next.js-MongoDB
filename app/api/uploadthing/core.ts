@@ -4,27 +4,35 @@ import { auth } from "@/auth";
 
 const f = createUploadthing();
 
-// FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
-  // Define as many FileRoutes as you like, each with a unique routeSlug
-  imageUploader: f({ image: { maxFileSize: "4MB" } })
-    // Set permissions and file types for this FileRoute
+  imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 5 } }) // Adjust file size and count as needed
     .middleware(async () => {
-      // This code runs on your server before upload
+      // Authenticate the user
       const session = await auth();
 
-      // If you throw, the user will not be able to upload
-      if (!session) throw new UploadThingError("Unauthorized");
+      if (!session || !session.user?.id) {
+        throw new UploadThingError("Unauthorized");
+      }
 
-      // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: session?.user?.id };
+      // // Ensure the user has admin privileges (adjust this based on your auth logic)
+      // if (session.user.role !== "admin") {
+      //   throw new UploadThingError("Insufficient permissions");
+      // }
+
+      // Metadata available to `onUploadComplete`
+      return { userId: session.user.id };
     })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
+      // Log the upload event for debugging or audit purposes
+      console.log("File uploaded successfully:", {
+        userId: metadata.userId,
+        fileUrl: file.url,
+        fileName: file.name,
+        fileSize: file.size,
+      });
 
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
+      // No further processing or database interaction
+      return { uploadedBy: metadata.userId, fileUrl: file.url };
     }),
 } satisfies FileRouter;
 
