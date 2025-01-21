@@ -10,14 +10,11 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card, CardContent } from "@/components/ui/card";
 import { ImagePlus, X } from "lucide-react";
 import Image from "next/image";
-import { UploadButton } from "@/lib/uploadthing";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 
 const ImageUploader = ({ form }: { form: any }) => {
-  const [images, setImages] = useState<string[]>(
-    form.getValues("images") || []
-  );
+  const [images, setImages] = useState<string[]>(form.getValues("images") || []);
 
   // Handle image reordering with drag-and-drop
   const handleOnDragEnd = (result: any) => {
@@ -36,6 +33,21 @@ const ImageUploader = ({ form }: { form: any }) => {
     const updatedImages = images.filter((_, i) => i !== index);
     setImages(updatedImages);
     form.setValue("images", updatedImages); // Update form state
+  };
+
+  // Handle file input change (multiple file selection)
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
+    const updatedImages = Array.from(new Set([...images, ...newImages])); // Deduplicate
+    setImages(updatedImages);
+    form.setValue("images", updatedImages); // Update form state
+
+    toast({
+      description: "Images selected successfully!",
+    });
   };
 
   return (
@@ -59,11 +71,7 @@ const ImageUploader = ({ form }: { form: any }) => {
                           ref={provided.innerRef}
                         >
                           {images.map((image, index) => (
-                            <Draggable
-                              key={image}
-                              draggableId={image}
-                              index={index}
-                            >
+                            <Draggable key={image} draggableId={image} index={index}>
                               {(provided) => (
                                 <div
                                   className="relative"
@@ -97,7 +105,7 @@ const ImageUploader = ({ form }: { form: any }) => {
                   </DragDropContext>
                 )}
 
-                {/* Upload Button */}
+                {/* Custom File Input for Multiple Image Selection */}
                 <div className="flex flex-col gap-2">
                   <span className="text-sm text-gray-500">
                     You can upload multiple images (max: 4MB each).
@@ -108,30 +116,19 @@ const ImageUploader = ({ form }: { form: any }) => {
                       variant="outline"
                       className="flex items-center gap-2 px-4 py-2"
                     >
-                      <UploadButton
-                        endpoint="imageUploader"
-                        onClientUploadComplete={(res: { url: string }[]) => {
-                          const uploadedImages = res.map((file) => file.url);
-                          const updatedImages = Array.from(
-                            new Set([...images, ...uploadedImages])
-                          ); // Deduplicate
-                          setImages(updatedImages);
-                          form.setValue("images", updatedImages); // Update form state
-                          toast({
-                            description: "Images uploaded successfully!",
-                          });
-                        }}
-                        onUploadError={(error: Error) => {
-                          toast({
-                            variant: "destructive",
-                            description: `ERROR! ${error.message}`,
-                          });
-                        }}
-                        multiple={true} // Allow multiple files to be selected
-                      />
-                      <ImagePlus size={16} />
-                      <span>Upload Images</span>
+                      <label htmlFor="fileInput" className="cursor-pointer flex items-center gap-2">
+                        <ImagePlus size={16} />
+                        <span>Upload Images</span>
+                      </label>
                     </Button>
+                    <input
+                      id="fileInput"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
                   </FormControl>
                 </div>
               </CardContent>
