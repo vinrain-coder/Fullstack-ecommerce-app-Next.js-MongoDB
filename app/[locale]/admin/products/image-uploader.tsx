@@ -38,13 +38,6 @@ const ImageUploader = ({ form }: { form: any }) => {
     form.setValue("images", updatedImages); // Update form state
   };
 
-  // Handle gallery selection
-  const handleGallerySelection = (selectedImages: string[]) => {
-    const updatedImages = Array.from(new Set([...images, ...selectedImages])); // Deduplicate
-    setImages(updatedImages);
-    form.setValue("images", updatedImages); // Update form state
-  };
-
   return (
     <div className="flex flex-col gap-5 md:flex-row">
       <FormField
@@ -104,10 +97,17 @@ const ImageUploader = ({ form }: { form: any }) => {
                   </DragDropContext>
                 )}
 
-                {/* Upload and Gallery Buttons */}
-                <div className="flex items-center gap-3">
+                {/* Upload Button */}
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm text-gray-500">
+                    You can upload multiple images (max: 4MB each).
+                  </span>
                   <FormControl>
-                    <Button type="button" variant="outline">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex items-center gap-2 px-4 py-2"
+                    >
                       <UploadButton
                         endpoint="imageUploader"
                         onClientUploadComplete={(res: { url: string }[]) => {
@@ -127,22 +127,12 @@ const ImageUploader = ({ form }: { form: any }) => {
                             description: `ERROR! ${error.message}`,
                           });
                         }}
+                        multiple // Enable multiple file selection
                       />
-                      <ImagePlus size={16} className="text-center" /> Upload
-                      images
+                      <ImagePlus size={16} />
+                      <span>Upload Images</span>
                     </Button>
                   </FormControl>
-                  {/* <Button
-                    variant="outline"
-                    onClick={() =>
-                      handleGallerySelection([
-                        "/example1.jpg",
-                        "/example2.jpg", // Replace this logic with your actual gallery selection handler
-                      ])
-                    }
-                  >
-                    <ImagePlus className="mr-2 w-4 h-4" /> Select from Gallery
-                  </Button> */}
                 </div>
               </CardContent>
             </Card>
