@@ -127,7 +127,7 @@ const ImageUploader = ({ form }: { form: any }) => {
                             description: `ERROR! ${error.message}`,
                           });
                         }}
-                        multiple // Enable multiple file selection
+                        multiple={true} // Allow multiple files to be selected
                       />
                       <ImagePlus size={16} />
                       <span>Upload Images</span>
