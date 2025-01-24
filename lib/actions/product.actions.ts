@@ -307,19 +307,25 @@ export async function getAllProducts({
 }
 
 export async function getAllTags() {
+  await connectToDatabase();
   const tags = await Product.aggregate([
+    // Unwind the tags array to process each tag individually
     { $unwind: "$tags" },
-    { $group: { _id: null, uniqueTags: { $addToSet: "$tags" } } },
-    { $project: { _id: 0, uniqueTags: 1 } },
+    // Group by tag and count the number of products for each tag
+    { $group: { _id: "$tags", count: { $sum: 1 } } },
+    // Filter out tags with no products
+    { $match: { count: { $gt: 0 } } },
+    // Sort tags alphabetically
+    { $sort: { _id: 1 } },
+    // Project the tag names
+    { $project: { tag: "$_id", _id: 0 } },
   ]);
-  return (
-    (tags[0]?.uniqueTags
-      .sort((a: string, b: string) => a.localeCompare(b))
-      .map((x: string) =>
-        x
-          .split("-")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ")
-      ) as string[]) || []
+
+  return tags.map((tag) =>
+    tag.tag
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
   );
 }
+
