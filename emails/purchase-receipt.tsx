@@ -61,6 +61,7 @@ PurchaseReceiptEmail.PreviewProps = {
     isDelivered: true,
   } as IOrder,
 } satisfies OrderInformationProps;
+
 const dateFormatter = new Intl.DateTimeFormat("en", { dateStyle: "medium" });
 
 export default async function PurchaseReceiptEmail({
@@ -72,44 +73,41 @@ export default async function PurchaseReceiptEmail({
       <Preview>View order receipt</Preview>
       <Tailwind>
         <Head />
-        <Body className="font-sans bg-white">
-          <Container className="max-w-xl">
-            <Heading>Purchase Receipt</Heading>
+        <Body className="font-sans bg-white text-gray-800">
+          <Container className="max-w-4xl mx-auto px-4">
+            <Heading className="text-3xl font-bold text-center text-golden-600 my-6">
+              Purchase Receipt
+            </Heading>
             <Section>
-              <Row>
-                <Column>
-                  <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">
-                    Order ID
-                  </Text>
-                  <Text className="mt-0 mr-4">{order._id.toString()}</Text>
+              <Row className="flex flex-wrap">
+                <Column className="w-full sm:w-1/3">
+                  <Text className="mb-1 text-gray-500">Order ID</Text>
+                  <Text className="font-semibold">{order._id.toString()}</Text>
                 </Column>
-                <Column>
-                  <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">
-                    Purchased On
-                  </Text>
-                  <Text className="mt-0 mr-4">
+                <Column className="w-full sm:w-1/3">
+                  <Text className="mb-1 text-gray-500">Purchased On</Text>
+                  <Text className="font-semibold">
                     {dateFormatter.format(order.createdAt)}
                   </Text>
                 </Column>
-                <Column>
-                  <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">
-                    Price Paid
-                  </Text>
-                  <Text className="mt-0 mr-4">
+                <Column className="w-full sm:w-1/3">
+                  <Text className="mb-1 text-gray-500">Price Paid</Text>
+                  <Text className="font-semibold">
                     Ksh.{order.totalPrice}
                   </Text>
                 </Column>
               </Row>
             </Section>
-            <Section className="border border-solid border-gray-500 rounded-lg p-4 md:p-6 my-4">
+
+            <Section className="border border-solid border-gray-200 rounded-lg p-4 my-6">
               {order.items.map((item) => (
-                <Row key={item.product} className="mt-8">
+                <Row key={item.product} className="flex flex-wrap items-center mb-4">
                   <Column className="w-20">
                     <Link href={`${site.url}/product/${item.slug}`}>
                       <Img
                         width="80"
                         alt={item.name}
-                        className="rounded"
+                        className="rounded shadow-sm"
                         src={
                           item.image.startsWith("/")
                             ? `${site.url}${item.image}`
@@ -118,31 +116,38 @@ export default async function PurchaseReceiptEmail({
                       />
                     </Link>
                   </Column>
-                  <Column className="align-top">
+                  <Column className="flex-1 text-left">
                     <Link href={`${site.url}/product/${item.slug}`}>
-                      <Text className="mx-2 my-0">
-                        {item.name} x {item.quantity}
-                      </Text>
+                      <Text className="font-semibold text-lg">{item.name} x {item.quantity}</Text>
                     </Link>
                   </Column>
-                  <Column align="right" className="align-top">
-                    <Text className="m-0 ">Ksh.{item.price}</Text>
+                  <Column align="right" className="text-right">
+                    <Text className="font-semibold">Ksh.{item.price}</Text>
                   </Column>
                 </Row>
               ))}
+
               {[
                 { name: "Items", price: order.itemsPrice },
                 { name: "Tax", price: order.taxPrice },
                 { name: "Shipping", price: order.shippingPrice },
                 { name: "Total", price: order.totalPrice },
               ].map(({ name, price }) => (
-                <Row key={name} className="py-1">
-                  <Column align="right">{name}:</Column>
-                  <Column align="right" width={70} className="align-top">
+                <Row key={name} className="py-2">
+                  <Column align="right" className="font-semibold text-right">
+                    {name}:
+                  </Column>
+                  <Column align="right" className="text-right">
                     <Text className="m-0">Ksh.{price}</Text>
                   </Column>
                 </Row>
               ))}
+            </Section>
+
+            <Section className="text-center py-4">
+              <Text className="text-sm text-gray-500">
+                Thank you for shopping with us!
+              </Text>
             </Section>
           </Container>
         </Body>
