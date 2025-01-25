@@ -28,47 +28,15 @@ export default function AddToCart({
 
   const { addItem } = useCartStore();
 
+  //PROMPT: add quantity state
   const [quantity, setQuantity] = useState(1);
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
-  const [isBuyNowLoading, setIsBuyNowLoading] = useState(false); // Loading for "Buy Now"
 
   const t = useTranslations();
-
-  const handleAddToCart = async () => {
-    setIsLoading(true); // Start loading
-    try {
-      const itemId = await addItem(item, quantity);
-      router.push(`/cart/${itemId}`);
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        description: error.message,
-      });
-    } finally {
-      setIsLoading(false); // End loading
-    }
-  };
-
-  const handleBuyNow = async () => {
-    setIsBuyNowLoading(true); // Start loading for "Buy Now"
-    try {
-      addItem(item, quantity);
-      router.push(`/checkout`);
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        description: error.message,
-      });
-    } finally {
-      setIsBuyNowLoading(false); // End loading for "Buy Now"
-    }
-  };
 
   return minimal ? (
     <Button
       className="rounded-full w-auto"
-      onClick={async () => {
-        setIsLoading(true); // Start loading
+      onClick={() => {
         try {
           addItem(item, 1);
           toast({
@@ -88,13 +56,10 @@ export default function AddToCart({
             variant: "destructive",
             description: error.message,
           });
-        } finally {
-          setIsLoading(false); // End loading
         }
       }}
-      disabled={isLoading} // Disable the button while loading
     >
-      {isLoading ? t("Product.Loading...") : t("Product.Add to Cart")}
+      {t("Product.Add to Cart")}
     </Button>
   ) : (
     <div className="w-full space-y-2">
@@ -102,14 +67,14 @@ export default function AddToCart({
         value={quantity.toString()}
         onValueChange={(i) => setQuantity(Number(i))}
       >
-        <SelectTrigger>
+        <SelectTrigger className="">
           <SelectValue>
             {t("Product.Quantity")}: {quantity}
           </SelectValue>
         </SelectTrigger>
         <SelectContent position="popper">
           {Array.from({ length: item.countInStock }).map((_, i) => (
-            <SelectItem key={i + 1} value={`${i + 1}`}>
+            <SelectItem key={i + 1} value={${i + 1}}>
               {i + 1}
             </SelectItem>
           ))}
@@ -119,19 +84,37 @@ export default function AddToCart({
       <Button
         className="rounded-full w-full"
         type="button"
-        onClick={handleAddToCart}
-        disabled={isLoading} // Disable the button while loading
+        onClick={async () => {
+          try {
+            const itemId = await addItem(item, quantity);
+            router.push(/cart/${itemId});
+          } catch (error: any) {
+            toast({
+              variant: "destructive",
+              description: error.message,
+            });
+          }
+        }}
       >
-        {isLoading ? t("Product.Loading...") : t("Product.Add to Cart")}
+        {t("Product.Add to Cart")}
       </Button>
       <Button
         variant="secondary"
-        onClick={handleBuyNow}
-        disabled={isBuyNowLoading} // Disable the button while loading
-        className="w-full rounded-full"
+        onClick={() => {
+          try {
+            addItem(item, quantity);
+            router.push(/checkout);
+          } catch (error: any) {
+            toast({
+              variant: "destructive",
+              description: error.message,
+            });
+          }
+        }}
+        className="w-full rounded-full "
       >
-        {isBuyNowLoading ? t("Product.Loading...") : t("Product.Buy Now")}
+        {t("Product.Buy Now")}
       </Button>
     </div>
   );
-}
+} 
