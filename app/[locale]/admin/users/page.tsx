@@ -1,9 +1,5 @@
-"use client";
-
 import { Metadata } from "next";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 
 import { auth } from "@/auth";
 import DeleteDialog from "@/components/shared/delete-dialog";
@@ -17,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllUsers, deleteUser } from "@/lib/actions/user.actions";
+import { deleteUser, getAllUsers } from "@/lib/actions/user.actions";
 import { IUser } from "@/lib/db/models/user.model";
 import { formatId } from "@/lib/utils";
 
@@ -28,40 +24,26 @@ export const metadata: Metadata = {
 export default async function AdminUser(props: {
   searchParams: Promise<{ page: string; search?: string }>;
 }) {
+  // Extract search parameters
   const searchParams = await props.searchParams;
   const session = await auth();
+
+  // Ensure the user is an admin
   if (session?.user.role !== "Admin")
     throw new Error("Admin permission required");
 
   const page = Number(searchParams.page) || 1;
-  const search = searchParams.search || "";
+  const search = searchParams.search || ""; // Handle search query
 
-  const users = await getAllUsers({ page, search });
-
-  const router = useRouter();
-
-  const [searchTerm, setSearchTerm] = useState(search);
-
-  const handleSearch = () => {
-    const params = new URLSearchParams(window.location.search);
-    params.set("search", searchTerm);
-    params.set("page", "1"); // Reset to page 1 on new search
-    router.push(`/admin/users?${params.toString()}`);
-  };
+  // Fetch users based on page and search parameters
+  const { data: users, totalPages } = await getAllUsers({
+    page,
+    search, // Pass the search parameter to the function
+  });
 
   return (
     <div className="space-y-2">
       <h1 className="h1-bold">Users</h1>
-      <div className="flex items-center justify-between">
-        <input
-          type="text"
-          placeholder="Search by name or email"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="input input-bordered w-full max-w-sm"
-        />
-        <Button onClick={handleSearch}>Search</Button>
-      </div>
       <div>
         <Table>
           <TableHeader>
@@ -74,7 +56,7 @@ export default async function AdminUser(props: {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users?.data.map((user: IUser) => (
+            {users?.map((user: IUser) => (
               <TableRow key={user._id}>
                 <TableCell>{formatId(user._id)}</TableCell>
                 <TableCell>{user.name}</TableCell>
@@ -90,9 +72,7 @@ export default async function AdminUser(props: {
             ))}
           </TableBody>
         </Table>
-        {users?.totalPages > 1 && (
-          <Pagination page={page} totalPages={users?.totalPages} />
-        )}
+        {totalPages > 1 && <Pagination page={page} totalPages={totalPages} />}
       </div>
     </div>
   );

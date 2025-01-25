@@ -117,20 +117,20 @@ export async function getAllUsers({
 
   const skipAmount = (Number(page) - 1) * limit;
 
-  // Create a query object
   const query = search
     ? {
         $or: [
-          { name: { $regex: search, $options: "i" } }, // Case-insensitive search by name
-          { email: { $regex: search, $options: "i" } }, // Case-insensitive search by email
+          { name: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
         ],
       }
     : {};
 
   const users = await User.find(query)
-    .sort({ createdAt: "desc" })
+    .sort({ createdAt: "asc" })
     .skip(skipAmount)
     .limit(limit);
+
   const usersCount = await User.countDocuments(query);
 
   return {
