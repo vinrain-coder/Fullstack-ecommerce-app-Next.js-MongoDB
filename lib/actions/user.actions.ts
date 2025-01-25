@@ -103,9 +103,11 @@ export const SignOut = async () => {
 export async function getAllUsers({
   limit,
   page,
+  search,
 }: {
   limit?: number;
   page: number;
+  search?: string;
 }) {
   const {
     common: { pageSize },
@@ -114,11 +116,23 @@ export async function getAllUsers({
   await connectToDatabase();
 
   const skipAmount = (Number(page) - 1) * limit;
-  const users = await User.find()
+
+  // Create a query object
+  const query = search
+    ? {
+        $or: [
+          { name: { $regex: search, $options: "i" } }, // Case-insensitive search by name
+          { email: { $regex: search, $options: "i" } }, // Case-insensitive search by email
+        ],
+      }
+    : {};
+
+  const users = await User.find(query)
     .sort({ createdAt: "desc" })
     .skip(skipAmount)
     .limit(limit);
-  const usersCount = await User.countDocuments();
+  const usersCount = await User.countDocuments(query);
+
   return {
     data: JSON.parse(JSON.stringify(users)) as IUser[],
     totalPages: Math.ceil(usersCount / limit),
