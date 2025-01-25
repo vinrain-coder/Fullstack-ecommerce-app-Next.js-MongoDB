@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { formUrlQuery } from "@/lib/utils";
 
@@ -18,10 +18,13 @@ type PaginationProps = {
 const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const visitedPages = useRef<Set<number>>(new Set());
+  const [isLoading, setIsLoading] = useState(false);
 
-  const visitedPages = useRef<Set<number>>(new Set()); // Track visited pages
+  const onClick = async (btnType: string) => {
+    if (isLoading) return; // Prevent multiple clicks during navigation
+    setIsLoading(true);
 
-  const onClick = (btnType: string) => {
     const pageValue = btnType === "next" ? Number(page) + 1 : Number(page) - 1;
 
     const newUrl = formUrlQuery({
@@ -38,7 +41,9 @@ const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
     visitedPages.current.add(pageValue); // Mark the page as visited
 
     // Navigate to the new page
-    router.push(newUrl, { scroll: false }); // Prevent default scroll handling
+    router.push(newUrl, { scroll: false }).finally(() => {
+      setIsLoading(false); // Reset loading state after navigation
+    });
   };
 
   const t = useTranslations();
@@ -56,20 +61,32 @@ const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
         size="lg"
         variant="outline"
         onClick={() => onClick("prev")}
-        disabled={Number(page) <= 1}
+        disabled={Number(page) <= 1 || isLoading}
         className="w-24"
       >
-        <ChevronLeft /> {t("Search.Previous")}
+        {isLoading && Number(page) <= 1 ? (
+          "..."
+        ) : (
+          <>
+            <ChevronLeft /> {t("Search.Previous")}
+          </>
+        )}
       </Button>
       {t("Search.Page")} {page} {t("Search.of")} {totalPages}
       <Button
         size="lg"
         variant="outline"
         onClick={() => onClick("next")}
-        disabled={Number(page) >= totalPages}
+        disabled={Number(page) >= totalPages || isLoading}
         className="w-24"
       >
-        {t("Search.Next")} <ChevronRight />
+        {isLoading && Number(page) >= totalPages ? (
+          "..."
+        ) : (
+          <>
+            {t("Search.Next")} <ChevronRight />
+          </>
+        )}
       </Button>
     </div>
   );
