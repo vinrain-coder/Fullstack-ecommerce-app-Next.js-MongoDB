@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 
 import { formUrlQuery } from "@/lib/utils";
 
@@ -18,13 +18,8 @@ type PaginationProps = {
 const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const visitedPages = useRef<Set<number>>(new Set());
-  const [isLoading, setIsLoading] = useState(false);
 
-  const onClick = async (btnType: string) => {
-    if (isLoading) return; // Prevent multiple clicks during navigation
-    setIsLoading(true);
-
+  const onClick = (btnType: string) => {
     const pageValue = btnType === "next" ? Number(page) + 1 : Number(page) - 1;
 
     const newUrl = formUrlQuery({
@@ -33,60 +28,36 @@ const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
       value: pageValue.toString(),
     });
 
-    // Scroll to top only for newly visited pages
-    if (btnType === "next" && !visitedPages.current.has(pageValue)) {
+    // Scroll to top only for the "Next" button
+    if (btnType === "next") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    visitedPages.current.add(pageValue); // Mark the page as visited
-
     // Navigate to the new page
-    router.push(newUrl, { scroll: false }).finally(() => {
-      setIsLoading(false); // Reset loading state after navigation
-    });
+    router.push(newUrl, { scroll: true });
   };
 
   const t = useTranslations();
-
-  useEffect(() => {
-    // Enable browser scroll restoration for revisited pages
-    if (typeof window !== "undefined") {
-      window.history.scrollRestoration = "auto";
-    }
-  }, []);
-
   return (
     <div className="flex items-center gap-2">
       <Button
         size="lg"
         variant="outline"
         onClick={() => onClick("prev")}
-        disabled={Number(page) <= 1 || isLoading}
+        disabled={Number(page) <= 1}
         className="w-24"
       >
-        {isLoading && Number(page) <= 1 ? (
-          "..."
-        ) : (
-          <>
-            <ChevronLeft /> {t("Search.Previous")}
-          </>
-        )}
+        <ChevronLeft /> {t("Search.Previous")}
       </Button>
       {t("Search.Page")} {page} {t("Search.of")} {totalPages}
       <Button
         size="lg"
         variant="outline"
         onClick={() => onClick("next")}
-        disabled={Number(page) >= totalPages || isLoading}
+        disabled={Number(page) >= totalPages}
         className="w-24"
       >
-        {isLoading && Number(page) >= totalPages ? (
-          "..."
-        ) : (
-          <>
-            {t("Search.Next")} <ChevronRight />
-          </>
-        )}
+        {t("Search.Next")} <ChevronRight />
       </Button>
     </div>
   );
