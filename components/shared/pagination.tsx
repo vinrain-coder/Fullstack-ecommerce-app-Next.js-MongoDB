@@ -28,6 +28,12 @@ const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
       value: pageValue.toString(),
     });
 
+    // Scroll to top only for the "Next" button
+    if (btnType === "next") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Navigate to the new page
     router.push(newUrl, { scroll: true });
   };
 
