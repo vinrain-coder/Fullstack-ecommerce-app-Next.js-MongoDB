@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { formUrlQuery } from "@/lib/utils";
 
@@ -19,6 +19,8 @@ const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const visitedPages = useRef<Set<number>>(new Set()); // Track visited pages
+
   const onClick = (btnType: string) => {
     const pageValue = btnType === "next" ? Number(page) + 1 : Number(page) - 1;
 
@@ -28,16 +30,26 @@ const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
       value: pageValue.toString(),
     });
 
-    // Scroll to top only for the "Next" button
-    if (btnType === "next") {
+    // Scroll to top only for newly visited pages
+    if (btnType === "next" && !visitedPages.current.has(pageValue)) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    visitedPages.current.add(pageValue); // Mark the page as visited
+
     // Navigate to the new page
-    router.push(newUrl, { scroll: true });
+    router.push(newUrl, { scroll: false }); // Prevent default scroll handling
   };
 
   const t = useTranslations();
+
+  useEffect(() => {
+    // Enable browser scroll restoration for revisited pages
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "auto";
+    }
+  }, []);
+
   return (
     <div className="flex items-center gap-2">
       <Button
