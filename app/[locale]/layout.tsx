@@ -5,7 +5,7 @@ import { getDirection } from "@/i18n-config";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getSetting } from "@/lib/actions/setting.actions";
 import { cookies } from "next/headers";
 
@@ -37,20 +37,27 @@ export default async function AppLayout({
   params,
   children,
 }: {
-  params: { locale: string };
+  params: { locale?: string }; // Locale is optional
   children: React.ReactNode;
 }) {
   const setting = await getSetting();
   const currencyCookie = (await cookies()).get("currency");
   const currency = currencyCookie ? currencyCookie.value : "KES";
 
-  const { locale } = await params;
-  // Ensure that the incoming `locale` is valid
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (!routing.locales.includes(locale as any)) {
-    notFound();
+  const { locale } = params;
+
+  // If no locale is provided, redirect to the default locale (e.g., "en-US")
+  if (!locale) {
+    redirect(`/${routing.defaultLocale}`);
   }
-  const messages = await getMessages();
+
+  // Ensure the provided locale is valid
+  if (!routing.locales.includes(locale)) {
+    notFound(); // Trigger the not-found page if locale is invalid
+  }
+
+  // Retrieve messages for the current locale
+  const messages = await getMessages(locale);
 
   return (
     <html
