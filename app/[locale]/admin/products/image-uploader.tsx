@@ -40,35 +40,6 @@ const ImageUploader = ({ form }: { form: any }) => {
     form.setValue("images", updatedImages); // Update form state
   };
 
-  // Handle file drag-and-drop
-  const handleFileDrop = async (files: FileList) => {
-    if (isUploading) return;
-
-    setIsUploading(true);
-    const fileArray = Array.from(files);
-    try {
-      const uploadedImages = await Promise.all(
-        fileArray.map(async (file) => {
-          // Mock upload process for demonstration
-          // Replace this with your UploadThing logic if needed
-          return URL.createObjectURL(file);
-        })
-      );
-
-      const updatedImages = Array.from(new Set([...images, ...uploadedImages])); // Deduplicate
-      setImages(updatedImages);
-      form.setValue("images", updatedImages);
-      toast({ description: "Images uploaded successfully!" });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        description: `ERROR! ${UploadThingError}`,
-      });
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
   return (
     <div className="flex flex-col gap-5 md:flex-row">
       <FormField
@@ -79,30 +50,6 @@ const ImageUploader = ({ form }: { form: any }) => {
             <FormLabel>Images</FormLabel>
             <Card>
               <CardContent className="space-y-4 mt-2 min-h-48">
-                {/* Drag-and-drop area */}
-                <div
-                  className="border-2 border-dashed border-gray-300 p-4 rounded-md hover:border-gray-400 flex justify-center items-center cursor-pointer"
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    handleFileDrop(e.dataTransfer.files);
-                  }}
-                  onDragOver={(e) => e.preventDefault()}
-                >
-                  {isUploading ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader2 className="animate-spin" size={20} />
-                      <span>Uploading...</span>
-                    </div>
-                  ) : (
-                    <div className="text-center text-gray-500">
-                      <ImagePlus className="mx-auto mb-2" size={32} />
-                      <p>
-                        Drag & Drop your images here or click below to upload
-                      </p>
-                    </div>
-                  )}
-                </div>
-
                 {/* Image Preview and Drag-and-Drop Reordering */}
                 {images.length > 0 && (
                   <DragDropContext onDragEnd={handleOnDragEnd}>
