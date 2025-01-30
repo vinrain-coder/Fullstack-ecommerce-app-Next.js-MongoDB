@@ -2,15 +2,14 @@
 import { ChevronUp } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-
 import { Button } from "@/components/ui/button";
 import useSettingStore from "@/hooks/use-setting-store";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
-
 import { SelectValue } from "@radix-ui/react-select";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { i18n } from "@/i18n-config";
+import { Facebook, Instagram, Twitter, TikTok, YouTube } from "lucide-react"; // Import social media icons
 
 export default function Footer() {
   const router = useRouter();
@@ -19,7 +18,6 @@ export default function Footer() {
     setting: { site },
   } = useSettingStore();
   const { locales } = i18n;
-
   const locale = useLocale();
   const t = useTranslations();
 
@@ -157,6 +155,25 @@ export default function Footer() {
           {/* Address and Contact */}
           <div className="text-center text-sm text-gray-400">
             {site.address} | {site.phone}
+          </div>
+
+          {/* Social Media Links */}
+          <div className="flex space-x-6 text-lg mt-4">
+            <Link href="https://www.instagram.com/yourprofile" target="_blank" className="hover:text-gray-300">
+              <Instagram />
+            </Link>
+            <Link href="https://www.facebook.com/yourprofile" target="_blank" className="hover:text-gray-300">
+              <Facebook />
+            </Link>
+            <Link href="https://twitter.com/yourprofile" target="_blank" className="hover:text-gray-300">
+              <Twitter />
+            </Link>
+            <Link href="https://www.tiktok.com/@yourprofile" target="_blank" className="hover:text-gray-300">
+              <TikTok />
+            </Link>
+            <Link href="https://www.youtube.com/c/yourprofile" target="_blank" className="hover:text-gray-300">
+              <YouTube />
+            </Link>
           </div>
         </div>
       </div>
