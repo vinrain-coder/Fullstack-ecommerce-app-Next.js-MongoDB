@@ -9,7 +9,6 @@ import { SelectValue } from "@radix-ui/react-select";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { i18n } from "@/i18n-config";
-import { Facebook, Instagram, Twitter, TikTok, YouTube } from "lucide-react"; // Import social media icons
 
 export default function Footer() {
   const router = useRouter();
@@ -158,21 +157,21 @@ export default function Footer() {
           </div>
 
           {/* Social Media Links */}
-          <div className="flex space-x-6 text-lg mt-4">
+          <div className="flex space-x-6 text-sm mt-4">
             <Link href="https://www.instagram.com/yourprofile" target="_blank" className="hover:text-gray-300">
-              <Instagram />
+              Instagram
             </Link>
             <Link href="https://www.facebook.com/yourprofile" target="_blank" className="hover:text-gray-300">
-              <Facebook />
+              Facebook
             </Link>
             <Link href="https://twitter.com/yourprofile" target="_blank" className="hover:text-gray-300">
-              <Twitter />
+              Twitter
             </Link>
             <Link href="https://www.tiktok.com/@yourprofile" target="_blank" className="hover:text-gray-300">
-              <TikTok />
+              TikTok
             </Link>
             <Link href="https://www.youtube.com/c/yourprofile" target="_blank" className="hover:text-gray-300">
-              <YouTube />
+              YouTube
             </Link>
           </div>
         </div>
