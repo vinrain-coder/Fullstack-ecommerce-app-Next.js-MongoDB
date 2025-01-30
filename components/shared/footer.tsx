@@ -35,7 +35,7 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 p-8 max-w-7xl mx-auto">
         {/* Column 1: Get to Know Us */}
         <div>
           <h3 className="font-bold mb-4">{t("Footer.Get to Know Us")}</h3>
@@ -101,6 +101,38 @@ export default function Footer() {
             </li>
           </ul>
         </div>
+
+        {/* Column 4: Social Media Links */}
+        <div>
+          <h3 className="font-bold mb-4">Follow us</h3>
+          <ul className="space-y-2">
+            <li>
+              <Link href="https://www.instagram.com/yourprofile" target="_blank" className="hover:text-gray-300">
+                Instagram
+              </Link>
+            </li>
+            <li>
+              <Link href="https://www.facebook.com/yourprofile" target="_blank" className="hover:text-gray-300">
+                Facebook
+              </Link>
+            </li>
+            <li>
+              <Link href="https://twitter.com/yourprofile" target="_blank" className="hover:text-gray-300">
+                Twitter
+              </Link>
+            </li>
+            <li>
+              <Link href="https://www.tiktok.com/@yourprofile" target="_blank" className="hover:text-gray-300">
+                TikTok
+              </Link>
+            </li>
+            <li>
+              <Link href="https://www.youtube.com/c/yourprofile" target="_blank" className="hover:text-gray-300">
+                YouTube
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
 
       {/* Footer Bottom */}
@@ -154,25 +186,6 @@ export default function Footer() {
           {/* Address and Contact */}
           <div className="text-center text-sm text-gray-400">
             {site.address} | {site.phone}
-          </div>
-
-          {/* Social Media Links */}
-          <div className="flex space-x-6 text-sm mt-4">
-            <Link href="https://www.instagram.com/yourprofile" target="_blank" className="hover:text-gray-300">
-              Instagram
-            </Link>
-            <Link href="https://www.facebook.com/yourprofile" target="_blank" className="hover:text-gray-300">
-              Facebook
-            </Link>
-            <Link href="https://twitter.com/yourprofile" target="_blank" className="hover:text-gray-300">
-              Twitter
-            </Link>
-            <Link href="https://www.tiktok.com/@yourprofile" target="_blank" className="hover:text-gray-300">
-              TikTok
-            </Link>
-            <Link href="https://www.youtube.com/c/yourprofile" target="_blank" className="hover:text-gray-300">
-              YouTube
-            </Link>
           </div>
         </div>
       </div>
