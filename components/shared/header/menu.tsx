@@ -1,4 +1,4 @@
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, MenuIcon } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -23,10 +23,11 @@ const Menu = ({ forAdmin = false }: { forAdmin?: boolean }) => {
         <UserButton />
         {forAdmin ? null : <CartButton />}
       </nav>
-      <nav className="md:hidden">
+      <nav className="md:hidden flex gap-1">
+      <CartButton/>
         <Sheet>
           <SheetTrigger className="align-middle header-button">
-            <EllipsisVertical className="h-6 w-6" />
+            <MenuIcon className="h-7 w-7" />
           </SheetTrigger>
           <SheetContent className="bg-black text-white  flex flex-col items-start  ">
             <SheetHeader className="w-full">
@@ -38,7 +39,7 @@ const Menu = ({ forAdmin = false }: { forAdmin?: boolean }) => {
             <LanguageSwitcher />
             <ThemeSwitcher />
             <UserButton />
-            <CartButton />
+            {/* <CartButton /> */}
           </SheetContent>
         </Sheet>
       </nav>

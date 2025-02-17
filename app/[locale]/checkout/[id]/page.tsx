@@ -29,7 +29,7 @@ const CheckoutPaymentPage = async (props: {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(order.totalPrice * 100),
-      currency: "USD",
+      currency: "KES",
       metadata: { orderId: order._id },
     });
     client_secret = paymentIntent.client_secret;

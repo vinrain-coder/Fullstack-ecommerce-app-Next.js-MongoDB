@@ -165,7 +165,7 @@ export default function OrderDetailsForm({
               </Link>
             )}
 
-            {isAdmin && !isPaid && paymentMethod === "Cash On Delivery" && (
+            {isAdmin && !isPaid && paymentMethod === " Manual Payment" && (
               <ActionButton
                 caption="Mark as paid"
                 action={() => updateOrderToPaid(order._id)}

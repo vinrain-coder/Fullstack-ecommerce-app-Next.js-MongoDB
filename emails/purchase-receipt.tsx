@@ -93,7 +93,7 @@ export default async function PurchaseReceiptEmail({
                 <Column className="w-full sm:w-1/3">
                   <Text className="mb-1 text-gray-500">Price Paid</Text>
                   <Text className="font-semibold">
-                    Ksh.{order.totalPrice}
+                    KES.{order.totalPrice}
                   </Text>
                 </Column>
               </Row>
@@ -122,7 +122,7 @@ export default async function PurchaseReceiptEmail({
                     </Link>
                   </Column>
                   <Column align="right" className="text-right">
-                    <Text className="font-semibold">Ksh.{item.price}</Text>
+                    <Text className="font-semibold">KES.{item.price}</Text>
                   </Column>
                 </Row>
               ))}
@@ -138,7 +138,7 @@ export default async function PurchaseReceiptEmail({
                     {name}:
                   </Column>
                   <Column align="right" className="text-right">
-                    <Text className="m-0">Ksh.{price}</Text>
+                    <Text className="m-0">KES.{price}</Text>
                   </Column>
                 </Row>
               ))}

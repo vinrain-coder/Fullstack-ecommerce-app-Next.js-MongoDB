@@ -134,7 +134,7 @@ const ProductList = () => {
                     </Link>
                   </TableCell>
                   <TableCell className="text-right">
-                    Ksh.{product.price}
+                    KES.{product.price}
                   </TableCell>
                   <TableCell>{product.category}</TableCell>
                   <TableCell>{product.countInStock}</TableCell>

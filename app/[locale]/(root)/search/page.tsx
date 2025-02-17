@@ -26,15 +26,15 @@ const sortOrders = [
 
 const prices = [
   {
-    name: "Ksh100 to Ksh2,500",
+    name: "KES100 to KES2,500",
     value: "100-2500",
   },
   {
-    name: "Ksh2,501 to Ksh4,000",
+    name: "KES2,501 to KES4,000",
     value: "2501-4000",
   },
   {
-    name: "Ksh4,001 to Ksh10,000",
+    name: "KES4,001 to KES10,000",
     value: "4001-10000",
   },
 ];

@@ -10,7 +10,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card, CardContent } from "@/components/ui/card";
 import { ImagePlus, X, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { UploadDropzone  } from "@/lib/uploadthing";
+import { UploadDropzone } from "@/lib/uploadthing";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { UploadThingError } from "uploadthing/server";
@@ -98,13 +98,13 @@ const ImageUploader = ({ form }: { form: any }) => {
                   </DragDropContext>
                 )}
 
-                {/* Upload Button */}
+                {/* Upload Dropzone */}
                 <div className="flex flex-col gap-2">
                   <span className="text-sm text-gray-500">
                     You can upload up to 6 images (max: 512KB each).
                   </span>
                   <FormControl>
-                    <UploadDropzone 
+                    <UploadDropzone
                       endpoint="imageUploader"
                       onClientUploadComplete={(res: { url: string }[]) => {
                         const uploadedImages = res.map((file) => file.url);

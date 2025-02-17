@@ -147,7 +147,7 @@ export default function OrderDetailsForm({
               </Elements>
             )}
 
-            {!isPaid && paymentMethod === "Cash On Delivery" && (
+            {!isPaid && paymentMethod === "Manual Payment" && (
               <Button
                 className="w-full rounded-full"
                 onClick={() => router.push(`/account/orders/${order._id}`)}

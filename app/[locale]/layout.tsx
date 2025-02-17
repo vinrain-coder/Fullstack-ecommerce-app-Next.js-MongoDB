@@ -1,23 +1,15 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lora } from "next/font/google";
 import "../globals.css";
 import ClientProviders from "@/components/shared/client-providers";
 import { getDirection } from "@/i18n-config";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { getSetting } from "@/lib/actions/setting.actions";
 import { cookies } from "next/headers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 export async function generateMetadata() {
   const {
@@ -37,27 +29,20 @@ export default async function AppLayout({
   params,
   children,
 }: {
-  params: { locale?: string }; // Locale is optional
+  params: { locale: string };
   children: React.ReactNode;
 }) {
   const setting = await getSetting();
   const currencyCookie = (await cookies()).get("currency");
   const currency = currencyCookie ? currencyCookie.value : "KES";
 
-  const { locale } = params;
-
-  // If no locale is provided, redirect to the default locale (e.g., "en-US")
-  if (!locale) {
-    redirect(`/${routing.defaultLocale}`);
+  const { locale } = await params;
+  // Ensure that the incoming `locale` is valid
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
   }
-
-  // Ensure the provided locale is valid
-  if (!routing.locales.includes(locale)) {
-    notFound(); // Trigger the not-found page if locale is invalid
-  }
-
-  // Retrieve messages for the current locale
-  const messages = await getMessages(locale);
+  const messages = await getMessages();
 
   return (
     <html
@@ -66,7 +51,7 @@ export default async function AppLayout({
       suppressHydrationWarning
     >
       <body
-        className={`min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`min-h-screen ${lora.className} antialiased leading-relaxed tracking-wide`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ClientProviders setting={{ ...setting, currency }}>
