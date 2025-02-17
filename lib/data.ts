@@ -35,7 +35,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Manual Payment",
+    paymentMethod: "Cash on Delivery",
     emailVerified: false,
   },
   {
@@ -69,7 +69,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Manual Payment",
+    paymentMethod: "Cash on Delivery",
     emailVerified: false,
   },
   {
@@ -120,7 +120,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Manual Payment",
+    paymentMethod: "Cash on Delivery",
     emailVerified: false,
   },
   {
@@ -188,7 +188,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Manual Payment",
+    paymentMethod: "Cash on Delivery",
     emailVerified: false,
   },
   {
@@ -239,7 +239,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Manual Payment",
+    paymentMethod: "Cash on Delivery",
     emailVerified: false,
   },
   {
@@ -1309,22 +1309,21 @@ We also provide helpful resources such as order tracking, product guides, and FA
       availablePaymentMethods: [
         { name: "PayPal", commission: 0 },
         { name: "Stripe", commission: 0 },
-        { name: "Manual Payment", commission: 0 },
-        { name: "Mpesa", commission: 0 },
+        { name: "Cash on Delivery", commission: 0 },
       ],
-      defaultPaymentMethod: "Manual Payment",
+      defaultPaymentMethod: "Cash on Delivery",
       availableDeliveryDates: [
         {
           name: "Tomorrow",
           daysToDeliver: 1,
           shippingPrice: 400,
-          freeShippingMinPrice:5000,
+          freeShippingMinPrice: 5000,
         },
         {
           name: "Next 3 Days",
           daysToDeliver: 3,
           shippingPrice: 350,
-          freeShippingMinPrice:5000,
+          freeShippingMinPrice: 5000,
         },
         {
           name: "Next 5 Days",
