@@ -1310,6 +1310,7 @@ We also provide helpful resources such as order tracking, product guides, and FA
         { name: "PayPal", commission: 0 },
         { name: "Stripe", commission: 0 },
         { name: "Cash on Delivery", commission: 0 },
+        { name: "Manual Payment", commission: 0 },
       ],
       defaultPaymentMethod: "Cash on Delivery",
       availableDeliveryDates: [
