@@ -35,7 +35,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash On Delivery",
+    paymentMethod: "Manual Payment",
     emailVerified: false,
   },
   {
@@ -69,7 +69,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash On Delivery",
+    paymentMethod: "Manual Payment",
     emailVerified: false,
   },
   {
@@ -120,7 +120,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash On Delivery",
+    paymentMethod: "Manual Payment",
     emailVerified: false,
   },
   {
@@ -188,7 +188,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash On Delivery",
+    paymentMethod: "Manual Payment",
     emailVerified: false,
   },
   {
@@ -239,7 +239,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash On Delivery",
+    paymentMethod: "Manual Payment",
     emailVerified: false,
   },
   {
