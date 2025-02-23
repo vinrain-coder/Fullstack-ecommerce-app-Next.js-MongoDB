@@ -11,6 +11,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getSetting } from "./setting.actions";
+import { request } from "@arcjet/next";
+import { arcjetInstance, handleArcjetDecision} from '@/lib/arcjet'
 
 // CREATE
 export async function registerUser(userSignUp: IUserSignUp) {
@@ -21,6 +23,12 @@ export async function registerUser(userSignUp: IUserSignUp) {
       password: userSignUp.password,
       confirmPassword: userSignUp.confirmPassword,
     });
+
+    // Arcjet Protection
+        const req = await request();
+            const decision = await arcjetInstance.protect(req, { email: user.email });
+                const protection = handleArcjetDecision(decision);
+                    if (!protection.success) return protection;
 
     await connectToDatabase();
     await User.create({
@@ -88,9 +96,16 @@ export async function updateUserName(user: IUserName) {
   }
 }
 
-export async function signInWithCredentials(user: IUserSignIn) {
-  return await signIn("credentials", { ...user, redirect: false });
-}
+// Sign in with Arcjet Protection
+export async function signInWithCredentials(user: { email: string; password: string }) {
+  const req = await request();
+    const decision = await arcjetInstance.protect(req, { email: user.email });
+      const protection = handleArcjetDecision(decision);
+        if (!protection.success) return protection;
+
+          return await signIn("credentials", { ...user, redirect: false });
+          }
+
 export const SignInWithGoogle = async () => {
   await signIn("google");
 };
