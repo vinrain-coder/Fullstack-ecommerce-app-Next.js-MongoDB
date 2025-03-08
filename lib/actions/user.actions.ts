@@ -12,9 +12,12 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getSetting } from "./setting.actions";
 import { request } from "@arcjet/next";
-import { arcjetInstance, handleArcjetDecision} from '@/lib/arcjet'
+import { handleArcjetDecision } from "@/lib/arcjet";
+import { arcjetInstance } from "../arcjetInstance";
 
 // CREATE
+
+// ✅ Fix: Ensure handleArcjetDecision is awaited
 export async function registerUser(userSignUp: IUserSignUp) {
   try {
     const user = await UserSignUpSchema.parseAsync({
@@ -25,10 +28,10 @@ export async function registerUser(userSignUp: IUserSignUp) {
     });
 
     // Arcjet Protection
-        const req = await request();
-            const decision = await arcjetInstance.protect(req, { email: user.email });
-                const protection = handleArcjetDecision(decision);
-                    if (!protection.success) return protection;
+    const req = await request();
+    const decision = await arcjetInstance.protect(req, { email: user.email });
+    const protection = await handleArcjetDecision(decision); // ✅ Add "await"
+    if (!protection.success) return protection;
 
     await connectToDatabase();
     await User.create({
@@ -40,6 +43,20 @@ export async function registerUser(userSignUp: IUserSignUp) {
     return { success: false, error: formatError(error) };
   }
 }
+
+// ✅ Fix: Ensure handleArcjetDecision is awaited
+export async function signInWithCredentials(user: {
+  email: string;
+  password: string;
+}) {
+  const req = await request();
+  const decision = await arcjetInstance.protect(req, { email: user.email });
+  const protection = await handleArcjetDecision(decision); // ✅ Add "await"
+  if (!protection.success) return protection;
+
+  return await signIn("credentials", { ...user, redirect: false });
+}
+
 
 // DELETE
 
@@ -96,15 +113,18 @@ export async function updateUserName(user: IUserName) {
   }
 }
 
-// Sign in with Arcjet Protection
-export async function signInWithCredentials(user: { email: string; password: string }) {
-  const req = await request();
-    const decision = await arcjetInstance.protect(req, { email: user.email });
-      const protection = handleArcjetDecision(decision);
-        if (!protection.success) return protection;
+// // Sign in with Arcjet Protection
+// export async function signInWithCredentials(user: {
+//   email: string;
+//   password: string;
+// }) {
+//   const req = await request();
+//   const decision = await arcjetInstance.protect(req, { email: user.email });
+//   const protection = handleArcjetDecision(decision);
+//   if (!protection.success) return protection;
 
-          return await signIn("credentials", { ...user, redirect: false });
-          }
+//   return await signIn("credentials", { ...user, redirect: false });
+// }
 
 export const SignInWithGoogle = async () => {
   await signIn("google");
