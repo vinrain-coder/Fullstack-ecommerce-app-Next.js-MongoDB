@@ -25,7 +25,7 @@ import { WebPageInputSchema, WebPageUpdateSchema } from "@/lib/validator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toSlug } from "@/lib/utils";
 import { toast } from "sonner";
-import { AutoResizeTextarea } from "@/components/shared/Textarea";
+// import { AutoResizeTextarea } from "@/components/shared/Textarea";
 
 const webPageDefaultValues =
   process.env.NODE_ENV === "development"
@@ -152,7 +152,11 @@ const WebPageForm = ({
                   <MarkdownEditor
                     {...field}
                     style={{ height: "500px" }}
-                    renderHTML={(text) => <ReactMarkdown>{text}</ReactMarkdown>}
+                    renderHTML={(text) => (
+                      <div>
+                        <ReactMarkdown>{text}</ReactMarkdown>
+                      </div>
+                    )}
                     onChange={({ text }) => form.setValue("content", text)}
                   />
 
