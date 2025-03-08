@@ -1,10 +1,8 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
-
+import React, { useState } from "react";
 import { formUrlQuery } from "@/lib/utils";
-
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -18,44 +16,54 @@ type PaginationProps = {
 const Pagination = ({ page, totalPages, urlParamName }: PaginationProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations();
+
+  const [currentPage, setCurrentPage] = useState(Number(page));
 
   const onClick = (btnType: string) => {
-    const pageValue = btnType === "next" ? Number(page) + 1 : Number(page) - 1;
+    const newPage = btnType === "next" ? currentPage + 1 : currentPage - 1;
+    setCurrentPage(newPage); 
 
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
       key: urlParamName || "page",
-      value: pageValue.toString(),
+      value: newPage.toString(),
     });
 
-    // Scroll to top only for the "Next" button
     if (btnType === "next") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // Navigate to the new page
     router.push(newUrl, { scroll: true });
   };
 
-  const t = useTranslations();
   return (
     <div className="flex items-center gap-2">
       <Button
         size="lg"
         variant="outline"
         onClick={() => onClick("prev")}
-        disabled={Number(page) <= 1}
+        disabled={currentPage <= 1}
         className="w-24"
       >
         <ChevronLeft /> {t("Search.Previous")}
       </Button>
-      {t("Search.Page")} {page} {t("Search.of")} {totalPages}
+      {t("Search.Page")} {currentPage} {t("Search.of")} {totalPages}
       <Button
         size="lg"
         variant="outline"
         onClick={() => onClick("next")}
-        disabled={Number(page) >= totalPages}
+        disabled={currentPage >= totalPages}
         className="w-24"
+        onMouseEnter={() =>
+          router.prefetch(
+            formUrlQuery({
+              params: searchParams.toString(),
+              key: urlParamName || "page",
+              value: (currentPage + 1).toString(),
+            })
+          )
+        }
       >
         {t("Search.Next")} <ChevronRight />
       </Button>
