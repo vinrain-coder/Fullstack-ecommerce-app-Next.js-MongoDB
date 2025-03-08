@@ -18,6 +18,7 @@ import RatingSummary from "@/components/shared/product/rating-summary";
 import ProductSlider from "@/components/shared/product/product-slider";
 import { getTranslations } from "next-intl/server";
 import { getSetting } from "@/lib/actions/setting.actions";
+import ShareProduct from "@/components/shared/product/share-product";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -136,6 +137,11 @@ export default async function ProductDetails(props: {
               <p className="p-medium-16 lg:p-regular-18">
                 {product.description}
               </p>
+            </div>
+            <Separator className="my-2" />
+            <div className="flex flex-col gap-1">
+              <h3>Share this product</h3>
+              <ShareProduct slug={product.slug} name={product.name} />
             </div>
           </div>
           <div>
