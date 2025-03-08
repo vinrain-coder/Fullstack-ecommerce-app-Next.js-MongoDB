@@ -40,7 +40,7 @@ export async function generateMetadata(props: {
       type: "product",
       title: product.name,
       description: product.description,
-      url: `${site.url}${product.slug}`,
+      url: {`${site.url}/product/${item.slug}`},
       images: [
         {
           url: ogImageUrl,
