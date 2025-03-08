@@ -1,5 +1,13 @@
 "use client";
-import { ChevronUp } from "lucide-react";
+import {
+  ChevronUp,
+  Clock,
+  Facebook,
+  Instagram,
+  Mail,
+  MessageCircle,
+  Twitter,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -41,8 +49,8 @@ export default function Footer() {
           <h3 className="font-bold mb-4">{t("Footer.Get to Know Us")}</h3>
           <ul className="space-y-2">
             <li>
-              <Link href="/page/careers" className="hover:text-gray-300">
-                {t("Footer.Careers")}
+              <Link href="/page/FAQs" className="hover:text-gray-300">
+                {t("Footer.FAQs")}
               </Link>
             </li>
             <li>
@@ -54,6 +62,10 @@ export default function Footer() {
               <Link href="/page/about-us" className="hover:text-gray-300">
                 {t("Footer.About name", { name: site.name })}
               </Link>
+            </li>
+            <li className="flex items-center gap-2">
+              <Clock size={20} />
+              <span>Mon - Sat | 9:00 AM - 7:00 PM</span>
             </li>
           </ul>
         </div>
@@ -102,76 +114,28 @@ export default function Footer() {
                 {t("Footer.Help")}
               </Link>
             </li>
+            <li>
+              <Link
+                href="/page/shoe-size-guide"
+                className="hover:text-gray-300"
+              >
+                {t("Footer.Size Guide (Shoes)")}
+              </Link>
+            </li>
           </ul>
         </div>
 
         {/* Column 4: Social Media Links */}
         <div>
           <h3 className="font-bold mb-4">Follow us</h3>
-          <ul className="space-y-2">
+          <ul className="flex items-center gap-3 flex-wrap">
             <li>
               <Link
                 href="https://www.instagram.com/yourprofile"
                 target="_blank"
                 className="hover:text-gray-300 flex items-center gap-1"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  x="0px"
-                  y="0px"
-                  width="30"
-                  height="30"
-                  viewBox="0 0 40 48"
-                >
-                  <radialGradient
-                    id="yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1"
-                    cx="19.38"
-                    cy="42.035"
-                    r="44.899"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop offset="0" stop-color="#fd5"></stop>
-                    <stop offset=".328" stop-color="#ff543f"></stop>
-                    <stop offset=".348" stop-color="#fc5245"></stop>
-                    <stop offset=".504" stop-color="#e64771"></stop>
-                    <stop offset=".643" stop-color="#d53e91"></stop>
-                    <stop offset=".761" stop-color="#cc39a4"></stop>
-                    <stop offset=".841" stop-color="#c837ab"></stop>
-                  </radialGradient>
-                  <path
-                    fill="url(#yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1)"
-                    d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
-                  ></path>
-                  <radialGradient
-                    id="yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2"
-                    cx="11.786"
-                    cy="5.54"
-                    r="29.813"
-                    gradientTransform="matrix(1 0 0 .6663 0 1.849)"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop offset="0" stop-color="#4168c9"></stop>
-                    <stop
-                      offset=".999"
-                      stop-color="#4168c9"
-                      stop-opacity="0"
-                    ></stop>
-                  </radialGradient>
-                  <path
-                    fill="url(#yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2)"
-                    d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
-                  ></path>
-                  <path
-                    fill="#fff"
-                    d="M24,31c-3.859,0-7-3.14-7-7s3.141-7,7-7s7,3.14,7,7S27.859,31,24,31z M24,19c-2.757,0-5,2.243-5,5	s2.243,5,5,5s5-2.243,5-5S26.757,19,24,19z"
-                  ></path>
-                  <circle cx="31.5" cy="16.5" r="1.5" fill="#fff"></circle>
-                  <path
-                    fill="#fff"
-                    d="M30,37H18c-3.859,0-7-3.14-7-7V18c0-3.86,3.141-7,7-7h12c3.859,0,7,3.14,7,7v12	C37,33.86,33.859,37,30,37z M18,13c-2.757,0-5,2.243-5,5v12c0,2.757,2.243,5,5,5h12c2.757,0,5-2.243,5-5V18c0-2.757-2.243-5-5-5H18z"
-                  ></path>
-                </svg>
-                Instagram
+                <Instagram size={20} className="text-pink-400" />
               </Link>
             </li>
             <li>
@@ -180,24 +144,17 @@ export default function Footer() {
                 target="_blank"
                 className="hover:text-gray-300 flex items-center gap-1"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  x="0px"
-                  y="0px"
-                  width="30"
-                  height="30"
-                  viewBox="0 0 48 48"
-                >
-                  <path
-                    fill="#039be5"
-                    d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"
-                  ></path>
-                  <path
-                    fill="#fff"
-                    d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"
-                  ></path>
-                </svg>
-                Facebook
+                <Facebook size={20} className="text-blue-500" />
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="https://www.Twitter.com/yourprofile"
+                target="_blank"
+                className="hover:text-gray-300 flex items-center gap-1"
+              >
+                <Twitter size={20} className="text-blue-400" />
               </Link>
             </li>
 
@@ -250,28 +207,43 @@ export default function Footer() {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                TikTok
               </Link>
             </li>
           </ul>
+          <div className="my-2">
+            <Link
+              href="https://www.whatsapp.com/yourprofile"
+              target="_blank"
+              className="hover:text-gray-300 flex items-center gap-1"
+            >
+              <Mail size={20} className="text-gray-500" />
+              mail@shoepedi.com
+            </Link>
+          </div>
+          <div className="my-2">
+            <Link
+              href="https://www.whatsapp.com/yourprofile"
+              target="_blank"
+              className="hover:text-gray-300 flex items-center gap-1"
+            >
+              <MessageCircle size={20} className="text-green-500" />
+              Ask on Whatsapp
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Footer Bottom */}
       <div className="border-t border-gray-800">
-        <div className="max-w-7xl mx-auto py-6 px-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+        <div className="max-w-7xl mx-auto py-6 px-4 flex flex-wrap items-center justify-center md:justify-between gap-y-4">
           {/* Logo and Language Selection */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
             <Image
               src="/icons/logo.svg"
               alt={`${site.name} logo`}
               width={48}
               height={48}
-              className="w-12"
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
+              className="w-12 h-auto"
             />
             <Select
               value={locale}
@@ -293,7 +265,7 @@ export default function Footer() {
           </div>
 
           {/* Navigation Links */}
-          <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-sm">
+          <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm">
             <Link
               href="/page/conditions-of-use"
               className="hover:text-gray-300"
@@ -309,9 +281,13 @@ export default function Footer() {
           </div>
 
           {/* Address and Contact */}
-          <div className="text-center text-sm text-gray-400">
-            {site.address} | {site.phone}
+          <div className="flex flex-col items-center md:items-start text-sm text-gray-400">
+            <div className="text-center">{site.address}</div>
+            <div className="text-center">{site.phone}</div>
           </div>
+
+          {/* Copyright */}
+          <div className="text-center w-full">{site.copyright}</div>
         </div>
       </div>
     </footer>
