@@ -25,6 +25,7 @@ import { WebPageInputSchema, WebPageUpdateSchema } from "@/lib/validator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toSlug } from "@/lib/utils";
 import { toast } from "sonner";
+import { AutoResizeTextarea } from "@/components/shared/Textarea";
 
 const webPageDefaultValues =
   process.env.NODE_ENV === "development"
@@ -155,7 +156,7 @@ const WebPageForm = ({
                     onChange={({ text }) => form.setValue("content", text)}
                   />
 
-                  {/* <Textarea placeholder='Enter content' {...field} /> */}
+                  {/* <AutoResizeTextarea placeholder='Enter content' {...field} /> */}
                 </FormControl>
                 <FormMessage />
               </FormItem>

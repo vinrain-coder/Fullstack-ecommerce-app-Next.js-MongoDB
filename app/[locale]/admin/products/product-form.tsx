@@ -21,7 +21,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 import { IProduct } from "@/lib/db/models/product.model";
 import { UploadButton } from "@/lib/uploadthing";
@@ -34,6 +33,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useState } from "react";
 import ImageUploader from "./image-uploader";
 import { toast } from "sonner";
+import { AutoResizeTextarea } from "@/components/shared/Textarea";
 
 const handleKeyDown = (e: React.KeyboardEvent) => {
   if (e.key === "Enter") {
@@ -489,7 +489,7 @@ const ProductForm = ({
               <FormItem className="w-full">
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea
+                  <AutoResizeTextarea
                     placeholder="Add the product description"
                     className="resize-none"
                     {...field}

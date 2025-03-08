@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { AutoResizeTextarea } from "@/components/shared/Textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -9,7 +10,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { UploadButton } from "@/lib/uploadthing";
 import { ISettingInput } from "@/types";
 import { TrashIcon } from "lucide-react";
@@ -113,7 +113,7 @@ export default function SiteInfoForm({
               <FormItem className="w-full">
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea
+                  <AutoResizeTextarea
                     placeholder="Enter description"
                     className="h-40"
                     {...field}

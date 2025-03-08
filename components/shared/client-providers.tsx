@@ -30,7 +30,7 @@ export default function ClientProviders({
         ) : (
           <div>{children}</div>
         )}
-        <Toaster duration={3000} richColors closeButton />
+        <Toaster duration={3000} richColors closeButton visibleToasts={3} />
       </ThemeProvider>
     </AppInitializer>
   );

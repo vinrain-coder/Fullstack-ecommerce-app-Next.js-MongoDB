@@ -41,7 +41,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import {
   createUpdateReview,
   getReviewByProductId,
@@ -53,6 +52,7 @@ import { IProduct } from "@/lib/db/models/product.model";
 import { Separator } from "@/components/ui/separator";
 import { IReviewDetails } from "@/types";
 import { toast } from "sonner";
+import { AutoResizeTextarea } from "@/components/shared/Textarea";
 
 const reviewFormDefaultValues = {
   title: "",
@@ -210,7 +210,7 @@ export default function ReviewList({
                               <FormItem className="w-full">
                                 <FormLabel>{t("Comment")}</FormLabel>
                                 <FormControl>
-                                  <Textarea
+                                  <AutoResizeTextarea
                                     placeholder={t("Enter comment")}
                                     {...field}
                                   />
