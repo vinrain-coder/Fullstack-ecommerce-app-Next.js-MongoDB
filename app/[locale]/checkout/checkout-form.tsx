@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
 import { createOrder } from "@/lib/actions/order.actions";
 import {
   calculateFutureDate,
@@ -39,6 +38,7 @@ import Link from "next/link";
 import useCartStore from "@/hooks/use-cart-store";
 import useSettingStore from "@/hooks/use-setting-store";
 import ProductPrice from "@/components/shared/product/product-price";
+import { toast } from "sonner";
 
 const shippingAddressDefaultValues =
   process.env.NODE_ENV === "development"
@@ -62,7 +62,6 @@ const shippingAddressDefaultValues =
       };
 
 const CheckoutForm = () => {
-  const { toast } = useToast();
   const router = useRouter();
   const {
     setting: {
@@ -134,15 +133,9 @@ const CheckoutForm = () => {
       totalPrice,
     });
     if (!res.success) {
-      toast({
-        description: res.message,
-        variant: "destructive",
-      });
+      toast.success(res.message);
     } else {
-      toast({
-        description: res.message,
-        variant: "default",
-      });
+      toast.error(res.message);
       clearCart();
       router.push(`/checkout/${res.data?.orderId}`);
     }

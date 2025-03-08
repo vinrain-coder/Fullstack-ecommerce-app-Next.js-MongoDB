@@ -10,10 +10,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useCartStore from "@/hooks/use-cart-store";
-import { useToast } from "@/hooks/use-toast";
 import { OrderItem } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function AddToCart({
   item,
@@ -23,7 +23,6 @@ export default function AddToCart({
   minimal?: boolean;
 }) {
   const router = useRouter();
-  const { toast } = useToast();
 
   const { addItem } = useCartStore();
 
@@ -37,10 +36,7 @@ export default function AddToCart({
       const itemId = await addItem(item, quantity);
       router.push(`/cart/${itemId}`);
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        description: error.message,
-      });
+      toast.error(`ERROR! ${error.message}`);
     } finally {
       setIsLoading(false); // End loading
     }
@@ -52,10 +48,7 @@ export default function AddToCart({
       addItem(item, quantity);
       router.push(`/checkout`);
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        description: error.message,
-      });
+      toast.error(`ERROR! ${error.message}`);
     } finally {
       setIsBuyNowLoading(false); // End loading for "Buy Now"
     }
@@ -68,8 +61,7 @@ export default function AddToCart({
         setIsLoading(true); // Start loading
         try {
           addItem(item, 1);
-          toast({
-            description: "Item added to cart",
+          toast.success("Item added to cart", {
             action: (
               <Button
                 onClick={() => {
@@ -81,10 +73,7 @@ export default function AddToCart({
             ),
           });
         } catch (error: any) {
-          toast({
-            variant: "destructive",
-            description: error.message,
-          });
+          toast.error(`ERROR! ${error.message}`);
         } finally {
           setIsLoading(false); // End loading
         }
@@ -100,9 +89,7 @@ export default function AddToCart({
         onValueChange={(i) => setQuantity(Number(i))}
       >
         <SelectTrigger>
-          <SelectValue>
-            Quantity: {quantity}
-          </SelectValue>
+          <SelectValue>Quantity: {quantity}</SelectValue>
         </SelectTrigger>
         <SelectContent position="popper">
           {Array.from({ length: item.countInStock }).map((_, i) => (

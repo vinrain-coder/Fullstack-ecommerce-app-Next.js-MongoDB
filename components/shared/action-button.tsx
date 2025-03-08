@@ -2,8 +2,8 @@
 import { useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function ActionButton({
   caption,
@@ -19,7 +19,6 @@ export default function ActionButton({
   size?: "default" | "sm" | "lg";
 }) {
   const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
   return (
     <Button
       type="button"
@@ -30,10 +29,7 @@ export default function ActionButton({
       onClick={() =>
         startTransition(async () => {
           const res = await action();
-          toast({
-            variant: res.success ? "default" : "destructive",
-            description: res.message,
-          });
+          toast.success(res.message);
         })
       }
     >

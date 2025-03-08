@@ -19,12 +19,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { createWebPage, updateWebPage } from "@/lib/actions/web-page.actions";
 import { IWebPage } from "@/lib/db/models/web-page.model";
 import { WebPageInputSchema, WebPageUpdateSchema } from "@/lib/validator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toSlug } from "@/lib/utils";
+import { toast } from "sonner";
 
 const webPageDefaultValues =
   process.env.NODE_ENV === "development"
@@ -59,19 +59,16 @@ const WebPageForm = ({
       webPage && type === "Update" ? webPage : webPageDefaultValues,
   });
 
-  const { toast } = useToast();
   async function onSubmit(values: z.infer<typeof WebPageInputSchema>) {
     if (type === "Create") {
       const res = await createWebPage(values);
       if (!res.success) {
-        toast({
-          variant: "destructive",
-          description: res.message,
-        });
-      } else {
-        toast({
-          description: res.message,
-        });
+        if (!res.success) {
+          toast.error(res.message);
+        } else {
+          toast.success(res.message);
+        }
+
         router.push(`/admin/web-pages`);
       }
     }
@@ -82,10 +79,7 @@ const WebPageForm = ({
       }
       const res = await updateWebPage({ ...values, _id: webPageId });
       if (!res.success) {
-        toast({
-          variant: "destructive",
-          description: res.message,
-        });
+        toast.success(res.message);
       } else {
         router.push(`/admin/web-pages`);
       }

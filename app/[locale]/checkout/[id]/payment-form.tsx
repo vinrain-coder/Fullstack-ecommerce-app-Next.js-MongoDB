@@ -6,7 +6,6 @@ import {
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { Card, CardContent } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import {
   approvePayPalOrder,
   createPayPalOrder,
@@ -21,6 +20,7 @@ import ProductPrice from "@/components/shared/product/product-price";
 import StripeForm from "./stripe-form";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { toast } from "sonner";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -47,7 +47,6 @@ export default function OrderDetailsForm({
     expectedDeliveryDate,
     isPaid,
   } = order;
-  const { toast } = useToast();
 
   if (isPaid) {
     redirect(`/account/orders/${order._id}`);
@@ -64,19 +63,16 @@ export default function OrderDetailsForm({
   }
   const handleCreatePayPalOrder = async () => {
     const res = await createPayPalOrder(order._id);
-    if (!res.success)
-      return toast({
-        description: res.message,
-        variant: "destructive",
-      });
+    if (!res.success) return toast.error(res.message);
     return res.data;
   };
   const handleApprovePayPalOrder = async (data: { orderID: string }) => {
     const res = await approvePayPalOrder(order._id, data);
-    toast({
-      description: res.message,
-      variant: res.success ? "default" : "destructive",
-    });
+    if (res.success) {
+      toast.success(res.message);
+    } else {
+      toast.error(res.message);
+    }
   };
 
   const CheckoutSummary = () => (

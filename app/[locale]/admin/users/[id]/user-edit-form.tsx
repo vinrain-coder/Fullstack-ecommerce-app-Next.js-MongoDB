@@ -22,11 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
 import { updateUser } from "@/lib/actions/user.actions";
 import { USER_ROLES } from "@/lib/constants";
 import { IUser } from "@/lib/db/models/user.model";
 import { UserUpdateSchema } from "@/lib/validator";
+import { toast } from "sonner";
 
 const UserEditForm = ({ user }: { user: IUser }) => {
   const router = useRouter();
@@ -36,30 +36,23 @@ const UserEditForm = ({ user }: { user: IUser }) => {
     defaultValues: user,
   });
 
-  const { toast } = useToast();
   async function onSubmit(values: z.infer<typeof UserUpdateSchema>) {
     try {
       const res = await updateUser({
         ...values,
         _id: user._id,
       });
-      if (!res.success)
-        return toast({
-          variant: "destructive",
-          description: res.message,
-        });
+      if (!res.success) {
+        toast.error(res.message);
+      } else {
+        toast.success(res.message);
+      }
 
-      toast({
-        description: res.message,
-      });
       form.reset();
       router.push(`/admin/users`);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        description: error.message,
-      });
+      toast.error(error.message);
     }
   }
 

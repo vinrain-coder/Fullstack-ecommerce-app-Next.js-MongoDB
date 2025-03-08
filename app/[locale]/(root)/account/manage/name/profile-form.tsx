@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner"; // ✅ Import Sonner toast
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+
 import { updateUserName } from "@/lib/actions/user.actions";
 import { UserNameSchema } from "@/lib/validator";
 
@@ -29,15 +30,13 @@ export const ProfileForm = () => {
       name: session?.user?.name ?? "",
     },
   });
-  const { toast } = useToast();
 
   async function onSubmit(values: z.infer<typeof UserNameSchema>) {
     const res = await updateUserName(values);
-    if (!res.success)
-      return toast({
-        variant: "destructive",
-        description: res.message,
-      });
+
+    if (!res.success) {
+      return toast.error(res.message); // ✅ Sonner toast for errors
+    }
 
     const { data, message } = res;
     const newSession = {
@@ -48,16 +47,16 @@ export const ProfileForm = () => {
       },
     };
     await update(newSession);
-    toast({
-      description: message,
-    });
+    
+    toast.success(message); // ✅ Sonner toast for success
     router.push("/account/manage");
   }
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="  flex flex-col gap-5"
+        className="flex flex-col gap-5"
       >
         <div className="flex flex-col gap-5">
           <FormField
@@ -67,11 +66,7 @@ export const ProfileForm = () => {
               <FormItem className="w-full">
                 <FormLabel className="font-bold">New name</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Name"
-                    {...field}
-                    className="input-field"
-                  />
+                  <Input placeholder="Name" {...field} className="input-field" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

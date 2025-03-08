@@ -19,11 +19,11 @@ import {
   registerUser,
   signInWithCredentials,
 } from "@/lib/actions/user.actions";
-import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSignUpSchema } from "@/lib/validator";
 import { Separator } from "@/components/ui/separator";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { toast } from "sonner";
 
 const signUpDefaultValues =
   process.env.NODE_ENV === "development"
@@ -58,11 +58,7 @@ export default function CredentialsSignInForm() {
     try {
       const res = await registerUser(data);
       if (!res.success) {
-        toast({
-          title: "Error",
-          description: res.error,
-          variant: "destructive",
-        });
+        toast.error("Invalid email or password");
         return;
       }
       await signInWithCredentials({
@@ -74,11 +70,7 @@ export default function CredentialsSignInForm() {
       if (isRedirectError(error)) {
         throw error;
       }
-      toast({
-        title: "Error",
-        description: "Invalid email or password",
-        variant: "destructive",
-      });
+      toast.error("Invalid email or password");
     }
   };
 

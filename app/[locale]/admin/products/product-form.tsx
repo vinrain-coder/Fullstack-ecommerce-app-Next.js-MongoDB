@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 import { IProduct } from "@/lib/db/models/product.model";
 import { UploadButton } from "@/lib/uploadthing";
@@ -34,6 +33,7 @@ import { ImagePlus, Trash, Upload, X } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useState } from "react";
 import ImageUploader from "./image-uploader";
+import { toast } from "sonner";
 
 const handleKeyDown = (e: React.KeyboardEvent) => {
   if (e.key === "Enter") {
@@ -104,19 +104,13 @@ const ProductForm = ({
       product && type === "Update" ? product : productDefaultValues,
   });
 
-  const { toast } = useToast();
   async function onSubmit(values: IProductInput) {
     if (type === "Create") {
       const res = await createProduct(values);
       if (!res.success) {
-        toast({
-          variant: "destructive",
-          description: res.message,
-        });
+        toast.error(res.message);
       } else {
-        toast({
-          description: res.message,
-        });
+        toast.success(res.message);
         router.push(`/admin/products`);
       }
     }
@@ -127,10 +121,7 @@ const ProductForm = ({
       }
       const res = await updateProduct({ ...values, _id: productId });
       if (!res.success) {
-        toast({
-          variant: "destructive",
-          description: res.message,
-        });
+        toast.error(res.message);
       } else {
         router.push(`/admin/products`);
       }

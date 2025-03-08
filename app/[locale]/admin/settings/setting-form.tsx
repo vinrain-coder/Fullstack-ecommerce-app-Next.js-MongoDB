@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
 import { SettingInputSchema } from "@/lib/validator";
 import { ClientSetting, ISettingInput } from "@/types";
 import { updateSetting } from "@/lib/actions/setting.actions";
@@ -16,6 +15,7 @@ import DeliveryDateForm from "./delivery-date-form";
 import SiteInfoForm from "./site-info-form";
 import CommonForm from "./common-form";
 import CarouselForm from "./carousel-form";
+import { toast } from "sonner";
 
 const SettingForm = ({ setting }: { setting: ISettingInput }) => {
   const { setSetting } = useSetting();
@@ -28,18 +28,12 @@ const SettingForm = ({ setting }: { setting: ISettingInput }) => {
     formState: { isSubmitting },
   } = form;
 
-  const { toast } = useToast();
   async function onSubmit(values: ISettingInput) {
     const res = await updateSetting({ ...values });
     if (!res.success) {
-      toast({
-        variant: "destructive",
-        description: res.message,
-      });
+      toast.error(res.message);
     } else {
-      toast({
-        description: res.message,
-      });
+      toast.success(res.message);
       setSetting(values as ClientSetting);
     }
   }

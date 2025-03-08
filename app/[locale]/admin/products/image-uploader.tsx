@@ -11,9 +11,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ImagePlus, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { UploadButton } from "@/lib/uploadthing";
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { UploadThingError } from "uploadthing/server";
+import { toast } from "sonner";
 
 const ImageUploader = ({ form }: { form: any }) => {
   const [images, setImages] = useState<string[]>(
@@ -113,15 +113,10 @@ const ImageUploader = ({ form }: { form: any }) => {
                         ); // Deduplicate
                         setImages(updatedImages);
                         form.setValue("images", updatedImages); // Update form state
-                        toast({
-                          description: "Images uploaded successfully!",
-                        });
+                        toast.success("Images uploaded successfully!");
                       }}
                       onUploadError={(error: Error) => {
-                        toast({
-                          variant: "destructive",
-                          description: `ERROR! ${error.message}`,
-                        });
+                        toast.error(`ERROR! ${error.message}`);
                       }}
                     />
                   </FormControl>

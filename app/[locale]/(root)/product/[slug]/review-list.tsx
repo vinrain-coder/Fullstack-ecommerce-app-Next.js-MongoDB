@@ -42,7 +42,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import {
   createUpdateReview,
   getReviewByProductId,
@@ -53,6 +52,7 @@ import RatingSummary from "@/components/shared/product/rating-summary";
 import { IProduct } from "@/lib/db/models/product.model";
 import { Separator } from "@/components/ui/separator";
 import { IReviewDetails } from "@/types";
+import { toast } from "sonner";
 
 const reviewFormDefaultValues = {
   title: "",
@@ -79,10 +79,7 @@ export default function ReviewList({
       setTotalPages(res.totalPages);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      toast({
-        variant: "destructive",
-        description: t("Error in fetching reviews"),
-      });
+      toast.error(t("Error in fetching reviews"));
     }
   };
 
@@ -118,22 +115,19 @@ export default function ReviewList({
     defaultValues: reviewFormDefaultValues,
   });
   const [open, setOpen] = useState(false);
-  const { toast } = useToast();
   const onSubmit: SubmitHandler<CustomerReview> = async (values) => {
     const res = await createUpdateReview({
       data: { ...values, product: product._id },
       path: `/product/${product.slug}`,
     });
-    if (!res.success)
-      return toast({
-        variant: "destructive",
-        description: res.message,
-      });
+    if (!res.success) {
+      toast.error(res.message);
+      return;
+    }
+
     setOpen(false);
     reload();
-    toast({
-      description: res.message,
-    });
+    toast.success(res.message);
   };
 
   const handleOpenForm = async () => {

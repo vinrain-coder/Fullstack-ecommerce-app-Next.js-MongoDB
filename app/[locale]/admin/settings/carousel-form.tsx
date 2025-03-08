@@ -8,12 +8,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
 import { UploadButton } from "@/lib/uploadthing";
 import { ISettingInput } from "@/types";
 import { TrashIcon } from "lucide-react";
 import Image from "next/image";
 import { useFieldArray, UseFormReturn } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function CarouselForm({
   form,
@@ -117,10 +117,7 @@ export default function CarouselForm({
                       form.setValue(`carousels.${index}.image`, res[0].url);
                     }}
                     onUploadError={(error: Error) => {
-                      toast({
-                        variant: "destructive",
-                        description: `ERROR! ${error.message}`,
-                      });
+                      toast.error(`ERROR! ${error.message}`);
                     }}
                   />
                 )}

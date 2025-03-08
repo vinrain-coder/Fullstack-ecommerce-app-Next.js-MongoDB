@@ -3,9 +3,9 @@ import React from "react";
 import useCartSidebar from "@/hooks/use-cart-sidebar";
 import CartSidebar from "./cart-sidebar";
 import { ThemeProvider } from "./theme-provider";
-import { Toaster } from "../ui/toaster";
 import AppInitializer from "./app-initializer";
 import { ClientSetting } from "@/types";
+import { Toaster } from "sonner";
 
 export default function ClientProviders({
   setting,
@@ -30,7 +30,7 @@ export default function ClientProviders({
         ) : (
           <div>{children}</div>
         )}
-        <Toaster />
+        <Toaster duration={3000} richColors closeButton />
       </ThemeProvider>
     </AppInitializer>
   );
