@@ -37,10 +37,10 @@ export async function generateMetadata(props: {
     title: product.name,
     description: product.description,
     openGraph: {
-      type: "product",
+      // type: "product",
       title: product.name,
       description: product.description,
-      url: {`${site.url}/product/${item.slug}`},
+      url: `${site.url}/product/${product.slug}`,
       images: [
         {
           url: ogImageUrl,
