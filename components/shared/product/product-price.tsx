@@ -81,7 +81,7 @@ const ProductPrice = ({
       </div>
       <div className="text-muted-foreground text-xs py-2">
         {t("Product.List price")}:{" "}
-        <span className="line-through">{listPrice}</span>
+        <span className="line-through">KES {listPrice}</span>
       </div>
     </div>
   );

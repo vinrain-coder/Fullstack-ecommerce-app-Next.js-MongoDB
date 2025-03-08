@@ -1,6 +1,8 @@
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
 import { getWebPageBySlug } from "@/lib/actions/web-page.actions";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -32,7 +34,27 @@ export default async function ProductDetailsPage(props: {
     <div className="p-4 max-w-3xl mx-auto">
       <h1 className="h1-bold py-4">{webPage.title}</h1>
       <section className="text-justify text-lg mb-20 web-page-content">
-        <ReactMarkdown>{webPage.content}</ReactMarkdown>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
+          components={{
+            table: ({ children }) => (
+              <table className="min-w-full border-collapse border border-gray-300">
+                {children}
+              </table>
+            ),
+            th: ({ children }) => (
+              <th className="border border-gray-300 p-2 bg-gray-100 text-left">
+                {children}
+              </th>
+            ),
+            td: ({ children }) => (
+              <td className="border border-gray-300 p-2">{children}</td>
+            ),
+          }}
+        >
+          {webPage.content}
+        </ReactMarkdown>
       </section>
     </div>
   );

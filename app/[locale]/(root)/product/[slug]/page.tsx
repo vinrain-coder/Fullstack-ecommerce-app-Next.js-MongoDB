@@ -17,6 +17,7 @@ import BrowsingHistoryList from "@/components/shared/browsing-history-list";
 import RatingSummary from "@/components/shared/product/rating-summary";
 import ProductSlider from "@/components/shared/product/product-slider";
 import { getTranslations } from "next-intl/server";
+import { getSetting } from "@/lib/actions/setting.actions";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -27,9 +28,39 @@ export async function generateMetadata(props: {
   if (!product) {
     return { title: t("Product.Product not found") };
   }
+
+  const ogImageUrl = product.images[0];
+
+  const { site } = await getSetting();
+
   return {
     title: product.name,
     description: product.description,
+    openGraph: {
+      type: "product",
+      title: product.name,
+      description: product.description,
+      url: `${site.url}${product.slug}`,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: product.name,
+        },
+      ],
+      siteName: "ShoePedi",
+      price: product.price.toString(),
+      currency: "KES",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.description,
+      image: ogImageUrl,
+      price: product.price.toString(),
+      currency: "KES",
+    },
   };
 }
 

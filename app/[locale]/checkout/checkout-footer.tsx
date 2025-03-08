@@ -22,7 +22,7 @@ export default function CheckoutFooter() {
         <Link href="/page/conditions-of-use"> conditions of use</Link>.
       </p>
       <p>
-        Within 30 days of delivery, you may return new, unopened merchandise in
+        Within 7 days of delivery, you may return new, unopened merchandise in
         its original condition. Exceptions and restrictions apply.{" "}
         <Link href="/page/returns-policy">
           See {site.name}&apos;s Returns Policy.
