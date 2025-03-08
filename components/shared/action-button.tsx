@@ -33,7 +33,7 @@ export default function ActionButton({
         })
       }
     >
-      {isPending ? "processing..." : caption}
+      {isPending ? "Processing..." : caption}
     </Button>
   );
 }
