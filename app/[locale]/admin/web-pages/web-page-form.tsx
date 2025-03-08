@@ -152,11 +152,7 @@ const WebPageForm = ({
                   <MarkdownEditor
                     {...field}
                     style={{ height: "500px" }}
-                    renderHTML={(text) => (
-                      <div>
-                        <ReactMarkdown>{text}</ReactMarkdown>
-                      </div>
-                    )}
+                    renderHTML={(text) => <ReactMarkdown>{text}</ReactMarkdown>}
                     onChange={({ text }) => form.setValue("content", text)}
                   />
 
