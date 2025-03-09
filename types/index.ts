@@ -1,4 +1,5 @@
 import {
+  BlogInputSchema,
   CarouselSchema,
   CartSchema,
   DeliveryDateSchema,
@@ -73,6 +74,9 @@ export type IUserName = z.infer<typeof UserNameSchema>;
 
 // webpage
 export type IWebPageInput = z.infer<typeof WebPageInputSchema>;
+
+// blog
+export type IBlogInput = z.infer<typeof BlogInputSchema>;
 
 // setting
 export type ICarousel = z.infer<typeof CarouselSchema>;

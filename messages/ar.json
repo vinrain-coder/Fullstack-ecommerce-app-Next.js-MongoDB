@@ -213,5 +213,22 @@
     "Status": "الحالة",
     "Actions": "الإجراءات",
     "Details": "التفاصيل"
-  }
+  },
+    "Blog": {
+      "Search": "بحث",
+      "Category": "الفئة",
+      "Tag": "الوسم",
+      "All Blogs": "جميع المدونات",
+      "No": "لا يوجد",
+      "of": "من",
+      "results": "نتائج",
+      "for": "لـ",
+      "Clear": "مسح",
+      "Filters": "الفلاتر",
+      "All": "الكل",
+      "Results": "النتائج",
+      "Explore latest blogs and articles": "استكشف أحدث المدونات والمقالات",
+      "No blog found": "لم يتم العثور على مدونة",
+      "By": "بواسطة"
+    }  
 }

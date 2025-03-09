@@ -28,6 +28,10 @@ const links = [
     href: "/admin/web-pages",
   },
   {
+    title: "Blogs",
+    href: "/admin/blogs",
+  },
+  {
     title: "Settings",
     href: "/admin/settings",
   },

@@ -211,6 +211,22 @@ export const WebPageUpdateSchema = WebPageInputSchema.extend({
   _id: z.string(),
 });
 
+// Blog Validation
+export const BlogInputSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  slug: z.string().min(3, "Slug must be at least 3 characters"),
+  content: z.string().min(10, "Content must be at least 10 characters"),
+  category: z.string().min(3, "Category is required"),
+  views: z.number(),
+  tags: z.array(z.string()),
+  isPublished: z.boolean(),
+  publishedAt: z.date().optional(),
+});
+
+export const BlogUpdateSchema = BlogInputSchema.extend({
+  _id: MongoId,
+});
+
 // Setting
 
 export const SiteLanguageSchema = z.object({

@@ -47,7 +47,7 @@ function ShareProduct({ slug, name }: { slug: string; name: string }) {
       </div>
 
       {/* Social Media Share Buttons */}
-      <a
+      {/* <a
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -63,7 +63,7 @@ function ShareProduct({ slug, name }: { slug: string; name: string }) {
         className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md flex items-center"
       >
         <Twitter size={20} />
-      </a>
+      </a> */}
 
       <a
         href={`https://api.whatsapp.com/send?text=Check out this product: ${encodeURIComponent(name)} ${encodeURIComponent(productUrl)}`}

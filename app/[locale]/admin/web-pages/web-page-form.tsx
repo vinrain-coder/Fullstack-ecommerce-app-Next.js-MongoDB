@@ -152,8 +152,8 @@ const WebPageForm = ({
                   <MarkdownEditor
                     {...field}
                     style={{ height: "500px" }}
-                    renderHTML={(text) => <ReactMarkdown>{text}</ReactMarkdown>}
                     onChange={({ text }) => form.setValue("content", text)}
+                    renderHTML={(text) => <ReactMarkdown>{text}</ReactMarkdown>}
                   />
 
                   {/* <AutoResizeTextarea placeholder='Enter content' {...field} /> */}

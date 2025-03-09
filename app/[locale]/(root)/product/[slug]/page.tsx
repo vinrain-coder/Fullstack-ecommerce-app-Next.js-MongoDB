@@ -138,11 +138,6 @@ export default async function ProductDetails(props: {
                 {product.description}
               </p>
             </div>
-            <Separator className="my-2" />
-            <div className="flex flex-col gap-1">
-              <h3>Share this product</h3>
-              <ShareProduct slug={product.slug} name={product.name} />
-            </div>
           </div>
           <div>
             <Card>
@@ -187,6 +182,10 @@ export default async function ProductDetails(props: {
                 )}
               </CardContent>
             </Card>
+          </div>
+          <div className="flex flex-col gap-1 my-2">
+            <h3 className="font-semibold">Share this product</h3>
+            <ShareProduct slug={product.slug} name={product.name} />
           </div>
         </div>
       </section>

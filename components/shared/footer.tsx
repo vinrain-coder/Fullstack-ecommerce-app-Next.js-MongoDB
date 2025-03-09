@@ -54,7 +54,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/page/blog" className="hover:text-gray-300">
+              <Link href="/blogs" className="hover:text-gray-300">
                 {t("Footer.Blog")}
               </Link>
             </li>

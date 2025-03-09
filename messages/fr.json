@@ -207,5 +207,22 @@
     "Status": "Statut",
     "Actions": "Actions",
     "Details": "Détails"
-  }
+  },
+    "Blog": {
+      "Search": "Rechercher",
+      "Category": "Catégorie",
+      "Tag": "Étiquette",
+      "All Blogs": "Tous les blogs",
+      "No": "Aucun",
+      "of": "de",
+      "results": "résultats",
+      "for": "pour",
+      "Clear": "Effacer",
+      "Filters": "Filtres",
+      "All": "Tous",
+      "Results": "Résultats",
+      "Explore latest blogs and articles": "Explorez les derniers blogs et articles",
+      "No blog found": "Aucun blog trouvé",
+      "By": "Par"
+    }  
 }

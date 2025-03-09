@@ -13,6 +13,8 @@ const publicPages = [
   "/cart/(.*)",
   "/product/(.*)",
   "/page/(.*)",
+  "/blogs",
+  "/blogs/(.*)",
   // (/secret requires auth)
 ];
 

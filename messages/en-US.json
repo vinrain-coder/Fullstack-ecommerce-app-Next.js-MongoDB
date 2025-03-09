@@ -212,5 +212,23 @@
     "Status": "Status",
     "Actions": "Actions",
     "Details": "Details"
-  }
+  },
+  
+    "Blog": {
+      "Search": "Search",
+      "Category": "Category",
+      "Tag": "Tag",
+      "All Blogs": "All Blogs",
+      "No": "No",
+      "of": "of",
+      "results": "results",
+      "for": "for",
+      "Clear": "Clear",
+      "Filters": "Filters",
+      "All": "All",
+      "Results": "Results",
+      "Explore latest blogs and articles": "Explore latest blogs and articles",
+      "No blog found": "No blog found",
+      "By": "By"
+    }
 }
