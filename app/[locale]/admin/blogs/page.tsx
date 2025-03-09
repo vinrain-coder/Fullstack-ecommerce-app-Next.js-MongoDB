@@ -18,14 +18,14 @@ import { IBlog } from "@/lib/db/models/blog.model";
 import { auth } from "@/auth";
 
 export const metadata: Metadata = {
-  title: "Admin Web Pages",
+  title: "Admin Blog Pages",
 };
 
 const session = await auth();
-  if (session?.user.role !== "Admin")
-    throw new Error("Admin permission required");
+if (session?.user.role !== "Admin")
+  throw new Error("Admin permission required");
 
-export default async function WebPageAdminPage() {
+export default async function BlogAdminPage() {
   const { blogs } = await getAllBlogs({});
 
   return (
@@ -44,7 +44,6 @@ export default async function WebPageAdminPage() {
               <TableHead>Name</TableHead>
               <TableHead>Slug</TableHead>
               <TableHead>Category</TableHead>
-
               <TableHead>Views</TableHead>
               <TableHead>IsPublished</TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
