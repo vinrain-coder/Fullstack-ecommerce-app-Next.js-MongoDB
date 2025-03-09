@@ -50,22 +50,34 @@ export default async function BlogAdminPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {blogs.map((blog: IBlog) => (
-              <TableRow key={blog._id}>
-                <TableCell>{formatId(blog._id)}</TableCell>
-                <TableCell>{blog.title}</TableCell>
-                <TableCell>{blog.slug}</TableCell>
-                <TableCell>{blog.category}</TableCell>
-                <TableCell>{blog.views}</TableCell>
-                <TableCell>{blog.isPublished ? "Yes" : "No"}</TableCell>
-                <TableCell className="flex gap-1">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`/admin/blogs/${blog._id}`}>Edit</Link>
-                  </Button>
-                  <DeleteDialog id={blog._id} action={deleteBlog} />
+            {Array.isArray(blogs) && blogs.length > 0 ? (
+              blogs.map((blog: IBlog) => (
+                <TableRow key={blog._id}>
+                  <TableCell>{formatId(blog._id)}</TableCell>
+                  <TableCell>{blog.title}</TableCell>
+                  <TableCell>{blog.slug}</TableCell>
+                  <TableCell>
+                    {typeof blog.category === "string"
+                      ? blog.category
+                      : "Unknown"}
+                  </TableCell>
+                  <TableCell>{blog.views}</TableCell>
+                  <TableCell>{blog.isPublished ? "Yes" : "No"}</TableCell>
+                  <TableCell className="flex gap-1">
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={`/admin/blogs/${blog._id}`}>Edit</Link>
+                    </Button>
+                    <DeleteDialog id={blog._id} action={deleteBlog} />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center">
+                  No blogs found.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>

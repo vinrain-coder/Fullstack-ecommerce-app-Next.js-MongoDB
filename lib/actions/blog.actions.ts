@@ -100,14 +100,13 @@ export async function getAllBlogs({
   });
 
   return {
-    blogs,
+    blogs: Array.isArray(blogs) ? blogs : [],
     totalPages: Math.ceil(totalBlogs / limit),
     totalBlogs,
     from: limit * (page - 1) + 1,
     to: limit * (page - 1) + blogs.length,
   };
 }
-
 
 // GET BLOG BY ID
 export async function getBlogById(blogId: string) {
@@ -169,4 +168,3 @@ export async function getMostViewedBlogs(limit: number = 5) {
     return [];
   }
 }
-
