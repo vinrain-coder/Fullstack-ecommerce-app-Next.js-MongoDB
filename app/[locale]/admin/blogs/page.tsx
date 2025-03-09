@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import DeleteDialog from "@/components/shared/delete-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +13,6 @@ import { formatId } from "@/lib/utils";
 import { Metadata } from "next";
 import { getAllBlogs } from "@/lib/actions/blog.actions";
 import { deleteBlog } from "../../../../lib/actions/blog.actions";
-import { IBlog } from "@/lib/db/models/blog.model";
 import { auth } from "@/auth";
 
 export const metadata: Metadata = {
@@ -23,10 +21,9 @@ export const metadata: Metadata = {
 
 export default async function BlogAdminPage() {
   const session = await auth();
-  if (session?.user.role !== "Admin")
-    throw new Error("Admin permission required");
+  if (session?.user.role !== "Admin") throw new Error("Admin permission required");
 
-  const { blogs } = await getAllBlogs({});
+  const blogs = await getAllBlogs({}); // ✅ Updated function call
 
   return (
     <div className="space-y-2">
@@ -43,24 +40,18 @@ export default async function BlogAdminPage() {
               <TableHead className="w-[100px]">Id</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Slug</TableHead>
-              <TableHead>Category</TableHead>
               <TableHead>Views</TableHead>
               <TableHead>IsPublished</TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.isArray(blogs) && blogs.length > 0 ? (
-              blogs.map((blog: IBlog) => (
+            {blogs.length > 0 ? (
+              blogs.map((blog) => (
                 <TableRow key={blog._id}>
                   <TableCell>{formatId(blog._id)}</TableCell>
                   <TableCell>{blog.title}</TableCell>
                   <TableCell>{blog.slug}</TableCell>
-                  <TableCell>
-                    {typeof blog.category === "string"
-                      ? blog.category
-                      : "Unknown"}
-                  </TableCell>
                   <TableCell>{blog.views}</TableCell>
                   <TableCell>{blog.isPublished ? "Yes" : "No"}</TableCell>
                   <TableCell className="flex gap-1">

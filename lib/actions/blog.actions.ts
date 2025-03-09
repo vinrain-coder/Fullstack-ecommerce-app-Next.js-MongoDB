@@ -61,52 +61,28 @@ export async function getBlogBySlug(slug: string) {
   }
 }
 
-// 🔹 GET ALL BLOGS (SEARCH, FILTER, PAGINATION, SORTING)
-export async function getAllBlogs({
-  query,
-  category,
-  tag,
-  sort = "latest",
-  page = 1,
-  limit = 10,
-}: {
-  query?: string;
-  category?: string;
-  tag?: string;
-  sort?: string;
-  page?: number;
-  limit?: number;
-}) {
+
+export async function getAllBlogs({ page = 1 }: { page?: number }) {
   await connectToDatabase();
 
-  const queryFilter = query ? { title: { $regex: query, $options: "i" } } : {};
-  const categoryFilter = category ? { category } : {};
-  const tagFilter = tag ? { tags: tag } : {};
+  const blogs = await Blog.find({ isPublished: true })
+    .sort({ createdAt: -1 }) // Sort by latest
+    .lean(); // ✅ Convert to plain objects
 
-  const blogs = await Blog.find({
-    isPublished: true,
-    ...queryFilter,
-    ...categoryFilter,
-    ...tagFilter,
-  })
-    .skip(limit * (page - 1))
-    .limit(limit)
-    .lean();
-
-  const totalBlogs = await Blog.countDocuments({
-    ...queryFilter,
-    ...categoryFilter,
-    ...tagFilter,
-  });
-
-  return {
-    blogs: Array.isArray(blogs) ? blogs : [],
-    totalPages: Math.ceil(totalBlogs / limit),
-    totalBlogs,
-    from: limit * (page - 1) + 1,
-    to: limit * (page - 1) + blogs.length,
-  };
+  return blogs.map((blog) => ({
+    _id: blog._id.toString(), // ✅ Convert _id to string
+    title: blog.title,
+    slug: blog.slug,
+    content: blog.content,
+    category: blog.category,
+    views: blog.views,
+    tags: blog.tags,
+    isPublished: blog.isPublished,
+    createdAt: blog.createdAt.toISOString(), // ✅ Convert date to string
+    updatedAt: blog.updatedAt.toISOString(), // ✅ Convert date to string
+  }));
 }
+
 
 // GET BLOG BY ID
 export async function getBlogById(blogId: string) {

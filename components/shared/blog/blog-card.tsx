@@ -47,13 +47,11 @@ export default function BlogCard({
 
       <div className="p-4">
         <Link href={`/blogs/${blog.slug}`}>
-          <h3 className="text-xl font-semibold hover:text-primary">
-            {blog.title}
-          </h3>
+          <h3 className="text-xl font-semibold text-slate-500">{blog.title}</h3>
         </Link>
-        <p className="text-gray-600 text-sm mt-1">
-          {blog.content.slice(0, 100)}...
-        </p>
+        {/* <p className="text-gray-600 text-sm mt-1">
+          {blog.content}
+        </p> */}
 
         <div className="flex justify-between items-center mt-4">
           <div className="text-xs text-gray-500">
@@ -66,11 +64,9 @@ export default function BlogCard({
           <span className="bg-blue-100 text-secondary px-2 py-1 rounded">
             {blog.category}
           </span>
-          {blog.tags.slice(0, 3).map((tag) => (
-            <span key={tag} className="bg-gray-200 px-2 py-1 rounded">
-              {tag}
-            </span>
-          ))}
+          <span className="bg-blue-100 text-secondary px-2 py-1 rounded">
+            {blog.tags}
+          </span>
         </div>
       </div>
     </div>
