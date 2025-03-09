@@ -47,7 +47,7 @@ export function AdminNav({
   return (
     <nav
       className={cn(
-        "flex items-center flex-wrap overflow-hidden gap-2 md:gap-4",
+        "flex items-center flex-wrap overflow-hidden gap-1 md:gap-2",
         className
       )}
       {...props}
@@ -57,7 +57,7 @@ export function AdminNav({
           key={item.href}
           href={item.href}
           className={cn(
-            "px-4 py-2 rounded-lg hover:text-primary active:bg-gray-300 transition duration-200", // Add padding and hover styles
+            "px-2 py-2 rounded-lg hover:text-primary active:bg-gray-300 transition duration-200", 
             pathname.includes(item.href)
               ? "font-semibold text-primary"
               : "text-muted-foreground"
