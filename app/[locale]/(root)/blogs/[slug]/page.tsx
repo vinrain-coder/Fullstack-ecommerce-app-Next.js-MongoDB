@@ -29,7 +29,6 @@ export default function BlogPage({ params }: { params: { slug: string } }) {
   if (loading) return <p>Loading...</p>;
   if (!blog) return notFound();
 
-  // ✅ Format Date
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleDateString("en-US", {
       weekday: "long",
@@ -41,7 +40,6 @@ export default function BlogPage({ params }: { params: { slug: string } }) {
 
   return (
     <>
-      {/* ✅ Dynamically Update Metadata */}
       <title>{blog.title}</title>
       <meta name="description" content={blog.content.slice(0, 160)} />
 

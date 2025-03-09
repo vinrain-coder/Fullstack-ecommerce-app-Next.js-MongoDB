@@ -21,11 +21,11 @@ export const metadata: Metadata = {
   title: "Admin Blog Pages",
 };
 
-const session = await auth();
-if (session?.user.role !== "Admin")
-  throw new Error("Admin permission required");
-
 export default async function BlogAdminPage() {
+  const session = await auth();
+  if (session?.user.role !== "Admin")
+    throw new Error("Admin permission required");
+
   const { blogs } = await getAllBlogs({});
 
   return (
