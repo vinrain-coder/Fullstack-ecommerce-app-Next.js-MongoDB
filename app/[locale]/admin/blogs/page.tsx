@@ -15,10 +15,15 @@ import { Metadata } from "next";
 import { getAllBlogs } from "@/lib/actions/blog.actions";
 import { deleteBlog } from "../../../../lib/actions/blog.actions";
 import { IBlog } from "@/lib/db/models/blog.model";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "Admin Web Pages",
 };
+
+const session = await auth();
+  if (session?.user.role !== "Admin")
+    throw new Error("Admin permission required");
 
 export default async function WebPageAdminPage() {
   const { blogs } = await getAllBlogs({});

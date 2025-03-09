@@ -12,7 +12,7 @@ export default async function MostViewedBlogs() {
           <li key={blog.slug} className="flex space-x-4">
             <img src={blog.category} alt={blog.title} className="w-16 h-16 object-cover rounded" />
             <div>
-              <Link href={`/blog/${blog.slug}`} className="text-blue-500 hover:underline">
+              <Link href={`/blogs/${blog.slug}`} className="text-primary hover:underline">
                 {blog.title}
               </Link>
               <p className="text-gray-500 text-sm">👀 {blog.views} views</p>

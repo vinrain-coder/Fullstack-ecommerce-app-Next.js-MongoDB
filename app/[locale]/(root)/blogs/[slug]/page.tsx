@@ -15,8 +15,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
-  const blog = await getBlogBySlug(params.slug);
-  return blog ? { title: blog.title } : { title: "Blog Not Found" };
+  return { title: params.slug.replaceAll("-", " ") }; 
 }
 
 export default async function BlogPage({
@@ -36,7 +35,7 @@ export default async function BlogPage({
 
   const formatDateTime = (date: string | Date) => {
     const d = new Date(date);
-    return d.toDateString(); 
+    return d.toDateString();
   };
 
   return (
@@ -60,7 +59,9 @@ export default async function BlogPage({
 
       {/* Blog Content */}
       <article className="prose max-w-none mt-6">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{blog.content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {blog.content}
+        </ReactMarkdown>
       </article>
       <div className="container mx-auto p-6">
         <MostViewedBlogs />

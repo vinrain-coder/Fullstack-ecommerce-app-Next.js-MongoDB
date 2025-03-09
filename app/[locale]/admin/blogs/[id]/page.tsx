@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getBlogById } from "@/lib/actions/blog.actions";
 import BlogForm from "../blog.form";
+import { auth } from "@/auth";
 
 type UpdateBlogProps = {
   params: Promise<{
@@ -13,6 +14,8 @@ const UpdateBlog = async (props: UpdateBlogProps) => {
   const params = await props.params;
 
   const { id } = params;
+
+  const session = await auth();
 
   const blog = await getBlogById(id);
   if (!blog) notFound();
