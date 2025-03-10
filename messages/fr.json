@@ -32,7 +32,8 @@
     "Help": "Aide",
     "Site Menu": "Menu du site",
     "Subtotal": "Sous-total",
-    "Go to cart": "Aller au panier"
+    "Go to cart": "Aller au panier",
+    "Your Wishlist": "Votre liste de souhaits"
   },
   "Home": {
     "Categories to explore": "Catégories à explorer",
@@ -171,8 +172,8 @@
     "Conditions of Use": "Conditions d'utilisation",
     "Privacy Notice": "Avis de confidentialité",
     "Help": "Aide",
-    "FAQs":"Foire Aux Questions",
-    "Size Guide (Shoes)":"Guide des tailles (Chaussures)"
+    "FAQs": "Foire Aux Questions",
+    "Size Guide (Shoes)": "Guide des tailles (Chaussures)"
   },
   "Loading": {
     "Loading": "Chargement..."
@@ -209,21 +210,30 @@
     "Actions": "Actions",
     "Details": "Détails"
   },
-    "Blog": {
-      "Search": "Rechercher",
-      "Category": "Catégorie",
-      "Tag": "Étiquette",
-      "All Blogs": "Tous les blogs",
-      "No": "Aucun",
-      "of": "de",
-      "results": "résultats",
-      "for": "pour",
-      "Clear": "Effacer",
-      "Filters": "Filtres",
-      "All": "Tous",
-      "Results": "Résultats",
-      "Explore latest blogs and articles": "Explorez les derniers blogs et articles",
-      "No blog found": "Aucun blog trouvé",
-      "By": "Par"
-    }  
+  "Blog": {
+    "Search": "Rechercher",
+    "Category": "Catégorie",
+    "Tag": "Étiquette",
+    "All Blogs": "Tous les blogs",
+    "No": "Aucun",
+    "of": "de",
+    "results": "résultats",
+    "for": "pour",
+    "Clear": "Effacer",
+    "Filters": "Filtres",
+    "All": "Tous",
+    "Results": "Résultats",
+    "Explore latest blogs and articles": "Explorez les derniers blogs et articles",
+    "No blog found": "Aucun blog trouvé",
+    "By": "Par"
+  },
+  "Wishlist": {
+    "Your Wishlist is empty": "Votre liste de souhaits est vide",
+    "Continue browsing": "Continuez vos achats sur {home}",
+    "Brand": "Marque",
+    "Category": "Catégorie",
+    "Remove": "Supprimer",
+    "Removed from Wishlist": "Supprimé de la liste de souhaits",
+    "Failed to remove item": "Échec de la suppression de l'article"
+  }
 }

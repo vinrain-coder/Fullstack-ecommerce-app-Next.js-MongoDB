@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-
 import {
   Card,
   CardContent,
@@ -15,6 +14,7 @@ import { formatNumber, generateId, round2 } from "@/lib/utils";
 import ProductPrice from "./product-price";
 import ImageHover from "./image-hover";
 import AddToCart from "./add-to-cart";
+import WishlistIcon from "./wishlist-icon"; // Import wishlist icon component
 
 const ProductCard = ({
   product,
@@ -47,9 +47,15 @@ const ProductCard = ({
             />
           </div>
         )}
+        {/* Wishlist Icon (Top Right Corner) */}
+        <div className="absolute top-2 right-2">
+        <WishlistIcon productId={product._id} isWishlisted={product.isWishlisted || false} />
+
+        </div>
       </div>
     </Link>
   );
+
   const ProductDetails = () => (
     <div className="flex-1 space-y-2">
       <p className="font-bold">{product.brand}</p>
@@ -77,6 +83,7 @@ const ProductCard = ({
       />
     </div>
   );
+
   const AddButton = () => (
     <div className="w-full text-center">
       <AddToCart
@@ -111,13 +118,13 @@ const ProductCard = ({
       )}
     </div>
   ) : (
-    <Card className="flex flex-col  ">
+    <Card className="flex flex-col">
       <CardHeader className="p-3">
         <ProductImage />
       </CardHeader>
       {!hideDetails && (
         <>
-          <CardContent className="p-3 flex-1  text-center">
+          <CardContent className="p-3 flex-1 text-center">
             <ProductDetails />
           </CardContent>
           <CardFooter className="p-3">

@@ -5,6 +5,7 @@ export interface IProduct extends Document, IProductInput {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
+  isWishlisted?: boolean;
 }
 
 const productSchema = new Schema<IProduct>(

@@ -32,7 +32,8 @@
     "Help": "مساعدة",
     "Site Menu": "قائمة الموقع",
     "Subtotal": "المجموع الفرعي",
-    "Go to cart": "اذهب إلى السلة"
+    "Go to cart": "اذهب إلى السلة",
+    "Your Wishlist": "قائمة رغباتك"
   },
   "Home": {
     "Categories to explore": "فئات للاستكشاف",
@@ -215,21 +216,30 @@
     "Actions": "الإجراءات",
     "Details": "التفاصيل"
   },
-    "Blog": {
-      "Search": "بحث",
-      "Category": "الفئة",
-      "Tag": "الوسم",
-      "All Blogs": "جميع المدونات",
-      "No": "لا يوجد",
-      "of": "من",
-      "results": "نتائج",
-      "for": "لـ",
-      "Clear": "مسح",
-      "Filters": "الفلاتر",
-      "All": "الكل",
-      "Results": "النتائج",
-      "Explore latest blogs and articles": "استكشف أحدث المدونات والمقالات",
-      "No blog found": "لم يتم العثور على مدونة",
-      "By": "بواسطة"
-    }  
+  "Blog": {
+    "Search": "بحث",
+    "Category": "الفئة",
+    "Tag": "الوسم",
+    "All Blogs": "جميع المدونات",
+    "No": "لا يوجد",
+    "of": "من",
+    "results": "نتائج",
+    "for": "لـ",
+    "Clear": "مسح",
+    "Filters": "الفلاتر",
+    "All": "الكل",
+    "Results": "النتائج",
+    "Explore latest blogs and articles": "استكشف أحدث المدونات والمقالات",
+    "No blog found": "لم يتم العثور على مدونة",
+    "By": "بواسطة"
+  },
+  "Wishlist": {
+    "Your Wishlist is empty": "قائمة رغباتك فارغة",
+    "Continue browsing": "تابع التصفح على {home}",
+    "Brand": "العلامة التجارية",
+    "Category": "الفئة",
+    "Remove": "إزالة",
+    "Removed from Wishlist": "تمت الإزالة من قائمة الرغبات",
+    "Failed to remove item": "فشل في إزالة العنصر"
+  }
 }

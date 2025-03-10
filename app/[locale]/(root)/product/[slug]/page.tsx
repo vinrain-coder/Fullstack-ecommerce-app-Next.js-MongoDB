@@ -19,6 +19,7 @@ import ProductSlider from "@/components/shared/product/product-slider";
 import { getTranslations } from "next-intl/server";
 import { getSetting } from "@/lib/actions/setting.actions";
 import ShareProduct from "@/components/shared/product/share-product";
+import WishlistButton from "@/components/shared/product/wishlist-button";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -88,6 +89,9 @@ export default async function ProductDetails(props: {
   });
 
   const t = await getTranslations();
+
+  const isWishlisted = session?.user?.wishlist?.includes(product._id) ?? false;
+
   return (
     <div>
       <AddToBrowsingHistory id={product._id} category={product.category} />
@@ -163,21 +167,30 @@ export default async function ProductDetails(props: {
 
                 {product.countInStock !== 0 && (
                   <div className="flex justify-center items-center">
-                    <AddToCart
-                      item={{
-                        clientId: generateId(),
-                        product: product._id,
-                        countInStock: product.countInStock,
-                        name: product.name,
-                        slug: product.slug,
-                        category: product.category,
-                        price: round2(product.price),
-                        quantity: 1,
-                        image: product.images[0],
-                        size: size || product.sizes[0],
-                        color: color || product.colors[0],
-                      }}
-                    />
+                    {product.countInStock !== 0 && (
+                      <div className="flex flex-col gap-2 items-center">
+                        <AddToCart
+                          item={{
+                            clientId: generateId(),
+                            product: product._id,
+                            countInStock: product.countInStock,
+                            name: product.name,
+                            slug: product.slug,
+                            category: product.category,
+                            price: round2(product.price),
+                            quantity: 1,
+                            image: product.images[0],
+                            size: size || product.sizes[0],
+                            color: color || product.colors[0],
+                          }}
+                        />
+                        {/* Wishlist Button */}
+                        <WishlistButton
+                          productId={product._id}
+                          isWishlisted={isWishlisted}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </CardContent>

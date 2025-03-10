@@ -1,10 +1,11 @@
 import { IUserInput } from "@/types";
-import { Document, Model, model, models, Schema } from "mongoose";
+import { Document, Model, model, models, Schema, Types } from "mongoose";
 
 export interface IUser extends Document, IUserInput {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
+  wishlist: Types.ObjectId[];
 }
 
 const userSchema = new Schema<IUser>(
@@ -15,6 +16,7 @@ const userSchema = new Schema<IUser>(
     password: { type: String },
     image: { type: String },
     emailVerified: { type: Boolean, default: false },
+    wishlist: [{ type: Schema.Types.ObjectId, ref: "Product" }], // Added wishlist field
   },
   {
     timestamps: true,

@@ -10,6 +10,7 @@ import { getSetting } from "@/lib/actions/setting.actions";
 import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SessionProvider } from "next-auth/react"; // ✅ Import SessionProvider
 
 const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
@@ -38,9 +39,7 @@ export default async function AppLayout({
   const currencyCookie = (await cookies()).get("currency");
   const currency = currencyCookie ? currencyCookie.value : "KES";
 
-  const { locale } = await params;
-  // Ensure that the incoming `locale` is valid
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { locale } = params;
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
@@ -55,11 +54,15 @@ export default async function AppLayout({
       <body
         className={`min-h-screen ${lora.className} antialiased leading-relaxed tracking-wide`}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ClientProviders setting={{ ...setting, currency }}>
-            {children}
-          </ClientProviders>
-        </NextIntlClientProvider>
+        <SessionProvider>
+          {" "}
+          {/* ✅ Wrap everything inside SessionProvider */}
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ClientProviders setting={{ ...setting, currency }}>
+              {children}
+            </ClientProviders>
+          </NextIntlClientProvider>
+        </SessionProvider>
         <Analytics />
         <SpeedInsights />
       </body>

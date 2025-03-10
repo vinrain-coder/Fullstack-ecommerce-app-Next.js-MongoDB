@@ -32,7 +32,8 @@
     "Help": "Help",
     "Site Menu": "Site Menu",
     "Subtotal": "Subtotal",
-    "Go to cart": "Go to cart"
+    "Go to cart": "Go to cart",
+    "Your Wishlist": "Your Wishlist"
   },
   "Home": {
     "Categories to explore": "Categories to explore",
@@ -171,8 +172,8 @@
     "Conditions of Use": "Conditions of Use",
     "Privacy Notice": "Privacy Notice",
     "Help": "Help",
-    "FAQs":"FAQS",
-    "Size Guide (Shoes)":"Size Guide (Shoes)"
+    "FAQs": "FAQS",
+    "Size Guide (Shoes)": "Size Guide (Shoes)"
   },
   "Loading": {
     "Loading": "Loading..."
@@ -214,22 +215,31 @@
     "Actions": "Actions",
     "Details": "Details"
   },
-  
-    "Blog": {
-      "Search": "Search",
-      "Category": "Category",
-      "Tag": "Tag",
-      "All Blogs": "All Blogs",
-      "No": "No",
-      "of": "of",
-      "results": "results",
-      "for": "for",
-      "Clear": "Clear",
-      "Filters": "Filters",
-      "All": "All",
-      "Results": "Results",
-      "Explore latest blogs and articles": "Explore latest blogs and articles",
-      "No blog found": "No blog found",
-      "By": "By"
-    }
+
+  "Blog": {
+    "Search": "Search",
+    "Category": "Category",
+    "Tag": "Tag",
+    "All Blogs": "All Blogs",
+    "No": "No",
+    "of": "of",
+    "results": "results",
+    "for": "for",
+    "Clear": "Clear",
+    "Filters": "Filters",
+    "All": "All",
+    "Results": "Results",
+    "Explore latest blogs and articles": "Explore latest blogs and articles",
+    "No blog found": "No blog found",
+    "By": "By"
+  },
+  "Wishlist": {
+    "Your Wishlist is empty": "Your Wishlist is empty",
+    "Continue browsing": "Continue browsing on {home}",
+    "Brand": "Brand",
+    "Category": "Category",
+    "Remove": "Remove",
+    "Removed from Wishlist": "Removed from Wishlist",
+    "Failed to remove item": "Failed to remove item"
+  }
 }
