@@ -53,7 +53,7 @@ export default async function UserButton() {
                 <DropdownMenuItem>{t("Header.Your orders")}</DropdownMenuItem>
               </Link>
               <Link className="w-full" href="/wishlist">
-                <DropdownMenuItem>{t("Header.Your wishlist")}</DropdownMenuItem>
+                <DropdownMenuItem>{t("Header.Your Wishlist")}</DropdownMenuItem>
               </Link>
 
               {session.user.role === "Admin" && (
