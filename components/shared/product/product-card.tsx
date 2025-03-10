@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -9,7 +10,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { IProduct } from "@/lib/db/models/product.model";
-
 import Rating from "./rating";
 import { formatNumber, generateId, round2 } from "@/lib/utils";
 import ProductPrice from "./product-price";
@@ -29,9 +29,6 @@ const ProductCard = ({
   hideBorder?: boolean;
   hideAddToCart?: boolean;
 }) => {
-  const { wishlist } = useWishlist();
-  const isWishlisted = wishlist.includes(product._id);
-
   const ProductImage = () => (
     <div className="relative h-52">
       <Link href={`/product/${product.slug}`}>
@@ -68,11 +65,6 @@ const ProductCard = ({
       <Link
         href={`/product/${product.slug}`}
         className="overflow-hidden text-ellipsis"
-        style={{
-          display: "-webkit-box",
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: "vertical",
-        }}
       >
         {product.name}
       </Link>
@@ -80,7 +72,6 @@ const ProductCard = ({
         <Rating rating={product.avgRating} />
         <span>({formatNumber(product.numReviews)})</span>
       </div>
-
       <ProductPrice
         isDeal={product.tags.includes("todays-deal")}
         price={product.price}

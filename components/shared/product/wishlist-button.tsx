@@ -33,7 +33,6 @@ const WishlistButton = ({ productId }: WishlistButtonProps) => {
       });
     }
 
-    // Optimistically update UI
     toggleWishlist(productId);
     setIsPending(true);
 
@@ -44,7 +43,6 @@ const WishlistButton = ({ productId }: WishlistButtonProps) => {
 
       toast.success(res.message);
     } catch {
-      // Revert UI update if action fails
       toggleWishlist(productId);
       toast.error("Something went wrong. Try again.");
     } finally {

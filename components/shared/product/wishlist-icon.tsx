@@ -5,8 +5,8 @@ import { useTransition, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { handleWishlist } from "@/lib/actions/wishlist.actions";
 import { useWishlist } from "@/hooks/use-wishlist";
+import { handleWishlist } from "@/lib/actions/wishlist.actions";
 
 interface WishlistIconProps {
   productId: string;
@@ -31,7 +31,6 @@ const WishlistIcon = ({ productId }: WishlistIconProps) => {
       return;
     }
 
-    // Optimistically update UI
     toggleWishlist(productId);
 
     startTransition(async () => {
@@ -41,8 +40,7 @@ const WishlistIcon = ({ productId }: WishlistIconProps) => {
         if (!res.success) throw new Error(res.message);
         toast.success(res.message);
       } catch {
-        // Revert UI update if action fails
-        toggleWishlist(productId);
+        toggleWishlist(productId); // Revert on error
         toast.error("Something went wrong. Try again.");
       }
     });
