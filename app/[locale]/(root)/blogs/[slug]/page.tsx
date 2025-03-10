@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { notFound } from "next/navigation";
 import { getBlogBySlug, incrementBlogViews } from "@/lib/actions/blog.actions";
 import { IBlog } from "@/lib/db/models/blog.model";
@@ -9,8 +8,10 @@ import { Separator } from "@/components/ui/separator";
 
 export default async function BlogPage({
   params,
+  searchParams,
 }: {
   params: { slug: string };
+  searchParams: { page?: string };
 }) {
   const blog: IBlog | null = await getBlogBySlug(params.slug);
 
@@ -27,6 +28,8 @@ export default async function BlogPage({
       day: "numeric",
     });
   };
+
+  const currentPage = Number(searchParams.page || "1");
 
   return (
     <>
@@ -45,18 +48,15 @@ export default async function BlogPage({
           </ReactMarkdown>
         </article>
 
-
         <div className="mt-3 flex gap-2 text-xs justify-between">
-          <span className="bg-blue-200 text-secondary px-2 py-1 rounded">
-            Published in: {blog.category}
-          </span>
-          <span className="bg-blue-100 text-secondary px-2 py-1 rounded">
-            Tags: {blog.tags}
+          <span>Published in: {blog.category}</span>
+          <span>
+            Tags: {Array.isArray(blog.tags) ? blog.tags.join(", ") : blog.tags}
           </span>
         </div>
-        {/* <div className="">
-          <MostViewedBlogs />
-        </div> */}
+
+        <Separator className="my-4" />
+        {/* <MostViewedBlogs /> */}
       </div>
     </>
   );

@@ -27,6 +27,10 @@ const nextConfig: NextConfig = withNextIntl()({
         hostname: "utfs.io", // Remote image hosting
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "i.postimg.cc", // Adding i.postimg.cc
+      },
     ],
   },
 

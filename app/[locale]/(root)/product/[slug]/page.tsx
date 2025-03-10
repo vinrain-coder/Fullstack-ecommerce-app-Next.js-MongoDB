@@ -183,12 +183,12 @@ export default async function ProductDetails(props: {
               </CardContent>
             </Card>
           </div>
-          <div className="flex flex-col gap-1 my-2">
-            <h3 className="font-semibold">Share this product</h3>
-            <ShareProduct slug={product.slug} name={product.name} />
-          </div>
         </div>
       </section>
+      <div className="flex flex-col gap-2 my-2">
+        <h3 className="font-semibold">Share this product</h3>
+        <ShareProduct slug={product.slug} name={product.name} />
+      </div>
       <section className="mt-10">
         <h2 className="h2-bold mb-2" id="reviews">
           {t("Product.Customer Reviews")}

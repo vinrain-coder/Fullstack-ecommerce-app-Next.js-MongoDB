@@ -25,14 +25,14 @@ export default function BlogCard({
     if (!markdownContent || typeof markdownContent !== "string") {
       return null;
     }
-    const regex = /!\[.*?\]\((.*?)\)/;
+    const regex = /!\[.*?\]\((https?:\/\/[^\s)]+)\)/;
     const match = markdownContent.match(regex);
     return match ? match[1] : null;
   }
 
   const firstImageUrl = extractFirstImageUrl(blog.content);
   return (
-    <div className="border rounded-lg shadow-md overflow-hidden bg-white hover:shadow-lg transition duration-300">
+    <div className="border rounded-lg shadow-lg overflow-hidden bg-gray-300 hover:shadow-xl transition duration-300">
       <Link href={`/blogs/${blog.slug}`}>
         <div className="relative w-full h-56">
           <Image
@@ -47,7 +47,7 @@ export default function BlogCard({
 
       <div className="p-4">
         <Link href={`/blogs/${blog.slug}`}>
-          <h3 className="text-xl font-semibold text-slate-500">{blog.title}</h3>
+          <h3 className="text-xl font-semibold text-slate-600">{blog.title}</h3>
         </Link>
         {/* <p className="text-gray-600 text-sm mt-1">
           {blog.content}
@@ -60,12 +60,12 @@ export default function BlogCard({
           <div className="flex items-center gap-3"></div>
         </div>
 
-        <div className="mt-3 flex gap-2 text-xs">
-          <span className="bg-blue-100 text-secondary px-2 py-1 rounded">
+        <div className="mt-3 flex gap-2 text-xs justify-between">
+          <span className="bg-blue-100 text-slate-800 dark:text-gray-800 px-2 py-1 rounded">
             {blog.category}
           </span>
-          <span className="bg-blue-100 text-secondary px-2 py-1 rounded">
-            {blog.tags}
+          <span className="bg-blue-100 text-slate-800 dark:text-gray-800 px-2 py-1 rounded">
+            {Array.isArray(blog.tags) ? blog.tags.join(", ") : blog.tags}
           </span>
         </div>
       </div>

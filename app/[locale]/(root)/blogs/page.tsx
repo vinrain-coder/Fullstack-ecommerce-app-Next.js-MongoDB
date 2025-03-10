@@ -14,7 +14,7 @@ export default async function BlogPage({
   const blogs = await getAllBlogs({});
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="">
       {/* ✅ Latest Blogs Section */}
       <div className="bg-card grid md:grid-cols-5 md:gap-4">
         <div className="md:col-span-4 space-y-4">

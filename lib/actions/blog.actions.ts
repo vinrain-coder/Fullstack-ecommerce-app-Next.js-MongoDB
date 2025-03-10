@@ -121,7 +121,7 @@ export async function incrementBlogViews(slug: string) {
     await connectToDatabase();
     const blog = await Blog.findOneAndUpdate(
       { slug },
-      { $inc: { views: 1 } }, // ✅ Increment views
+      { $inc: { views: -1 } }, // ✅ Increment views
       { new: true }
     );
 
