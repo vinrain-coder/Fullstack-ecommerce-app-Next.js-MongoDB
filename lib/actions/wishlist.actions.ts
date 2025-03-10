@@ -17,12 +17,18 @@ export async function handleWishlist(
   const userId = session.user.id;
 
   if (action === "fetch") {
-    const user = await User.findById(userId, "wishlist");
+    const user = await User.findById(userId)
+      .populate({
+        path: "wishlist",
+        select: "_id name slug price images", // Ensure product details are fetched
+      })
+      .lean(); // Converts Mongoose document to plain object
+
     if (!user) throw new Error("User not found");
 
     return {
       success: true,
-      wishlist: user.wishlist.map((p) => p.toString()),
+      wishlist: Array.isArray(user.wishlist) ? user.wishlist : [],
     };
   }
 
@@ -32,7 +38,6 @@ export async function handleWishlist(
     throw new Error("Product not found");
   }
 
-  // Use atomic update to modify wishlist efficiently
   const update =
     action === "add"
       ? { $addToSet: { wishlist: productObjectId } }
@@ -40,14 +45,18 @@ export async function handleWishlist(
 
   const updatedUser = await User.findByIdAndUpdate(userId, update, {
     new: true,
-    select: "wishlist",
-  });
+  })
+    .populate({
+      path: "wishlist",
+      select: "_id name slug price images",
+    })
+    .lean();
 
   if (!updatedUser) throw new Error("User not found");
 
   return {
     success: true,
     message: action === "add" ? "Added to wishlist" : "Removed from wishlist",
-    wishlist: updatedUser.wishlist.map((p) => p.toString()), // Ensure wishlist returns an array of product IDs
+    wishlist: Array.isArray(updatedUser.wishlist) ? updatedUser.wishlist : [],
   };
 }
