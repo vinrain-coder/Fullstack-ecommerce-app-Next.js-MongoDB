@@ -15,8 +15,8 @@ import { formatNumber, generateId, round2 } from "@/lib/utils";
 import ProductPrice from "./product-price";
 import ImageHover from "./image-hover";
 import AddToCart from "./add-to-cart";
-import WishlistIcon from "./wishlist-icon";
-import { useWishlist } from "@/hooks/use-wishlist";
+// import WishlistIcon from "./wishlist-icon";
+// import { useWishlist } from "@/hooks/use-wishlist";
 
 const ProductCard = ({
   product,
@@ -54,7 +54,7 @@ const ProductCard = ({
         className="absolute top-1 right-1"
         onClick={(e) => e.stopPropagation()} // Stop event bubbling
       >
-        <WishlistIcon productId={product._id} />
+        {/* <WishlistIcon productId={product._id} /> */}
       </div>
     </div>
   );
