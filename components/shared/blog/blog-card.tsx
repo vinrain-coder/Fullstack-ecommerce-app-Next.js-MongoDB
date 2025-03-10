@@ -47,7 +47,9 @@ export default function BlogCard({
 
       <div className="p-4">
         <Link href={`/blogs/${blog.slug}`}>
-          <h3 className="text-xl font-semibold text-slate-600">{blog.title}</h3>
+          <h3 className="text-xl font-semibold text-slate-600 line-clamp-2">
+            {blog.title}
+          </h3>
         </Link>
         {/* <p className="text-gray-600 text-sm mt-1">
           {blog.content}

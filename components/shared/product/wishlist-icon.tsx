@@ -1,14 +1,18 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useTransition } from "react";
+import { useTransition, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { handleWishlist } from "@/lib/actions/wishlist.actions";
 import { useWishlist } from "@/hooks/use-wishlist";
 
-const WishlistIcon = ({ productId }: { productId: string }) => {
+interface WishlistIconProps {
+  productId: string;
+}
+
+const WishlistIcon = ({ productId }: WishlistIconProps) => {
   const { data: session } = useSession();
   const { wishlist, toggleWishlist } = useWishlist();
   const [isPending, startTransition] = useTransition();
@@ -16,7 +20,7 @@ const WishlistIcon = ({ productId }: { productId: string }) => {
 
   const isWishlisted = wishlist.includes(productId);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (!session) {
       toast.error("You must log in to use the wishlist.", {
         action: {
@@ -27,21 +31,22 @@ const WishlistIcon = ({ productId }: { productId: string }) => {
       return;
     }
 
+    // Optimistically update UI
+    toggleWishlist(productId);
+
     startTransition(async () => {
       try {
         const action = isWishlisted ? "remove" : "add";
         const res = await handleWishlist(productId, action);
-        if (res.success) {
-          toggleWishlist(productId);
-          toast.success(res.message);
-        } else {
-          throw new Error(res.message);
-        }
+        if (!res.success) throw new Error(res.message);
+        toast.success(res.message);
       } catch {
+        // Revert UI update if action fails
+        toggleWishlist(productId);
         toast.error("Something went wrong. Try again.");
       }
     });
-  };
+  }, [session, isWishlisted, productId, toggleWishlist, router]);
 
   return (
     <button

@@ -14,36 +14,40 @@ export async function handleWishlist(
   const session = await auth();
   if (!session) throw new Error("User not authenticated");
 
-  const user = await User.findById(session.user.id).populate({
-    path: "wishlist",
-    select: "_id",
-  });
-
-  if (!user) throw new Error("User not found");
+  const userId = session.user.id;
 
   if (action === "fetch") {
+    const user = await User.findById(userId, "wishlist");
+    if (!user) throw new Error("User not found");
+
     return {
       success: true,
-      wishlist: user.wishlist.map((p) => p._id.toString()),
+      wishlist: user.wishlist.map((p) => p.toString()),
     };
   }
 
+  // Validate Product ID
   const productObjectId = new mongoose.Types.ObjectId(productId);
-  const productExists = await Product.exists({ _id: productObjectId });
-
-  if (!productExists) throw new Error("Product not found");
-
-  if (action === "add" && !user.wishlist.includes(productObjectId)) {
-    user.wishlist.push(productObjectId);
-  } else if (action === "remove") {
-    user.wishlist = user.wishlist.filter((id) => !id.equals(productObjectId));
+  if (!(await Product.exists({ _id: productObjectId }))) {
+    throw new Error("Product not found");
   }
 
-  await user.save();
+  // Use atomic update to modify wishlist efficiently
+  const update =
+    action === "add"
+      ? { $addToSet: { wishlist: productObjectId } }
+      : { $pull: { wishlist: productObjectId } };
+
+  const updatedUser = await User.findByIdAndUpdate(userId, update, {
+    new: true,
+    select: "wishlist",
+  });
+
+  if (!updatedUser) throw new Error("User not found");
 
   return {
     success: true,
     message: action === "add" ? "Added to wishlist" : "Removed from wishlist",
-    wishlist: user.wishlist.map((p) => p._id.toString()), // Ensure wishlist is an array of product IDs
+    wishlist: updatedUser.wishlist.map((p) => p.toString()), // Ensure wishlist returns an array of product IDs
   };
 }

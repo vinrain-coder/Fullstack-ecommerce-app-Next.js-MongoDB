@@ -24,7 +24,7 @@ export default function WishlistPage() {
         {wishlist.length === 0 ? (
           <Card className="col-span-4 rounded-none">
             <CardHeader className="text-3xl">
-              {t("Wishlist.Your Wishlist is Empty")}
+              {t("Wishlist.Your Wishlist is empty")}
             </CardHeader>
             <CardContent>
               {t.rich("Wishlist.Continue browsing", {

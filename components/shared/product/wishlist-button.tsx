@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { handleWishlist } from "@/lib/actions/wishlist.actions";
 import { Button } from "@/components/ui/button";
 import { Heart, Loader2 } from "lucide-react";
@@ -9,7 +9,11 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useWishlist } from "@/hooks/use-wishlist";
 
-const WishlistButton = ({ productId }: { productId: string }) => {
+interface WishlistButtonProps {
+  productId: string;
+}
+
+const WishlistButton = ({ productId }: WishlistButtonProps) => {
   const { data: session, status } = useSession();
   const { wishlist, toggleWishlist } = useWishlist();
   const [isPending, setIsPending] = useState(false);
@@ -19,45 +23,39 @@ const WishlistButton = ({ productId }: { productId: string }) => {
 
   if (status === "loading") return null;
 
-  if (!session) {
-    return (
-      <Button
-        variant="outline"
-        className="flex items-center gap-2"
-        onClick={() =>
-          toast.error("Please log in to use the wishlist", {
-            action: {
-              label: "Login",
-              onClick: () => router.push("/login"),
-            },
-          })
-        }
-      >
-        <Heart size={18} /> Add to Wishlist
-      </Button>
-    );
-  }
+  const handleClick = useCallback(async () => {
+    if (!session) {
+      return toast.error("Please log in to use the wishlist", {
+        action: {
+          label: "Login",
+          onClick: () => router.push("/login"),
+        },
+      });
+    }
 
-  const handleClick = async () => {
+    // Optimistically update UI
+    toggleWishlist(productId);
     setIsPending(true);
+
     try {
       const action = isWishlisted ? "remove" : "add";
       const res = await handleWishlist(productId, action);
-      if (!res.success) throw new Error("Failed to update wishlist");
+      if (!res.success) throw new Error(res.message);
 
-      toggleWishlist(productId);
       toast.success(res.message);
     } catch {
+      // Revert UI update if action fails
+      toggleWishlist(productId);
       toast.error("Something went wrong. Try again.");
     } finally {
       setIsPending(false);
     }
-  };
+  }, [session, isWishlisted, productId, toggleWishlist, router]);
 
   return (
     <Button
       variant="outline"
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 rounded-full w-full"
       onClick={handleClick}
       disabled={isPending}
     >
