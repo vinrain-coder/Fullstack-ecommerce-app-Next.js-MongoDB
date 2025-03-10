@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const session = await auth();
-    if (!session) {
+    if (!session || !session.user?.id) {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
         { status: 401 }
@@ -30,7 +30,7 @@ export async function GET() {
     }
 
     return NextResponse.json(
-      { success: true, wishlist: user.wishlist },
+      { success: true, wishlist: user.wishlist || [] },
       { status: 200 }
     );
   } catch (error) {
