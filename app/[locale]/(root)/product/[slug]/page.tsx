@@ -20,6 +20,7 @@ import { getTranslations } from "next-intl/server";
 import { getSetting } from "@/lib/actions/setting.actions";
 import ShareProduct from "@/components/shared/product/share-product";
 import WishlistButton from "@/components/shared/product/wishlist-button";
+import { useWishlist } from "@/hooks/use-wishlist";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -34,6 +35,9 @@ export async function generateMetadata(props: {
   const ogImageUrl = product.images[0];
 
   const { site } = await getSetting();
+
+  const { wishlist } = useWishlist();
+  const isWishlisted = wishlist.includes(product._id);
 
   return {
     title: product.name,
@@ -185,10 +189,7 @@ export default async function ProductDetails(props: {
                           }}
                         />
                         {/* Wishlist Button */}
-                        <WishlistButton
-                          productId={product._id}
-                          isWishlisted={isWishlisted}
-                        />
+                        <WishlistButton productId={product._id} />
                       </div>
                     )}
                   </div>

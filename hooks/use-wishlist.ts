@@ -1,28 +1,39 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { handleWishlist } from "@/lib/actions/wishlist.actions";
-import { useTransition } from "react";
-import { toast } from "sonner";
 
-export default function useWishlist() {
-  const [isPending, startTransition] = useTransition();
+export function useWishlist() {
+  const [wishlist, setWishlist] = useState<string[]>([]); // Store wishlist as an array of product IDs
 
-  const toggleWishlist = (productId: string, isInWishlist: boolean) => {
-    startTransition(async () => {
+  useEffect(() => {
+    const fetchWishlist = async () => {
       try {
-        const action = isInWishlist ? "remove" : "add";
-        const response = await handleWishlist(productId, action);
-
-        if (response.success) {
-          toast.success(response.message);
-        } else {
-          toast.error("Something went wrong");
+        const res = await handleWishlist("", "fetch");
+        if (res.success && Array.isArray(res.wishlist)) {
+          setWishlist(res.wishlist);
         }
-      } catch (error: any) {
-        toast.error(error.message || "Failed to update wishlist");
+      } catch (error) {
+        console.error("Failed to fetch wishlist", error);
       }
-    });
+    };
+
+    fetchWishlist();
+  }, []);
+
+  const toggleWishlist = async (productId: string) => {
+    const isWishlisted = wishlist.includes(productId);
+    const action = isWishlisted ? "remove" : "add";
+
+    try {
+      const res = await handleWishlist(productId, action);
+      if (res.success && Array.isArray(res.wishlist)) {
+        setWishlist(res.wishlist); // Update wishlist state with latest product IDs
+      }
+    } catch (error) {
+      console.error("Error updating wishlist", error);
+    }
   };
 
-  return { toggleWishlist, isPending };
+  return { wishlist, toggleWishlist };
 }

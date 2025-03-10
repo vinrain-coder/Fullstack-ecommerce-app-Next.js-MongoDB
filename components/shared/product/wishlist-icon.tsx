@@ -1,23 +1,20 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { handleWishlist } from "@/lib/actions/wishlist.actions";
+import { useWishlist } from "@/hooks/use-wishlist";
 
-const WishlistIcon = ({
-  productId,
-  isWishlisted,
-}: {
-  productId: string;
-  isWishlisted: boolean;
-}) => {
+const WishlistIcon = ({ productId }: { productId: string }) => {
   const { data: session } = useSession();
-  const [inWishlist, setInWishlist] = useState(isWishlisted);
+  const { wishlist, toggleWishlist } = useWishlist();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
+  const isWishlisted = wishlist.includes(productId);
 
   const handleClick = () => {
     if (!session) {
@@ -32,13 +29,15 @@ const WishlistIcon = ({
 
     startTransition(async () => {
       try {
-        const action = inWishlist ? "remove" : "add";
+        const action = isWishlisted ? "remove" : "add";
         const res = await handleWishlist(productId, action);
         if (res.success) {
-          setInWishlist(!inWishlist);
+          toggleWishlist(productId);
           toast.success(res.message);
+        } else {
+          throw new Error(res.message);
         }
-      } catch (error) {
+      } catch {
         toast.error("Something went wrong. Try again.");
       }
     });
@@ -51,11 +50,12 @@ const WishlistIcon = ({
       className="p-1 rounded-full bg-white shadow-md hover:bg-gray-100 transition"
     >
       {isPending ? (
-        <Loader2 className="animate-spin text-gray-500" size={20} />
-      ) : inWishlist ? (
-        <Heart className="text-red-500" size={20} />
+        <Loader2 className="animate-spin text-primary" size={20} />
       ) : (
-        <Heart className="text-gray-400" size={20} />
+        <Heart
+          className={`transition-all ${isWishlisted ? "text-red-500 fill-red-500" : "text-gray-400"}`}
+          size={20}
+        />
       )}
     </button>
   );

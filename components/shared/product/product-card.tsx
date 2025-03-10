@@ -14,7 +14,8 @@ import { formatNumber, generateId, round2 } from "@/lib/utils";
 import ProductPrice from "./product-price";
 import ImageHover from "./image-hover";
 import AddToCart from "./add-to-cart";
-import WishlistIcon from "./wishlist-icon"; // Import wishlist icon component
+import WishlistIcon from "./wishlist-icon";
+import { useWishlist } from "@/hooks/use-wishlist";
 
 const ProductCard = ({
   product,
@@ -27,6 +28,9 @@ const ProductCard = ({
   hideBorder?: boolean;
   hideAddToCart?: boolean;
 }) => {
+  const { wishlist } = useWishlist();
+  const isWishlisted = wishlist.includes(product._id);
+
   const ProductImage = () => (
     <Link href={`/product/${product.slug}`}>
       <div className="relative h-52">
@@ -47,10 +51,11 @@ const ProductCard = ({
             />
           </div>
         )}
-        {/* Wishlist Icon (Top Right Corner) */}
-        <div className="absolute top-2 right-2">
-        <WishlistIcon productId={product._id} isWishlisted={product.isWishlisted || false} />
-
+        <div
+          className="absolute top-2 right-2"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <WishlistIcon productId={product._id} />
         </div>
       </div>
     </Link>
@@ -108,29 +113,21 @@ const ProductCard = ({
   return hideBorder ? (
     <div className="flex flex-col">
       <ProductImage />
-      {!hideDetails && (
-        <>
-          <div className="p-3 flex-1 text-center">
-            <ProductDetails />
-          </div>
-          {!hideAddToCart && <AddButton />}
-        </>
-      )}
+      {!hideDetails && <ProductDetails />}
+      {!hideAddToCart && <AddButton />}
     </div>
   ) : (
     <Card className="flex flex-col">
       <CardHeader className="p-3">
         <ProductImage />
       </CardHeader>
-      {!hideDetails && (
-        <>
-          <CardContent className="p-3 flex-1 text-center">
-            <ProductDetails />
-          </CardContent>
-          <CardFooter className="p-3">
-            {!hideAddToCart && <AddButton />}
-          </CardFooter>
-        </>
+      <CardContent className="p-3 flex-1 text-center">
+        {!hideDetails && <ProductDetails />}
+      </CardContent>
+      {!hideAddToCart && (
+        <CardFooter className="p-3">
+          <AddButton />
+        </CardFooter>
       )}
     </Card>
   );
