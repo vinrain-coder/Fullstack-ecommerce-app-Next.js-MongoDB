@@ -50,11 +50,11 @@ const WishlistIcon = ({ productId }: { productId: string }) => {
       className="p-1 rounded-full bg-white shadow-md hover:bg-gray-100 transition"
     >
       {isPending ? (
-        <Loader2 className="animate-spin text-primary" size={20} />
+        <Loader2 className="animate-spin text-primary" size={16} />
       ) : (
         <Heart
           className={`transition-all ${isWishlisted ? "text-red-500 fill-red-500" : "text-gray-400"}`}
-          size={20}
+          size={16}
         />
       )}
     </button>

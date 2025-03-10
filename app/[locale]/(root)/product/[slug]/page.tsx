@@ -33,17 +33,12 @@ export async function generateMetadata(props: {
   }
 
   const ogImageUrl = product.images[0];
-
   const { site } = await getSetting();
-
-  const { wishlist } = useWishlist();
-  const isWishlisted = wishlist.includes(product._id);
 
   return {
     title: product.name,
     description: product.description,
     openGraph: {
-      // type: "product",
       title: product.name,
       description: product.description,
       url: `${site.url}/product/${product.slug}`,
@@ -75,39 +70,31 @@ export default async function ProductDetails(props: {
   searchParams: Promise<{ page: string; color: string; size: string }>;
 }) {
   const searchParams = await props.searchParams;
-
-  const { page, color, size } = searchParams;
-
   const params = await props.params;
 
   const { slug } = params;
-
   const session = await auth();
-
   const product = await getProductBySlug(slug);
-
   const relatedProducts = await getRelatedProductsByCategory({
     category: product.category,
     productId: product._id,
-    page: Number(page || "1"),
+    page: Number(searchParams.page || "1"),
   });
 
   const t = await getTranslations();
-
-  const isWishlisted = session?.user?.wishlist?.includes(product._id) ?? false;
 
   return (
     <div>
       <AddToBrowsingHistory id={product._id} category={product.category} />
       <section>
-        <div className="grid grid-cols-1 md:grid-cols-5  ">
+        <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="col-span-2">
             <ProductGallery images={product.images} />
           </div>
 
           <div className="flex w-full flex-col gap-2 md:p-5 col-span-2">
             <div className="flex flex-col gap-3">
-              <p className="p-medium-16 rounded-full bg-grey-500/10   text-grey-500">
+              <p className="p-medium-16 rounded-full bg-grey-500/10 text-grey-500">
                 {t("Product.Brand")} {product.brand} {product.category}
               </p>
               <h1 className="font-bold text-lg lg:text-xl">{product.name}</h1>
@@ -133,8 +120,8 @@ export default async function ProductDetails(props: {
             <div>
               <SelectVariant
                 product={product}
-                size={size || product.sizes[0]}
-                color={color || product.colors[0]}
+                size={searchParams.size || product.sizes[0]}
+                color={searchParams.color || product.colors[0]}
               />
             </div>
             <Separator className="my-2" />
@@ -149,9 +136,8 @@ export default async function ProductDetails(props: {
           </div>
           <div>
             <Card>
-              <CardContent className="p-4 flex flex-col  gap-4">
+              <CardContent className="p-4 flex flex-col gap-4">
                 <ProductPrice price={product.price} />
-
                 {product.countInStock > 0 && product.countInStock <= 3 && (
                   <div className="text-destructive font-bold">
                     {t("Only few left in stock - order soon", {
@@ -184,11 +170,10 @@ export default async function ProductDetails(props: {
                             price: round2(product.price),
                             quantity: 1,
                             image: product.images[0],
-                            size: size || product.sizes[0],
-                            color: color || product.colors[0],
+                            size: searchParams.size || product.sizes[0],
+                            color: searchParams.color || product.colors[0],
                           }}
                         />
-                        {/* Wishlist Button */}
                         <WishlistButton productId={product._id} />
                       </div>
                     )}

@@ -32,8 +32,8 @@ const ProductCard = ({
   const isWishlisted = wishlist.includes(product._id);
 
   const ProductImage = () => (
-    <Link href={`/product/${product.slug}`}>
-      <div className="relative h-52">
+    <div className="relative h-52">
+      <Link href={`/product/${product.slug}`}>
         {product.images.length > 1 ? (
           <ImageHover
             src={product.images[0]}
@@ -51,14 +51,14 @@ const ProductCard = ({
             />
           </div>
         )}
-        <div
-          className="absolute top-2 right-2"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <WishlistIcon productId={product._id} />
-        </div>
+      </Link>
+      <div
+        className="absolute top-1 right-1"
+        onClick={(e) => e.stopPropagation()} // Stop event bubbling
+      >
+        <WishlistIcon productId={product._id} />
       </div>
-    </Link>
+    </div>
   );
 
   const ProductDetails = () => (
