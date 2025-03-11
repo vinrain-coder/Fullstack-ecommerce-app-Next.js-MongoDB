@@ -8,7 +8,7 @@ interface WishlistState {
   toggleWishlist: (productId: string, sessionUser: any) => Promise<void>;
 }
 
-export const useWishlistStore = create<WishlistState>((set) => ({
+export const useWishlistStore = create<WishlistState>((set, get) => ({
   wishlist: [],
 
   syncWishlist: async (sessionUser) => {
@@ -36,14 +36,16 @@ export const useWishlistStore = create<WishlistState>((set) => ({
       return;
     }
 
+    console.log("Toggling wishlist for product:", productId);
+
+    const isWished = get().wishlist.includes(productId);
+    const action = isWished ? "remove" : "add";
+
     try {
       const res = await fetch("/api/wishlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId,
-          action: "toggle", // Let the API determine whether to add or remove
-        }),
+        body: JSON.stringify({ productId, action }),
       });
 
       if (!res.ok) throw new Error("Wishlist update failed");
@@ -52,7 +54,7 @@ export const useWishlistStore = create<WishlistState>((set) => ({
       set({ wishlist: data.wishlist });
 
       toast.success(
-        data.wishlist.includes(productId)
+        action === "add"
           ? "Added to your wishlist ❤️"
           : "Removed from your wishlist"
       );
