@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth"; // Ensure this fetches session data
-import { connectToDatabase } from "@/lib/db"; // Your MongoDB connection
+import { auth } from "@/auth";
+import { connectToDatabase } from "@/lib/db";
 
 export async function POST(req: Request) {
   const session = await auth();

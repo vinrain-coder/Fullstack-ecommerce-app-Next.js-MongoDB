@@ -2,7 +2,7 @@
 
 import { useWishlistStore } from "@/hooks/use-wishlist-store";
 import { useSession } from "next-auth/react";
-import { Heart, HeartOff } from "lucide-react";
+import { Heart } from "lucide-react";
 import { toast } from "sonner";
 
 export const WishlistIcon = ({
@@ -38,11 +38,7 @@ export const WishlistIcon = ({
       className={`text-red-500 ${className}`}
       aria-label="Toggle Wishlist"
     >
-      {isWished ? (
-        <Heart className="fill-red-500" />
-      ) : (
-        <Heart className="fill-white" />
-      )}
+      <Heart className={isWished ? "fill-red-500" : "fill-white"} />
     </button>
   );
 };

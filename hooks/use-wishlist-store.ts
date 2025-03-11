@@ -25,6 +25,8 @@ export const useWishlistStore = create<WishlistState>()(
 
         try {
           const res = await fetch("/api/wishlist");
+          if (!res.ok) throw new Error("Failed to fetch wishlist");
+
           const data = await res.json();
           set({ wishlist: data.wishlist || [] });
         } catch (error) {
@@ -55,7 +57,7 @@ export const useWishlistStore = create<WishlistState>()(
         set({ wishlist: newWishlist });
 
         try {
-          await fetch("/api/wishlist", {
+          const res = await fetch("/api/wishlist", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -63,6 +65,8 @@ export const useWishlistStore = create<WishlistState>()(
               action: isWished ? "remove" : "add",
             }),
           });
+
+          if (!res.ok) throw new Error("Wishlist update failed");
         } catch (error) {
           console.error("Wishlist update failed", error);
           toast.error("Could not update wishlist");
