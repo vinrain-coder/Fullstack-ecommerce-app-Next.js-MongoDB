@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectToDatabase } from "@/lib/db";
-import { ObjectId } from "mongodb"; // Import ObjectId
+import User from "@/lib/db/models/user.model";
 
 export async function POST(req: Request) {
+  await connectToDatabase();
+
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,29 +17,23 @@ export async function POST(req: Request) {
   }
 
   try {
-    const client = await connectToDatabase();
-    const db = client.db(); // Get database instance
-    const userId = new ObjectId(session.user.id); // Convert user ID to ObjectId
-
-    const user = await db.collection("users").findOne({ _id: userId });
-
+    const user = await User.findById(session.user.id);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    let wishlist = user.wishlist || [];
+    const wishlistSet = new Set(user.wishlist || []);
 
     if (action === "add") {
-      if (!wishlist.includes(productId)) wishlist.push(productId);
+      wishlistSet.add(productId);
     } else {
-      wishlist = wishlist.filter((id: string) => id !== productId);
+      wishlistSet.delete(productId);
     }
 
-    await db
-      .collection("users")
-      .updateOne({ _id: userId }, { $set: { wishlist } });
+    user.wishlist = Array.from(wishlistSet);
+    await user.save();
 
-    return NextResponse.json({ wishlist });
+    return NextResponse.json({ wishlist: user.wishlist });
   } catch (error) {
     console.error("Wishlist error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
