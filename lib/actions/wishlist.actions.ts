@@ -1,62 +1,24 @@
-"use server";
-
 import { auth } from "@/auth";
 import { connectToDatabase } from "../db";
-import User from "../db/models/user.model";
-import Product from "../db/models/product.model";
-import mongoose from "mongoose";
 
-export async function handleWishlist(
-  productId: string,
-  action: "add" | "remove" | "fetch"
-) {
-  await connectToDatabase();
+export async function toggleWishlist(productId: string) {
   const session = await auth();
-  if (!session) throw new Error("User not authenticated");
+  if (!session?.user) {
+    return { success: false, message: "Login required" };
+  }
+
+  const { db } = await connectToDatabase();
+  const wishlistCollection = db.collection("wishlist");
 
   const userId = session.user.id;
 
-  if (action === "fetch") {
-    const user = await User.findById(userId)
-      .populate({
-        path: "wishlist",
-        select: "_id name slug price images", // Ensure product details are fetched
-      })
-      .lean(); // Converts Mongoose document to plain object
+  const existing = await wishlistCollection.findOne({ userId, productId });
 
-    if (!user) throw new Error("User not found");
-
-    return {
-      success: true,
-      wishlist: Array.isArray(user.wishlist) ? user.wishlist : [],
-    };
+  if (existing) {
+    await wishlistCollection.deleteOne({ _id: existing._id });
+    return { success: true, action: "removed" };
+  } else {
+    await wishlistCollection.insertOne({ userId, productId });
+    return { success: true, action: "added" };
   }
-
-  // Validate Product ID
-  const productObjectId = new mongoose.Types.ObjectId(productId);
-  if (!(await Product.exists({ _id: productObjectId }))) {
-    throw new Error("Product not found");
-  }
-
-  const update =
-    action === "add"
-      ? { $addToSet: { wishlist: productObjectId } }
-      : { $pull: { wishlist: productObjectId } };
-
-  const updatedUser = await User.findByIdAndUpdate(userId, update, {
-    new: true,
-  })
-    .populate({
-      path: "wishlist",
-      select: "_id name slug price images",
-    })
-    .lean();
-
-  if (!updatedUser) throw new Error("User not found");
-
-  return {
-    success: true,
-    message: action === "add" ? "Added to wishlist" : "Removed from wishlist",
-    wishlist: Array.isArray(updatedUser.wishlist) ? updatedUser.wishlist : [],
-  };
 }

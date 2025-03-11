@@ -15,6 +15,7 @@ import { formatNumber, generateId, round2 } from "@/lib/utils";
 import ProductPrice from "./product-price";
 import ImageHover from "./image-hover";
 import AddToCart from "./add-to-cart";
+import { WishlistIcon } from "./wishlist-icon";
 
 const ProductCard = ({
   product,
@@ -28,8 +29,12 @@ const ProductCard = ({
   hideAddToCart?: boolean;
 }) => {
   const ProductImage = () => (
-    <Link href={`/product/${product.slug}`}>
-      <div className="relative h-52">
+    <div className="relative h-52">
+      <div className="absolute top-2 right-2 z-10">
+        <WishlistIcon productId={product._id} />
+      </div>
+
+      <Link href={`/product/${product.slug}`}>
         {product.images.length > 1 ? (
           <ImageHover
             src={product.images[0]}
@@ -47,9 +52,10 @@ const ProductCard = ({
             />
           </div>
         )}
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
+
   const ProductDetails = () => (
     <div className="flex-1 space-y-2">
       <p className="font-bold">{product.brand}</p>
@@ -77,6 +83,7 @@ const ProductCard = ({
       />
     </div>
   );
+
   const AddButton = () => (
     <div className="w-full text-center">
       <AddToCart
@@ -99,7 +106,7 @@ const ProductCard = ({
   );
 
   return hideBorder ? (
-    <div className="flex flex-col">
+    <div className="flex flex-col relative">
       <ProductImage />
       {!hideDetails && (
         <>
@@ -111,13 +118,13 @@ const ProductCard = ({
       )}
     </div>
   ) : (
-    <Card className="flex flex-col  ">
+    <Card className="flex flex-col relative">
       <CardHeader className="p-3">
         <ProductImage />
       </CardHeader>
       {!hideDetails && (
         <>
-          <CardContent className="p-3 flex-1  text-center">
+          <CardContent className="p-3 flex-1 text-center">
             <ProductDetails />
           </CardContent>
           <CardFooter className="p-3">

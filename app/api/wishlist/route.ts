@@ -1,43 +1,42 @@
-import { auth } from "@/auth";
-import { connectToDatabase } from "@/lib/db";
-import User from "@/lib/db/models/user.model";
 import { NextResponse } from "next/server";
+import { auth } from "@/auth"; // Ensure this fetches session data
+import { connectToDatabase } from "@/lib/db"; // Your MongoDB connection
 
-export async function GET() {
+export async function POST(req: Request) {
+  const session = await auth();
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { productId, action } = await req.json();
+  if (!productId || !["add", "remove"].includes(action)) {
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const db = await connectToDatabase();
+    const userId = session.user.id;
 
-    await connectToDatabase(); // Connect to DB only if user is authenticated
-
-    const user = await User.findById(session.user.id)
-      .populate({
-        path: "wishlist",
-        select: "_id name slug price images", // Select only necessary fields
-      })
-      .lean(); // Improve performance
+    const user = await db.collection("users").findOne({ _id: userId });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { success: true, wishlist: user.wishlist },
-      { status: 200 }
-    );
+    let wishlist = user.wishlist || [];
+    if (action === "add") {
+      if (!wishlist.includes(productId)) wishlist.push(productId);
+    } else {
+      wishlist = wishlist.filter((id) => id !== productId);
+    }
+
+    await db
+      .collection("users")
+      .updateOne({ _id: userId }, { $set: { wishlist } });
+
+    return NextResponse.json({ wishlist });
   } catch (error) {
-    console.error("Error fetching wishlist:", error);
-    return NextResponse.json(
-      { success: false, message: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("Wishlist error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

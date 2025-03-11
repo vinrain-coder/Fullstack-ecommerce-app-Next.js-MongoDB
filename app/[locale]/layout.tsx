@@ -10,7 +10,7 @@ import { getSetting } from "@/lib/actions/setting.actions";
 import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { SessionProvider } from "next-auth/react"; // ✅ Import SessionProvider
+import { SessionProvider } from "next-auth/react";
 
 const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
@@ -21,7 +21,7 @@ export async function generateMetadata() {
   return {
     title: {
       template: `%s | ${name}`,
-      default: `${name}. ${slogan}`,
+      default: `${name} | ${slogan}`,
     },
     description: description,
     metadataBase: new URL(url),
@@ -55,8 +55,6 @@ export default async function AppLayout({
         className={`min-h-screen ${lora.className} antialiased leading-relaxed tracking-wide`}
       >
         <SessionProvider>
-          {" "}
-          {/* ✅ Wrap everything inside SessionProvider */}
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ClientProviders setting={{ ...setting, currency }}>
               {children}

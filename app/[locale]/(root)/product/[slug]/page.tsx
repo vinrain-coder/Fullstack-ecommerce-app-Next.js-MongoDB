@@ -19,8 +19,7 @@ import ProductSlider from "@/components/shared/product/product-slider";
 import { getTranslations } from "next-intl/server";
 import { getSetting } from "@/lib/actions/setting.actions";
 import ShareProduct from "@/components/shared/product/share-product";
-// import WishlistButton from "@/components/shared/product/wishlist-button";
-// import { useWishlist } from "@/hooks/use-wishlist";
+import WishlistButton from "@/components/shared/product/wishlist-button";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -174,7 +173,7 @@ export default async function ProductDetails(props: {
                             color: searchParams.color || product.colors[0],
                           }}
                         />
-                        {/* <WishlistButton productId={product._id} /> */}
+                        <WishlistButton productId={product._id} />
                       </div>
                     )}
                   </div>

@@ -1,73 +1,41 @@
-"use client";
-
-import { useState, useCallback } from "react";
-import { handleWishlist } from "@/lib/actions/wishlist.actions";
-import { Button } from "@/components/ui/button";
-import { Heart, Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useWishlist } from "@/hooks/use-wishlist";
+import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
+import { useWishlistStore } from "@/hooks/use-wishlist-store";
+import { Heart, HeartOff } from "lucide-react";
 
-interface WishlistButtonProps {
-  productId: string;
-}
-
-const WishlistButton = ({ productId }: WishlistButtonProps) => {
-  const { data: session, status } = useSession();
-  const { wishlist, toggleWishlist } = useWishlist();
-  const [isPending, setIsPending] = useState(false);
-  const router = useRouter();
-
+export default function WishlistButton({ productId }: { productId: string }) {
+  const { wishlist, toggleWishlist } = useWishlistStore();
+  const { data: session } = useSession();
   const isWishlisted = wishlist.includes(productId);
 
-  if (status === "loading") return null;
-
-  const handleClick = useCallback(async () => {
-    if (!session) {
-      return toast.error("Please log in to use the wishlist", {
+  const handleClick = () => {
+    if (!session?.user) {
+      return toast.error("Please log in", {
         action: {
           label: "Login",
-          onClick: () => router.push("/login"),
+          onClick: () => (window.location.href = "/login"),
         },
       });
     }
-
     toggleWishlist(productId);
-    setIsPending(true);
-
-    try {
-      const action = isWishlisted ? "remove" : "add";
-      const res = await handleWishlist(productId, action);
-      if (!res.success) throw new Error(res.message);
-
-      toast.success(res.message);
-    } catch {
-      toggleWishlist(productId);
-      toast.error("Something went wrong. Try again.");
-    } finally {
-      setIsPending(false);
-    }
-  }, [session, isWishlisted, productId, toggleWishlist, router]);
+  };
 
   return (
     <Button
-      variant="outline"
-      className="flex items-center gap-2 rounded-full w-full"
       onClick={handleClick}
-      disabled={isPending}
+      variant={isWishlisted ? "destructive" : "outline"}
+      className="flex items-center gap-2 rounded-full w-full"
     >
-      {isPending ? (
-        <Loader2 className="animate-spin" size={18} />
+      {isWishlisted ? (
+        <>
+          <HeartOff className="w-5 h-5" /> Remove from Wishlist
+        </>
       ) : (
-        <Heart
-          className={`transition-all ${isWishlisted ? "text-red-500 fill-red-500" : ""}`}
-          size={18}
-        />
+        <>
+          <Heart className="w-5 h-5" /> Add to Wishlist
+        </>
       )}
-      {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
     </Button>
   );
-};
-
-export default WishlistButton;
+}

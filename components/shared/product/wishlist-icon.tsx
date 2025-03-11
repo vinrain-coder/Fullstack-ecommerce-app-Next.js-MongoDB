@@ -1,67 +1,42 @@
-"use client";
-
+import { useWishlistStore } from "@/hooks/use-wishlist-store";
 import { useSession } from "next-auth/react";
-import { useTransition, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { Heart, Loader2 } from "lucide-react";
+import { Heart, HeartOff } from "lucide-react";
 import { toast } from "sonner";
-import { useWishlist } from "@/hooks/use-wishlist";
-import { handleWishlist } from "@/lib/actions/wishlist.actions";
 
-interface WishlistIconProps {
+export const WishlistIcon = ({
+  productId,
+  className = "",
+}: {
   productId: string;
-}
-
-const WishlistIcon = ({ productId }: WishlistIconProps) => {
+  className?: string;
+}) => {
   const { data: session } = useSession();
-  const { wishlist, toggleWishlist } = useWishlist();
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { wishlist, toggleWishlist } = useWishlistStore();
+  const isWished = wishlist.includes(productId);
 
-  const isWishlisted = wishlist.includes(productId);
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
 
-  const handleClick = useCallback(() => {
-    if (!session) {
-      toast.error("You must log in to use the wishlist.", {
+    if (!session?.user) {
+      toast.error("Please log in to use the wishlist", {
         action: {
           label: "Login",
-          onClick: () => router.push("/login"),
+          onClick: () => (window.location.href = "/login"),
         },
       });
       return;
     }
 
     toggleWishlist(productId);
-
-    startTransition(async () => {
-      try {
-        const action = isWishlisted ? "remove" : "add";
-        const res = await handleWishlist(productId, action);
-        if (!res.success) throw new Error(res.message);
-        toast.success(res.message);
-      } catch {
-        toggleWishlist(productId); // Revert on error
-        toast.error("Something went wrong. Try again.");
-      }
-    });
-  }, [session, isWishlisted, productId, toggleWishlist, router]);
+  };
 
   return (
     <button
       onClick={handleClick}
-      disabled={isPending}
-      className="p-1 rounded-full bg-white shadow-md hover:bg-gray-100 transition"
+      className={`text-red-500 ${className}`}
+      aria-label="Toggle Wishlist"
     >
-      {isPending ? (
-        <Loader2 className="animate-spin text-primary" size={16} />
-      ) : (
-        <Heart
-          className={`transition-all ${isWishlisted ? "text-red-500 fill-red-500" : "text-gray-400"}`}
-          size={16}
-        />
-      )}
+      {isWished ? <Heart className="fill-red-500" /> : <HeartOff />}
     </button>
   );
 };
-
-export default WishlistIcon;
