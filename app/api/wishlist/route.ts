@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectToDatabase } from "@/lib/db";
 import User from "@/lib/db/models/user.model";
+import Product from "@/lib/db/models/product.model";
 
 export async function POST(req: Request) {
   await connectToDatabase();
@@ -11,32 +12,30 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await req.json();
-  console.log("Received Wishlist Request:", body);
-
-  const { productId, action } = body;
-  if (!productId || !["add", "remove"].includes(action)) {
-    console.error("Invalid wishlist request:", body);
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-  }
-
   try {
+    const body = await req.json();
+    console.log("Received Wishlist Request:", body);
+
+    const { productId, action } = body;
+    if (!productId || !["add", "remove"].includes(action)) {
+      console.error("Invalid wishlist request:", body);
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    }
+
     const user = await User.findById(session.user.id);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const wishlistSet = new Set(user.wishlist || []);
-
     if (action === "add") {
-      wishlistSet.add(productId);
+      if (!user.wishlist.includes(productId)) {
+        user.wishlist.push(productId);
+      }
     } else {
-      wishlistSet.delete(productId);
+      user.wishlist = user.wishlist.filter((id) => id.toString() !== productId);
     }
 
-    user.wishlist = Array.from(wishlistSet);
     await user.save();
-
     return NextResponse.json({ wishlist: user.wishlist });
   } catch (error) {
     console.error("Wishlist error:", error);
@@ -44,7 +43,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   await connectToDatabase();
   const session = await auth();
 
@@ -53,7 +52,8 @@ export async function GET(req: Request) {
   }
 
   try {
-    const user = await User.findById(session.user.id);
+    const user = await User.findById(session.user.id).populate("wishlist");
+
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

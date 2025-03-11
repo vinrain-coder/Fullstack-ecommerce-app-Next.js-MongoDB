@@ -5,18 +5,20 @@ import { useSession } from "next-auth/react";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 
-export const WishlistIcon = ({
-  productId,
-  className = "",
-}: {
+interface WishlistIconProps {
   productId: string;
   className?: string;
+}
+
+export const WishlistIcon: React.FC<WishlistIconProps> = ({
+  productId,
+  className = "",
 }) => {
   const { data: session } = useSession();
   const { wishlist, toggleWishlist } = useWishlistStore();
-  const isWished = wishlist.includes(productId);
+  const isWishlisted = wishlist.includes(productId);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (!session?.user) {
@@ -29,16 +31,25 @@ export const WishlistIcon = ({
       return;
     }
 
-    toggleWishlist(productId, session.user);
+    try {
+      await toggleWishlist(productId, session.user);
+    } catch (error) {
+      console.error("Wishlist toggle failed:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
     <button
       onClick={handleClick}
-      className={`text-red-500 ${className}`}
+      className={`p-2 rounded-full hover:bg-gray-100 transition-all ${className}`}
       aria-label="Toggle Wishlist"
     >
-      <Heart className={isWished ? "w-5 h-5 fill-red-500" : "w-5 h-5"} />
+      <Heart
+        className={`w-6 h-6 transition-all ${
+          isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"
+        }`}
+      />
     </button>
   );
 };
