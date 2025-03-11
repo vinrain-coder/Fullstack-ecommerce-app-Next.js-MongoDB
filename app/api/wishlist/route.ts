@@ -1,3 +1,4 @@
+// api/wishlist.ts
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectToDatabase } from "@/lib/db";
@@ -18,7 +19,6 @@ export async function POST(req: Request) {
     const userId = session.user.id;
 
     const user = await db.collection("users").findOne({ _id: userId });
-
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -33,7 +33,6 @@ export async function POST(req: Request) {
     await db
       .collection("users")
       .updateOne({ _id: userId }, { $set: { wishlist } });
-
     return NextResponse.json({ wishlist });
   } catch (error) {
     console.error("Wishlist error:", error);

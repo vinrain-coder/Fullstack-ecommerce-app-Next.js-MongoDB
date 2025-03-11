@@ -1,5 +1,6 @@
+// actions/toggleWishlist.ts
 import { auth } from "@/auth";
-import { connectToDatabase } from "../db";
+import { connectToDatabase } from "@/lib/db";
 
 export async function toggleWishlist(productId: string) {
   const session = await auth();
@@ -9,7 +10,6 @@ export async function toggleWishlist(productId: string) {
 
   const { db } = await connectToDatabase();
   const wishlistCollection = db.collection("wishlist");
-
   const userId = session.user.id;
 
   const existing = await wishlistCollection.findOne({ userId, productId });
@@ -22,3 +22,9 @@ export async function toggleWishlist(productId: string) {
     return { success: true, action: "added" };
   }
 }
+
+
+
+
+
+

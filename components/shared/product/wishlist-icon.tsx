@@ -1,5 +1,5 @@
+// components/WishlistIcon.tsx
 "use client";
-
 import { useWishlistStore } from "@/hooks/use-wishlist-store";
 import { useSession } from "next-auth/react";
 import { Heart } from "lucide-react";
@@ -18,7 +18,6 @@ export const WishlistIcon = ({
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-
     if (!session?.user) {
       toast.error("Please log in to use the wishlist", {
         action: {
@@ -28,7 +27,6 @@ export const WishlistIcon = ({
       });
       return;
     }
-
     toggleWishlist(productId);
   };
 

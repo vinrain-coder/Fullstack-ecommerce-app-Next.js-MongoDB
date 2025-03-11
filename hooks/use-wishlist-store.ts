@@ -1,32 +1,27 @@
+// hooks/use-wishlist-store.ts
 "use client";
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 
-// ✅ Define Zustand Store Type
 interface WishlistState {
   wishlist: string[];
   toggleWishlist: (productId: string) => Promise<void>;
   syncWishlist: () => Promise<void>;
 }
 
-// ✅ Create Zustand Store with Persist Middleware
 export const useWishlistStore = create<WishlistState>()(
   persist(
     (set, get) => ({
       wishlist: [],
 
-      // ✅ Fetch Wishlist from API
       syncWishlist: async () => {
         const { data: session } = useSession();
         if (!session?.user) return set({ wishlist: [] });
-
         try {
           const res = await fetch("/api/wishlist");
           if (!res.ok) throw new Error("Failed to fetch wishlist");
-
           const data = await res.json();
           set({ wishlist: data.wishlist || [] });
         } catch (error) {
@@ -35,7 +30,6 @@ export const useWishlistStore = create<WishlistState>()(
         }
       },
 
-      // ✅ Toggle Wishlist (Add/Remove)
       toggleWishlist: async (productId: string) => {
         const { data: session } = useSession();
         if (!session?.user) {
@@ -53,7 +47,6 @@ export const useWishlistStore = create<WishlistState>()(
           ? get().wishlist.filter((id) => id !== productId)
           : [...get().wishlist, productId];
 
-        // ✅ Optimistic UI Update
         set({ wishlist: newWishlist });
 
         try {
@@ -65,13 +58,10 @@ export const useWishlistStore = create<WishlistState>()(
               action: isWished ? "remove" : "add",
             }),
           });
-
           if (!res.ok) throw new Error("Wishlist update failed");
         } catch (error) {
           console.error("Wishlist update failed", error);
           toast.error("Could not update wishlist");
-
-          // ✅ Revert State on Failure
           set({ wishlist: get().wishlist });
         }
       },
