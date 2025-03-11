@@ -1,3 +1,5 @@
+"use client";
+
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
@@ -29,11 +31,11 @@ export default function WishlistButton({ productId }: { productId: string }) {
     >
       {isWishlisted ? (
         <>
-          <HeartOff className="w-5 h-5" /> Remove from Wishlist
+          <Heart className="w-5 h-5 fill-red-500" /> Remove from Wishlist
         </>
       ) : (
         <>
-          <Heart className="w-5 h-5" /> Add to Wishlist
+          <Heart className="w-5 h-5 fill-white" /> Add to Wishlist
         </>
       )}
     </Button>

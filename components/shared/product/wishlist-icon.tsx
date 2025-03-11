@@ -1,3 +1,5 @@
+"use client";
+
 import { useWishlistStore } from "@/hooks/use-wishlist-store";
 import { useSession } from "next-auth/react";
 import { Heart, HeartOff } from "lucide-react";
@@ -36,7 +38,11 @@ export const WishlistIcon = ({
       className={`text-red-500 ${className}`}
       aria-label="Toggle Wishlist"
     >
-      {isWished ? <Heart className="fill-red-500" /> : <HeartOff />}
+      {isWished ? (
+        <Heart className="fill-red-500" />
+      ) : (
+        <Heart className="fill-white" />
+      )}
     </button>
   );
 };

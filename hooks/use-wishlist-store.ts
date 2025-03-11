@@ -1,3 +1,5 @@
+"use client";
+
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
@@ -15,7 +17,7 @@ export const useWishlistStore = create<WishlistState>()(
   persist(
     (set, get) => ({
       wishlist: [],
-      
+
       // ✅ Fetch Wishlist from API
       syncWishlist: async () => {
         const { data: session } = useSession();
@@ -36,7 +38,10 @@ export const useWishlistStore = create<WishlistState>()(
         const { data: session } = useSession();
         if (!session?.user) {
           toast.error("Please log in to use wishlist", {
-            action: { label: "Login", onClick: () => (window.location.href = "/login") },
+            action: {
+              label: "Login",
+              onClick: () => (window.location.href = "/login"),
+            },
           });
           return;
         }
@@ -53,7 +58,10 @@ export const useWishlistStore = create<WishlistState>()(
           await fetch("/api/wishlist", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ productId, action: isWished ? "remove" : "add" }),
+            body: JSON.stringify({
+              productId,
+              action: isWished ? "remove" : "add",
+            }),
           });
         } catch (error) {
           console.error("Wishlist update failed", error);
