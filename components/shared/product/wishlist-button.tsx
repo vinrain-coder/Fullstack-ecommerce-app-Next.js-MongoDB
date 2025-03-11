@@ -23,10 +23,6 @@ export default function WishlistButton({ productId }: { productId: string }) {
     }
 
     await toggleWishlist(productId, session.user);
-
-    toast.success(
-      isWishlisted ? "Removed from your wishlist" : "Added to your wishlist ❤️"
-    );
   };
 
   return (
