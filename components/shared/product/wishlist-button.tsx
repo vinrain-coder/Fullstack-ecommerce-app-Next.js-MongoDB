@@ -22,26 +22,16 @@ export default function WishlistButton({ productId }: { productId: string }) {
       return;
     }
 
-    try {
-      await toggleWishlist(productId, session.user);
-    } catch (error) {
-      console.error("Wishlist action failed:", error);
-      toast.error("Something went wrong. Please try again.");
-    }
+    await toggleWishlist(productId, session.user);
   };
 
   return (
     <Button
       onClick={handleClick}
       variant={isWishlisted ? "destructive" : "outline"}
-      className="flex items-center gap-2 rounded-full w-full transition-all"
-      aria-label={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+      className="flex items-center gap-2 rounded-full w-full"
     >
-      <Heart
-        className={`w-5 h-5 transition-all ${
-          isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"
-        }`}
-      />
+      <Heart className={isWishlisted ? "w-5 h-5 fill-red-500" : "w-5 h-5"} />
       {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
     </Button>
   );
