@@ -17,7 +17,7 @@ export default function WishlistPage() {
     }
 
     setLoading(true);
-    fetch(`/api/products?ids=${wishlist.join(",")}`)
+    fetch(`/api/products/wishlist?ids=${wishlist.join(",")}`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
