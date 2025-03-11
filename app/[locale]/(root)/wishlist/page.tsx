@@ -10,36 +10,34 @@ import Link from "next/link";
 export default function WishlistPage() {
   const { wishlist } = useWishlist();
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start as false
 
   useEffect(() => {
     if (wishlist.length > 0) {
-      setLoading(true);
+      setLoading(true); // Only set true if there are products to fetch
       getProductsByIds(wishlist)
         .then(setProducts)
         .finally(() => setLoading(false));
     } else {
-      setLoading(false);
+      setProducts([]); // Ensure products state is empty if wishlist is empty
     }
   }, [wishlist]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="">
       <h2 className="text-2xl font-bold mb-4">Your Wishlist</h2>
 
       {loading ? (
         <div className="flex justify-center items-center h-32">
-          <p className="animate-pulse text-gray-500">
-            Loading your wishlist...
-          </p>
+          <p className="animate-pulse text-gray-500">Loading your wishlist...</p>
         </div>
       ) : products.length === 0 ? (
         <div className="text-center mt-10">
-          <p className="text-lg">Your wishlist is empty.</p>
-          <p className="mb-4">Browse and add products to your wishlist!</p>
+          <p className="text-gray-600 text-lg">Your wishlist is empty.</p>
+          <p className="text-gray-500 mb-4">Browse and add products to your wishlist!</p>
           <Link
             href="/"
-            className="inline-block px-6 py-2 rounded-lg hover:bg-blue-600 transition"
+            className="inline-block px-6 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition"
           >
             Go to Home
           </Link>

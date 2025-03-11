@@ -5,6 +5,7 @@ import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 
 interface WishlistButtonProps {
   productId: string;
@@ -38,13 +39,14 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({ productId }) => {
   };
 
   return (
-    <button
+    <Button
       onClick={toggleWishlist}
-      className="flex items-center rounded w-full"
+      variant='outline'
+      className="flex items-center rounded w-full gap-1"
     >
-      <Heart className={`w-5 h-5 ${isInWishlist ? "fill-red" : ""}`} />
+      <Heart className={`w-5 h-5 ${isInWishlist ? "fill-red-500" : ""}`} />
       {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
-    </button>
+    </Button>
   );
 };
 

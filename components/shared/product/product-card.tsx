@@ -30,7 +30,7 @@ const ProductCard = ({
 }) => {
   const ProductImage = () => (
     <div className="relative h-52">
-      <div className="absolute top-2 right-2 z-10">
+      <div className="absolute top-1 right-1 z-10">
         <WishlistIcon productId={product._id.toString()} />
       </div>
 

@@ -35,7 +35,7 @@ const WishlistIcon = ({ productId }: { productId: string }) => {
 
   return (
     <button onClick={toggleWishlist} className="text-red-500">
-      <Heart className={`w-5 h-5 ${isInWishlist ? "fill-red-500" : ""}`} />
+      <Heart className={`w-6 h-6 ${isInWishlist ? "fill-red-500" : ""}`} />
     </button>
   );
 };
