@@ -56,6 +56,12 @@ export const useWishlistStore = create<WishlistState>()(
             }),
           });
           if (!res.ok) throw new Error("Wishlist update failed");
+
+          toast.success(
+            isWished
+              ? "Removed from your wishlist"
+              : "Added to your wishlist ❤️"
+          );
         } catch (error) {
           console.error("Wishlist update failed", error);
           toast.error("Could not update wishlist");

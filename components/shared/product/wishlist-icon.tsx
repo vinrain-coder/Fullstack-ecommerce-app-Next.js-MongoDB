@@ -30,6 +30,13 @@ export const WishlistIcon = ({
     }
 
     toggleWishlist(productId, session.user);
+
+    toast.success(
+      isWished
+        ? "Removed from your wishlist"
+        : "Added to your wishlist ❤️"
+    );
+    
   };
 
   return (

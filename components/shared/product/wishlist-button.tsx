@@ -11,7 +11,7 @@ export default function WishlistButton({ productId }: { productId: string }) {
   const { wishlist, toggleWishlist } = useWishlistStore();
   const isWishlisted = wishlist.includes(productId);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (!session?.user) {
       toast.error("Please log in to use the wishlist", {
         action: {
@@ -22,7 +22,11 @@ export default function WishlistButton({ productId }: { productId: string }) {
       return;
     }
 
-    toggleWishlist(productId, session.user);
+    await toggleWishlist(productId, session.user);
+
+    toast.success(
+      isWishlisted ? "Removed from your wishlist" : "Added to your wishlist ❤️"
+    );
   };
 
   return (
@@ -31,9 +35,7 @@ export default function WishlistButton({ productId }: { productId: string }) {
       variant={isWishlisted ? "destructive" : "outline"}
       className="flex items-center gap-2 rounded-full w-full"
     >
-      <Heart
-        className={isWishlisted ? "w-5 h-5 fill-red-500" : "w-5 h-5"}
-      />
+      <Heart className={isWishlisted ? "w-5 h-5 fill-red-500" : "w-5 h-5"} />
       {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
     </Button>
   );
