@@ -1,24 +1,61 @@
-// actions/toggleWishlist.ts
+"use server";
+
+import mongoose, { Types } from "mongoose";
+import { connectToDatabase } from "../db";
 import { auth } from "@/auth";
-import { connectToDatabase } from "@/lib/db";
+import User from "../db/models/user.model";
 
-export async function toggleWishlist(productId: string) {
+export async function getWishlist() {
+  await connectToDatabase();
   const session = await auth();
-  if (!session?.user) {
-    return { success: false, message: "Login required" };
+
+  if (!session) return [];
+
+  const user = await User.findOne({ email: session.user?.email }).populate("wishlist");
+
+  if (!user) return [];
+
+  return user.wishlist.map((item: any) => item._id.toString());
+}
+
+export async function addToWishlist(productId: string) {
+  await connectToDatabase();
+  const session = await auth();
+
+  if (!session) return [];
+
+  let user = await User.findOne({ email: session.user?.email });
+
+  if (!user) {
+    return [];
   }
 
-  const { db } = await connectToDatabase();
-  const wishlistCollection = db.collection("wishlist");
-  const userId = session.user.id;
+  const productObjectId = new mongoose.Types.ObjectId(productId); // Convert to ObjectId
 
-  const existing = await wishlistCollection.findOne({ userId, productId });
-
-  if (existing) {
-    await wishlistCollection.deleteOne({ _id: existing._id });
-    return { success: true, action: "removed" };
-  } else {
-    await wishlistCollection.insertOne({ userId, productId });
-    return { success: true, action: "added" };
+  if (!user.wishlist.includes(productObjectId)) {
+    user.wishlist.push(productObjectId);
+    await user.save();
   }
+
+  return user.wishlist.map((item: any) => item.toString());
+}
+
+export async function removeFromWishlist(productId: string) {
+  await connectToDatabase();
+  const session = await auth();
+
+  if (!session) return [];
+
+  let user = await User.findOne({ email: session.user?.email });
+
+  if (!user) {
+    return [];
+  }
+
+  const productObjectId = new mongoose.Types.ObjectId(productId); // Convert to ObjectId
+
+  user.wishlist = user.wishlist.filter((id) => !id.equals(productObjectId));
+  await user.save();
+
+  return user.wishlist.map((item: any) => item.toString());
 }

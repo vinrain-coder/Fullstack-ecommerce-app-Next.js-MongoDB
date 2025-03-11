@@ -27,11 +27,17 @@ const UpdateProduct = async (props: UpdateProductProps) => {
       <div className="flex mb-4">
         <Link href="/admin/products">Products</Link>
         <span className="mx-1">›</span>
-        <Link href={`/admin/products/${product._id}`}>{product._id}</Link>
+        <Link href={`/admin/products/${product._id}`}>
+          {product._id.toString()}
+        </Link>
       </div>
 
       <div className="my-8">
-        <ProductForm type="Update" product={product} productId={product._id} />
+        <ProductForm
+          type="Update"
+          product={product}
+          productId={product._id.toString()}
+        />
       </div>
     </main>
   );

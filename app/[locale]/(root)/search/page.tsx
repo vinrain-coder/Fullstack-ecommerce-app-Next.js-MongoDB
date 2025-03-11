@@ -278,7 +278,7 @@ export default async function SearchPage(props: {
               <div>{t("Search.No product found")}</div>
             )}
             {data.products.map((product: IProduct) => (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard key={product._id.toString()} product={product} />
             ))}
           </div>
           {data.totalPages > 1 && (

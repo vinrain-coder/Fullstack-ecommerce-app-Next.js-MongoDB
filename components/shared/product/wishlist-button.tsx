@@ -1,38 +1,31 @@
 "use client";
 
-import { useWishlistStore } from "@/hooks/use-wishlist-store";
-import { useSession } from "next-auth/react";
+import { useWishlist } from "@/hooks/use-wishlist-store";
 import { Heart } from "lucide-react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 
-export default function WishlistButton({ productId }: { productId: string }) {
-  const { data: session } = useSession();
-  const { wishlist, toggleWishlist } = useWishlistStore();
-  const isWishlisted = wishlist.includes(productId);
+interface WishlistButtonProps {
+  productId: string;
+}
 
-  const handleClick = async () => {
-    if (!session?.user) {
-      toast.error("Please log in to use the wishlist", {
-        action: {
-          label: "Login",
-          onClick: () => (window.location.href = "/login"),
-        },
-      });
-      return;
-    }
+const WishlistButton: React.FC<WishlistButtonProps> = ({ productId }) => {
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const isInWishlist = wishlist.includes(productId);
 
-    await toggleWishlist(productId, session.user);
+  const toggleWishlist = () => {
+    isInWishlist ? removeFromWishlist(productId) : addToWishlist(productId);
   };
 
   return (
-    <Button
-      onClick={handleClick}
-      variant={isWishlisted ? "destructive" : "outline"}
-      className="flex items-center gap-2 rounded-full w-full"
+    <button
+      onClick={toggleWishlist}
+      className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition"
     >
-      <Heart className={isWishlisted ? "w-5 h-5 fill-red-500" : "w-5 h-5"} />
-      {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
-    </Button>
+      <Heart
+        className={`w-5 h-5 ${isInWishlist ? "fill-red-500 text-white" : ""}`}
+      />
+      {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
+    </button>
   );
-}
+};
+
+export default WishlistButton;

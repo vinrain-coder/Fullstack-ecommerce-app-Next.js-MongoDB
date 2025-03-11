@@ -76,7 +76,7 @@ export default async function ProductDetails(props: {
   const product = await getProductBySlug(slug);
   const relatedProducts = await getRelatedProductsByCategory({
     category: product.category,
-    productId: product._id,
+    productId: product._id.toString(),
     page: Number(searchParams.page || "1"),
   });
 
@@ -84,7 +84,10 @@ export default async function ProductDetails(props: {
 
   return (
     <div>
-      <AddToBrowsingHistory id={product._id} category={product.category} />
+      <AddToBrowsingHistory
+        id={product._id.toString()}
+        category={product.category}
+      />
       <section>
         <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="col-span-2">
@@ -161,7 +164,8 @@ export default async function ProductDetails(props: {
                         <AddToCart
                           item={{
                             clientId: generateId(),
-                            product: product._id,
+                            product: product._id.toString(),
+
                             countInStock: product.countInStock,
                             name: product.name,
                             slug: product.slug,
@@ -173,7 +177,7 @@ export default async function ProductDetails(props: {
                             color: searchParams.color || product.colors[0],
                           }}
                         />
-                        <WishlistButton productId={product._id} />
+                        <WishlistButton productId={product._id.toString()} />
                       </div>
                     )}
                   </div>

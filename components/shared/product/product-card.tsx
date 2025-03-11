@@ -15,7 +15,7 @@ import { formatNumber, generateId, round2 } from "@/lib/utils";
 import ProductPrice from "./product-price";
 import ImageHover from "./image-hover";
 import AddToCart from "./add-to-cart";
-import { WishlistIcon } from "./wishlist-icon";
+import WishlistIcon from "./wishlist-icon";
 
 const ProductCard = ({
   product,
@@ -31,7 +31,7 @@ const ProductCard = ({
   const ProductImage = () => (
     <div className="relative h-52">
       <div className="absolute top-2 right-2 z-10">
-        <WishlistIcon productId={product._id} />
+        <WishlistIcon productId={product._id.toString()} />
       </div>
 
       <Link href={`/product/${product.slug}`}>
@@ -90,7 +90,7 @@ const ProductCard = ({
         minimal
         item={{
           clientId: generateId(),
-          product: product._id,
+          product: product._id.toString(),
           size: product.sizes[0],
           color: product.colors[0],
           countInStock: product.countInStock,

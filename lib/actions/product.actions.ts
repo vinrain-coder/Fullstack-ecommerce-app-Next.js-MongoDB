@@ -8,6 +8,7 @@ import { ProductInputSchema, ProductUpdateSchema } from "../validator";
 import { IProductInput } from "@/types";
 import { z } from "zod";
 import { getSetting } from "./setting.actions";
+import mongoose from "mongoose";
 
 // CREATE
 export async function createProduct(data: IProductInput) {
@@ -60,6 +61,15 @@ export async function getProductById(productId: string) {
   await connectToDatabase();
   const product = await Product.findById(productId);
   return JSON.parse(JSON.stringify(product)) as IProduct;
+}
+
+export async function getProductsByIds(productIds: string[]) {
+  await connectToDatabase();
+
+  const objectIds = productIds.map((id) => new mongoose.Types.ObjectId(id));
+  const products = await Product.find({ _id: { $in: objectIds } });
+
+  return JSON.parse(JSON.stringify(products)) as IProduct[];
 }
 
 // GET ALL PRODUCTS FOR ADMIN
@@ -328,4 +338,3 @@ export async function getAllTags() {
       .join(" ")
   );
 }
-
