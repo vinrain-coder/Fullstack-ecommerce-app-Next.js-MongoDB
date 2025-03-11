@@ -42,9 +42,9 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({ productId }) => {
     <Button
       onClick={toggleWishlist}
       variant='outline'
-      className="flex items-center rounded w-full gap-1"
+      className="flex items-center rounded-full w-full gap-1"
     >
-      <Heart className={`w-5 h-5 ${isInWishlist ? "fill-red-500" : ""}`} />
+      <Heart className={`w-6 h-6 text-red-500 ${isInWishlist ? "fill-red-500" : ""}`} />
       {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
     </Button>
   );

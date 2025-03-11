@@ -10,16 +10,17 @@ import Link from "next/link";
 export default function WishlistPage() {
   const { wishlist } = useWishlist();
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [loading, setLoading] = useState(false); // Start as false
+  const [loading, setLoading] = useState(true); // Start as true initially
 
   useEffect(() => {
     if (wishlist.length > 0) {
-      setLoading(true); // Only set true if there are products to fetch
+      setLoading(true);
       getProductsByIds(wishlist)
         .then(setProducts)
         .finally(() => setLoading(false));
     } else {
-      setProducts([]); // Ensure products state is empty if wishlist is empty
+      setProducts([]);
+      setLoading(false); // Ensure loading stops when wishlist is empty
     }
   }, [wishlist]);
 
@@ -29,20 +30,11 @@ export default function WishlistPage() {
 
       {loading ? (
         <div className="flex justify-center items-center h-32">
-          <p className="animate-pulse text-gray-500">Loading your wishlist...</p>
+          <p className="animate-pulse text-gray-500">
+            Loading your wishlist...
+          </p>
         </div>
-      ) : products.length === 0 ? (
-        <div className="text-center mt-10">
-          <p className="text-gray-600 text-lg">Your wishlist is empty.</p>
-          <p className="text-gray-500 mb-4">Browse and add products to your wishlist!</p>
-          <Link
-            href="/"
-            className="inline-block px-6 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition"
-          >
-            Go to Home
-          </Link>
-        </div>
-      ) : (
+      ) : products.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 transition-opacity duration-500">
           {products.map((product) => (
             <ProductCard
@@ -51,6 +43,14 @@ export default function WishlistPage() {
               hideAddToCart
             />
           ))}
+        </div>
+      ) : (
+        <div className="text-center mt-10">
+          <p className="text-lg">Your wishlist is empty.</p>
+          <p className="mb-4">Browse and add products to your wishlist!</p>
+          <Link href="/" className="inline-block px-6 py-2 text-undeline">
+            Go to Home
+          </Link>
         </div>
       )}
     </div>
