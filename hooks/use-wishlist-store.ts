@@ -1,14 +1,12 @@
-// hooks/use-wishlist-store.ts
 "use client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 
 interface WishlistState {
   wishlist: string[];
-  toggleWishlist: (productId: string) => Promise<void>;
-  syncWishlist: () => Promise<void>;
+  toggleWishlist: (productId: string, sessionUser: any) => Promise<void>;
+  syncWishlist: (sessionUser: any) => Promise<void>;
 }
 
 export const useWishlistStore = create<WishlistState>()(
@@ -16,9 +14,9 @@ export const useWishlistStore = create<WishlistState>()(
     (set, get) => ({
       wishlist: [],
 
-      syncWishlist: async () => {
-        const { data: session } = useSession();
-        if (!session?.user) return set({ wishlist: [] });
+      syncWishlist: async (sessionUser) => {
+        if (!sessionUser) return set({ wishlist: [] });
+
         try {
           const res = await fetch("/api/wishlist");
           if (!res.ok) throw new Error("Failed to fetch wishlist");
@@ -30,9 +28,8 @@ export const useWishlistStore = create<WishlistState>()(
         }
       },
 
-      toggleWishlist: async (productId: string) => {
-        const { data: session } = useSession();
-        if (!session?.user) {
+      toggleWishlist: async (productId, sessionUser) => {
+        if (!sessionUser) {
           toast.error("Please log in to use wishlist", {
             action: {
               label: "Login",
@@ -62,7 +59,7 @@ export const useWishlistStore = create<WishlistState>()(
         } catch (error) {
           console.error("Wishlist update failed", error);
           toast.error("Could not update wishlist");
-          set({ wishlist: get().wishlist });
+          set({ wishlist: get().wishlist }); // Revert on failure
         }
       },
     }),
