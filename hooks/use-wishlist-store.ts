@@ -1,74 +1,64 @@
 "use client";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import { toast } from "sonner";
 
 interface WishlistState {
   wishlist: string[];
-  toggleWishlist: (productId: string, sessionUser: any) => Promise<void>;
   syncWishlist: (sessionUser: any) => Promise<void>;
+  toggleWishlist: (productId: string, sessionUser: any) => Promise<void>;
 }
 
-export const useWishlistStore = create<WishlistState>()(
-  persist(
-    (set, get) => ({
-      wishlist: [],
+export const useWishlistStore = create<WishlistState>((set) => ({
+  wishlist: [],
 
-      syncWishlist: async (sessionUser) => {
-        if (!sessionUser) return set({ wishlist: [] });
+  syncWishlist: async (sessionUser) => {
+    if (!sessionUser) return set({ wishlist: [] });
 
-        try {
-          const res = await fetch("/api/wishlist");
-          if (!res.ok) throw new Error("Failed to fetch wishlist");
-          const data = await res.json();
-          set({ wishlist: data.wishlist || [] });
-        } catch (error) {
-          console.error("Failed to sync wishlist", error);
-          set({ wishlist: [] });
-        }
-      },
+    try {
+      const res = await fetch("/api/wishlist");
+      if (!res.ok) throw new Error("Failed to fetch wishlist");
+      const data = await res.json();
+      set({ wishlist: data.wishlist || [] });
+    } catch (error) {
+      console.error("Failed to sync wishlist", error);
+      set({ wishlist: [] });
+    }
+  },
 
-      toggleWishlist: async (productId, sessionUser) => {
-        if (!sessionUser) {
-          toast.error("Please log in to use wishlist", {
-            action: {
-              label: "Login",
-              onClick: () => (window.location.href = "/login"),
-            },
-          });
-          return;
-        }
+  toggleWishlist: async (productId, sessionUser) => {
+    if (!sessionUser) {
+      toast.error("Please log in to use wishlist", {
+        action: {
+          label: "Login",
+          onClick: () => (window.location.href = "/login"),
+        },
+      });
+      return;
+    }
 
-        const isWished = get().wishlist.includes(productId);
-        const newWishlist = isWished
-          ? get().wishlist.filter((id) => id !== productId)
-          : [...get().wishlist, productId];
+    try {
+      const res = await fetch("/api/wishlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId,
+          action: "toggle", // Let the API determine whether to add or remove
+        }),
+      });
 
-        set({ wishlist: newWishlist });
+      if (!res.ok) throw new Error("Wishlist update failed");
 
-        try {
-          const res = await fetch("/api/wishlist", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              productId,
-              action: isWished ? "remove" : "add",
-            }),
-          });
-          if (!res.ok) throw new Error("Wishlist update failed");
+      const data = await res.json();
+      set({ wishlist: data.wishlist });
 
-          toast.success(
-            isWished
-              ? "Removed from your wishlist"
-              : "Added to your wishlist ❤️"
-          );
-        } catch (error) {
-          console.error("Wishlist update failed", error);
-          toast.error("Could not update wishlist");
-          set({ wishlist: get().wishlist }); // Revert on failure
-        }
-      },
-    }),
-    { name: "wishlist-storage" }
-  )
-);
+      toast.success(
+        data.wishlist.includes(productId)
+          ? "Added to your wishlist ❤️"
+          : "Removed from your wishlist"
+      );
+    } catch (error) {
+      console.error("Wishlist update failed", error);
+      toast.error("Could not update wishlist");
+    }
+  },
+}));

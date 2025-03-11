@@ -22,9 +22,3 @@ export async function toggleWishlist(productId: string) {
     return { success: true, action: "added" };
   }
 }
-
-
-
-
-
-
