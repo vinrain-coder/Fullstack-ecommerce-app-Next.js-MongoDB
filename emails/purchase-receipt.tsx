@@ -92,16 +92,17 @@ export default async function PurchaseReceiptEmail({
                 </Column>
                 <Column className="w-full sm:w-1/3">
                   <Text className="mb-1 text-gray-500">Price Paid</Text>
-                  <Text className="font-semibold">
-                    KES.{order.totalPrice}
-                  </Text>
+                  <Text className="font-semibold">KES.{order.totalPrice}</Text>
                 </Column>
               </Row>
             </Section>
 
             <Section className="border border-solid border-gray-200 rounded-lg p-4 my-6">
               {order.items.map((item) => (
-                <Row key={item.product} className="flex flex-wrap items-center mb-4">
+                <Row
+                  key={item.product}
+                  className="flex flex-wrap items-center mb-4"
+                >
                   <Column className="w-20">
                     <Link href={`${site.url}/product/${item.slug}`}>
                       <Img
@@ -118,7 +119,9 @@ export default async function PurchaseReceiptEmail({
                   </Column>
                   <Column className="flex-1 text-left">
                     <Link href={`${site.url}/product/${item.slug}`}>
-                      <Text className="font-semibold text-lg">{item.name} x {item.quantity}</Text>
+                      <Text className="font-semibold text-lg">
+                        {item.name} x {item.quantity}
+                      </Text>
                     </Link>
                   </Column>
                   <Column align="right" className="text-right">
