@@ -27,6 +27,15 @@ export default function StockSubscriptionNotificationEmail({
   email,
   siteUrl,
 }: StockSubscriptionEmailProps) {
+  if (!product) {
+    // Handle case where the product is not available
+    return (
+      <Text>
+        Unfortunately, the product is no longer available for notification.
+      </Text>
+    );
+  }
+
   return (
     <Html>
       <Preview>{`"${product.name}" is back in stock!`}</Preview>

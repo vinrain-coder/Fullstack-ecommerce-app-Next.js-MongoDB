@@ -5,7 +5,7 @@ import StockSubscriptionNotificationEmail from "./stock-subscription";
 import { IOrder } from "@/lib/db/models/order.model";
 import { IProduct } from "@/lib/db/models/product.model";
 import { SENDER_EMAIL, SENDER_NAME } from "@/lib/constants";
-import { getSetting } from "@/lib/actions/setting.actions"; // Add this import to get site settings
+import { getSetting } from "@/lib/actions/setting.actions";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
 
@@ -32,7 +32,6 @@ export const sendAskReviewOrderItems = async ({ order }: { order: IOrder }) => {
   });
 };
 
-// ✅ New: Send Stock Subscription Notification Email
 export const sendStockSubscriptionNotification = async ({
   email,
   product,
@@ -40,8 +39,14 @@ export const sendStockSubscriptionNotification = async ({
   email: string;
   product: IProduct;
 }) => {
-  const { site } = await getSetting(); // Fetch site settings to get the site URL
+  const { site } = await getSetting();
 
+  if (!product) {
+    // If no product found, log and exit
+    return { success: false, message: "Product not found." };
+  }
+
+  // Sending email logic
   await resend.emails.send({
     from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
     to: email,
@@ -50,7 +55,7 @@ export const sendStockSubscriptionNotification = async ({
       <StockSubscriptionNotificationEmail
         product={product}
         email={email}
-        siteUrl={site.url} // Pass siteUrl here
+        siteUrl={site.url}
       />
     ),
   });
@@ -58,4 +63,9 @@ export const sendStockSubscriptionNotification = async ({
   console.log(
     `✅ Stock notification email sent to ${email} for "${product.name}"`
   );
+
+  return {
+    success: true,
+    message: "Stock subscription email sent successfully",
+  };
 };

@@ -132,12 +132,12 @@ const CheckoutForm = () => {
       taxPrice,
       totalPrice,
     });
-    if (!res.success) {
+    if (res.success) {
       toast.success(res.message);
-    } else {
-      toast.error(res.message);
       clearCart();
       router.push(`/checkout/${res.data?.orderId}`);
+    } else {
+      toast.error(res.message);
     }
   };
   const handleSelectPaymentMethod = () => {
