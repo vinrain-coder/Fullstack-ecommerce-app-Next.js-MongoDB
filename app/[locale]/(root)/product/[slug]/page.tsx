@@ -20,6 +20,7 @@ import { getTranslations } from "next-intl/server";
 import { getSetting } from "@/lib/actions/setting.actions";
 import ShareProduct from "@/components/shared/product/share-product";
 import WishlistButton from "@/components/shared/product/wishlist-button";
+import SubscribeButton from "@/components/shared/product/stock-subscription-button";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -147,6 +148,7 @@ export default async function ProductDetails(props: {
                     })}
                   </div>
                 )}
+
                 {product.countInStock !== 0 ? (
                   <div className="text-green-700 text-xl">
                     {t("Product.In Stock")}
@@ -157,29 +159,33 @@ export default async function ProductDetails(props: {
                   </div>
                 )}
 
+                {/* This block will show when the product is in stock */}
                 {product.countInStock !== 0 && (
                   <div className="flex justify-center items-center">
-                    {product.countInStock !== 0 && (
-                      <div className="flex flex-col gap-2 items-center">
-                        <AddToCart
-                          item={{
-                            clientId: generateId(),
-                            product: product._id.toString(),
+                    <div className="flex flex-col gap-2 items-center">
+                      <AddToCart
+                        item={{
+                          clientId: generateId(),
+                          product: product._id.toString(),
+                          countInStock: product.countInStock,
+                          name: product.name,
+                          slug: product.slug,
+                          category: product.category,
+                          price: round2(product.price),
+                          quantity: 1,
+                          image: product.images[0],
+                          size: searchParams.size || product.sizes[0],
+                          color: searchParams.color || product.colors[0],
+                        }}
+                      />
+                      <WishlistButton productId={product._id.toString()} />
+                    </div>
+                  </div>
+                )}
 
-                            countInStock: product.countInStock,
-                            name: product.name,
-                            slug: product.slug,
-                            category: product.category,
-                            price: round2(product.price),
-                            quantity: 1,
-                            image: product.images[0],
-                            size: searchParams.size || product.sizes[0],
-                            color: searchParams.color || product.colors[0],
-                          }}
-                        />
-                        <WishlistButton productId={product._id.toString()} />
-                      </div>
-                    )}
+                {product.countInStock === 0 && (
+                  <div className="flex justify-center items-center mt-4">
+                    <SubscribeButton productId={product._id.toString()} />
                   </div>
                 )}
               </CardContent>

@@ -317,3 +317,10 @@ export const SettingInputSchema = z.object({
     .min(1, "At least one delivery date is required"),
   defaultDeliveryDate: z.string().min(1, "Delivery date is required"),
 });
+
+export const StockSubscriptionSchema = z.object({
+  product: MongoId,
+  email: z.string().email("Invalid email address"),
+  subscribedAt: z.date().default(() => new Date()),
+  isNotified: z.boolean().default(false),
+});
