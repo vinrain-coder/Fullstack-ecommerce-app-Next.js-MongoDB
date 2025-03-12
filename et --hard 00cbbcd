@@ -1,0 +1,151 @@
+[33ma7be238[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Add stock subscription feature
+[33m00cbbcd[m Update auth in wishlist
+[33mab52bc8[m Fix wishlist button and page
+[33m3246d93[m Edit ui
+[33mb859cc8[m UI tweaks
+[33m47813dd[m Refine wishlist
+[33m428b156[m edit
+[33m5db0b5d[m Fix api
+[33m6d6b8bb[m Store wish in db
+[33m17dc4b3[m store wiishlist in database
+[33m5e07841[m Edit wishlist page
+[33m3aaf491[m Fix toasts
+[33m9b867f3[m Add sonner toast to wishlist
+[33mcc98b87[m Edit wishlist api
+[33m49a6bba[m Fix wishlist api
+[33m476c36c[m Add product wishlist api
+[33mcd1ff5a[m Fix react minification errors
+[33m08a1d0f[m Update store
+[33m414a126[m Update wishlist store
+[33mcc759ed[m Fix wishlist store
+[33m3ce5873[m Use Zustand in wishlist
+[33m7916b2f[m Edit product card
+[33m0c70f9b[m Comment
+[33mbf4a1ad[m Update wishlist
+[33mcc79888[m Fetch wishlist
+[33mfaece62[m Fix wishlist page
+[33mb5b8135[m Fix seach page
+[33m37fc461[m Fix wishlist
+[33m9d6b941[m Tewak wishlist UI and functionality
+[33m851688e[m Fix wishlist actions
+[33mcad33de[m Fix wishlist page
+[33me2f89c7[m edit wishlist page
+[33me08d975[m Implement wishlist feature
+[33med69a5e[m Fix products page and blogs
+[33m41991e3[m Fix blog rendering
+[33m0a2735f[m Fix blogrendering in admin page
+[33md67fc1e[m Edit admin translations
+[33m7ed2126[m fix admin blogs page
+[33ma737abf[m Fix blog slug page
+[33m5ab78cf[m fix metadata generation
+[33m3cfa4c9[m Add blogs section
+[33m6cf4ef8[m remove syntsx highlighter
+[33m0b051fa[m fix react matkdown
+[33m6fe6709[m Add custom textarea
+[33mc575fd3[m Edit the footer
+[33m26b9e0f[m add product sharing
+[33m328be29[m Implement instant variant selection and pagination
+[33m85a45da[m Add layout suspense, addvercel analytics and speed insights, and fix not-found page
+[33mea4e3f8[m fix opengraph image again
+[33maf1963e[m fix opengraph
+[33m82e0f42[m add og metadata
+[33m380704e[m change to sonner toaster
+[33ma9ea6ee[m enhance arcjet protection
+[33m6009d66[m protect sign up and sign in forms using arcjet
+[33mf7a0a1e[m Update loading.tsx
+[33m6ac71c5[m Update loading.tsx
+[33m5bde0b0[m Update loading.tsx
+[33m87bfb0d[m Update loading.tsx
+[33m754127f[m Update image-uploader.tsx
+[33m5b988f3[m update markdown editor
+[33m5cad1eb[m Add manual payment
+[33mb4f2b59[m Fix payment methods
+[33m78b82d8[m ediit delivery dates
+[33mcb7e69b[m Fix delivery days
+[33m8a610fb[m fix loading and violet color
+[33mb7b17bb[m UI tweaks
+[33m24613d3[m update languages
+[33mabd1596[m Update image-uploader.tsx
+[33md8eff7f[m Update footer.tsx
+[33mff8c012[m Update footer.tsx
+[33mc2bb7f4[m Update footer.tsx
+[33mbe3d33d[m Update image-uploader.tsx
+[33m12ec641[m Update globals.css
+[33m3ce8d7a[m Update layout.tsx
+[33m41bea10[m Update not-found.tsx
+[33m72e7f81[m Update routing.ts
+[33md71fd90[m Update globals.css for darkmode image zoom
+[33m82c51b6[m Update not-found.tsx
+[33m18fda5e[m add vercel cron job
+[33m1c00543[m add image drag and drop and multiple image selection from gallery
+[33m9f9fadf[m update get all user function
+[33m10a5302[m Update purchase-receipt.tsx
+[33m19d738f[m Update page.tsx
+[33m2a59caf[m Update user.actions.ts
+[33m2f8bfbf[m Update add-to-cart.tsx
+[33maaba867[m Update add-to-cart.tsx
+[33m54d238f[m Update pagination.tsx
+[33ma749306[m Update add-to-cart.tsx
+[33mb3c17b0[m Update pagination.tsx
+[33m1e648a8[m Update footer.tsx
+[33me1c0c96[m Update pagination.tsx
+[33m7360475[m Update pagination.tsx
+[33mf94bea4[m optimize tag fetching
+[33m9474c56[m Update image-uploader.tsx
+[33m02a9cfb[m Update image-uploader.tsx
+[33m77543b3[m Update image-uploader.tsx
+[33mca3b94e[m Update image-uploader.tsx
+[33mcce8143[m Merge pull request #2 from vinrain-coder/draft/charming-newton
+[33m76e17b8[m[33m ([m[1;31morigin/draft/charming-newton[m[33m)[m update image upoader
+[33m3aaa836[m Merge pull request #1 from vinrain-coder/draft/misty-architecture
+[33m1d9fe25[m[33m ([m[1;31morigin/draft/misty-architecture[m[33m)[m improve caching
+[33m5965fde[m edit product form and add caching
+[33m0168ba8[m Update product-form.tsx
+[33mf3d6da6[m Update language-switcher.tsx
+[33m67315a5[m Update product-form.tsx
+[33m1470ad8[m 38-calculate tax
+[33m2c5dffe[m update page slug
+[33m50ecadd[m update price
+[33mc94b2b1[m 37-update product form
+[33m6de6621[m Update product-form.tsx
+[33mdbab337[m 36-edit product form
+[33m9eba3fb[m Update i18n-config.ts
+[33mc6e987b[m Update i18n-config.ts
+[33m6118bbb[m Update product-form.tsx
+[33m50cc27c[m Update routing.ts
+[33mb603b90[m 35-format product form prices
+[33mb2a7073[m 34-modify list products in admin
+[33mfbc0ef8[m 33-add image reordering
+[33m602f4e1[m 32-enhance admin image uploads
+[33maa2d150[m 31-fix swahili language
+[33mb3569fc[m 30-add caching,KES currency and Swahili language
+[33m5a1bff8[m 29-add favicon
+[33m3acdf97[m 28-complete admin dashboard
+[33m84a3b50[m 27-add theme color
+[33m6002c28[m 26-add search page
+[33mab83231[m 25-create-category sidebar
+[33m1ea744e[m 24-update user page
+[33m9212faf[m 24-create order history page
+[33mad088fa[m 23-create-reviews
+[33md1c3c8d[m 22-fis stripe route
+[33m249afee[m 21-add pay order by stripe
+[33m274bb25[m 20-fixed peer dependencies
+[33m7beebec[m 19-fix database connection
+[33m09833db[m 18-pay order by paypal
+[33mcb95f04[m 17-create order
+[33m40ee3f6[m 16-create checkout page
+[33mb02375e[m 15-sign in with google
+[33me64a44c[m 14-implement user sign up
+[33m05149c1[m 13-implement user sign in and sign out
+[33mfb39326[m 12-create cart sidebar
+[33mee65d2a[m 11-create cart page
+[33m427f357[m 10-create product details page
+[33m8066699[m 09-create browsing history
+[33m4160486[m 08-create product details page
+[33m9d39c43[m 07-create best selling slider
+[33mff8f31f[m 06-add todays deals slider
+[33mccaf27f[m 05-create home card
+[33m5930412[m 04-connect to mongodb database
+[33m782672b[m 03-create home pafe carousel
+[33m80b9e5a[m 02-create website layout
+[33me9813e0[m Initialize the app
