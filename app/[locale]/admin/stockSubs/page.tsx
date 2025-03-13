@@ -9,12 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Metadata } from "next";
-import {
-  getStockSubscriptions,
-  notifySubscribers,
-} from "@/lib/actions/stock.actions";
+import { getStockSubscriptions } from "@/lib/actions/stock.actions";
 import { auth } from "@/auth";
 import { formatDateTime } from "@/lib/utils";
+import NotifyButton from "@/components/shared/notify-button";
 
 export const metadata: Metadata = {
   title: "Admin Stock Subscriptions",
@@ -109,23 +107,5 @@ export default async function StockSubscriptionsPage({
         </TableBody>
       </Table>
     </div>
-  );
-}
-
-// Separate component to handle the notify action
-function NotifyButton({ productId }: { productId: string }) {
-  const handleNotify = async () => {
-    try {
-      await notifySubscribers(productId);
-      location.reload();
-    } catch (error) {
-      console.error("Failed to notify subscribers:", error);
-    }
-  };
-
-  return (
-    <Button size="sm" onClick={handleNotify}>
-      Notify
-    </Button>
   );
 }
