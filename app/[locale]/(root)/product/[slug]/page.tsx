@@ -40,7 +40,6 @@ export async function generateMetadata(props: {
     description:
       product.description || "Check out this amazing product at ShoePedi!",
     openGraph: {
-      type: "product",
       title: product.name,
       description: product.description || "Discover this product on ShoePedi!",
       url: `${site.url}/product/${product.slug}`,
