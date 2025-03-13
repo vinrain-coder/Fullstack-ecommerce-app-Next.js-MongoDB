@@ -1,21 +1,19 @@
 import { getAllBlogs } from "@/lib/actions/blog.actions";
 import BlogCard from "@/components/shared/blog/blog-card";
-import MostViewedBlogs from "@/components/shared/blog/most-viewed";
+import Pagination from "@/components/shared/pagination";
+import BrowsingHistoryList from "@/components/shared/browsing-history-list";
 
 export default async function BlogPage({
   searchParams = {},
 }: {
   searchParams?: Record<string, string>;
 }) {
-  // ✅ Ensure `page` is safely parsed
-  // const page = Number(searchParams.page) || 1;
+  const currentPage = Number(searchParams.page) || 1;
 
-  // ✅ Fetch blogs with proper serialization
-  const blogs = await getAllBlogs({});
+  const { blogs, totalPages } = await getAllBlogs({ page: currentPage });
 
   return (
-    <div className="">
-      {/* ✅ Latest Blogs Section */}
+    <div className="space-y-6">
       <div className="bg-card grid md:grid-cols-5 md:gap-4">
         <div className="md:col-span-4 space-y-4">
           <div>
@@ -25,7 +23,6 @@ export default async function BlogPage({
             </p>
           </div>
 
-          {/* ✅ Blog List */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {blogs.length === 0 ? (
               <p>No blogs found.</p>
@@ -33,12 +30,16 @@ export default async function BlogPage({
               blogs.map((blog) => <BlogCard key={blog._id} blog={blog} />)
             )}
           </div>
-        {/* <div className="">
-          <MostViewedBlogs />
-        </div> */}
-        </div>
 
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-6">
+              <Pagination page={currentPage} totalPages={totalPages} />
+            </div>
+          )}
+
+        </div>
       </div>
+      <BrowsingHistoryList className="mt-16" />
     </div>
   );
 }

@@ -77,7 +77,7 @@ export default async function AskReviewOrderItemsEmail({
         <Head />
         <Body className="font-sans bg-white text-gray-800">
           <Container className="max-w-4xl mx-auto px-4">
-            <Heading className="text-3xl font-bold text-center text-blue-600 my-6">
+            <Heading className="text-3xl font-bold text-center text-orange-500 my-6">
               Review Your Order Items
             </Heading>
 
@@ -132,7 +132,7 @@ export default async function AskReviewOrderItemsEmail({
                   <Column align="right" className="text-right">
                     <Button
                       href={`${site.url}/product/${item.slug}#reviews`}
-                      className="bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-bold"
+                      className="bg-orange-500 text-white px-6 py-3 rounded-md text-lg font-bold"
                     >
                       Review this product
                     </Button>

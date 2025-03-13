@@ -17,58 +17,63 @@ export default function BlogCard({
   };
 }) {
   const formatDateTime = (date: string | Date) => {
-    const d = new Date(date);
-    return d.toDateString();
+    return new Date(date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
-  function extractFirstImageUrl(markdownContent) {
-    if (!markdownContent || typeof markdownContent !== "string") {
-      return null;
-    }
-    const regex = /!\[.*?\]\((https?:\/\/[^\s)]+)\)/;
-    const match = markdownContent.match(regex);
+  function extractFirstImageUrl(markdownContent: string) {
+    if (!markdownContent) return null;
+    const match = markdownContent.match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/);
     return match ? match[1] : null;
   }
 
   const firstImageUrl = extractFirstImageUrl(blog.content);
+
   return (
-    <div className="border rounded-lg shadow-lg overflow-hidden bg-gray-300 hover:shadow-xl transition duration-300">
-      <Link href={`/blogs/${blog.slug}`}>
-        <div className="relative w-full h-56">
+    <div className="border rounded-xl shadow-md dark:shadow-lg overflow-hidden bg-white dark:bg-gray-900 transition-all duration-300 hover:shadow-xl dark:hover:shadow-2xl">
+      {/* Blog Image */}
+      <Link href={`/blogs/${blog.slug}`} className="block group">
+        <div className="relative w-full h-56 overflow-hidden">
           <Image
             src={firstImageUrl || "/images/not-found.png"}
             alt={blog.title}
             layout="fill"
             objectFit="cover"
-            className="hover:scale-105 transition duration-300"
+            className="group-hover:scale-105 transition-transform duration-300"
           />
         </div>
       </Link>
 
-      <div className="p-4">
-        <Link href={`/blogs/${blog.slug}`}>
-          <h3 className="text-xl font-semibold text-slate-600 line-clamp-2">
+      {/* Blog Content */}
+      <div className="p-5">
+        <Link href={`/blogs/${blog.slug}`} className="block group">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 group-hover:text-primary transition-colors line-clamp-2">
             {blog.title}
           </h3>
         </Link>
-        {/* <p className="text-gray-600 text-sm mt-1">
-          {blog.content}
-        </p> */}
 
-        <div className="flex justify-between items-center mt-4">
-          <div className="text-xs text-gray-500">
+        <div className="flex justify-between items-center mt-3">
+          <span className="text-xs text-gray-600 dark:text-gray-400">
             {formatDateTime(blog.createdAt)}
-          </div>
-          <div className="flex items-center gap-3"></div>
+          </span>
         </div>
 
-        <div className="mt-3 flex gap-2 text-xs justify-between">
-          <span className="bg-blue-100 text-slate-800 dark:text-gray-800 px-2 py-1 rounded">
+        {/* Tags & Category */}
+        <div className="mt-4 flex flex-wrap gap-2 text-xs">
+          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 font-medium">
             {blog.category}
           </span>
-          <span className="bg-blue-100 text-slate-800 dark:text-gray-800 px-2 py-1 rounded">
-            {Array.isArray(blog.tags) ? blog.tags.join(", ") : blog.tags}
-          </span>
+          {blog.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 font-medium"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
     </div>

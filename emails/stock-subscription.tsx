@@ -68,7 +68,7 @@ export default function StockSubscriptionNotificationEmail({
               </Text>
               <Button
                 href={`${siteUrl}/product/${product.slug}`}
-                className="bg-blue-600 text-white px-6 py-3 mt-4 rounded-md text-lg font-bold"
+                className="bg-orange-500 text-white px-6 py-3 mt-4 rounded-md text-lg font-bold"
               >
                 Buy Now
               </Button>

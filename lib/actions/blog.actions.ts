@@ -61,28 +61,41 @@ export async function getBlogBySlug(slug: string) {
   }
 }
 
-
-export async function getAllBlogs({ page = 1 }: { page?: number }) {
+export async function getAllBlogs({
+  page = 1,
+  limit = 9,
+}: {
+  page?: number;
+  limit?: number;
+}) {
   await connectToDatabase();
 
+  const totalBlogs = await Blog.countDocuments({ isPublished: true });
+
+  const totalPages = Math.ceil(totalBlogs / limit);
+
   const blogs = await Blog.find({ isPublished: true })
-    .sort({ createdAt: -1 }) // Sort by latest
-    .lean(); // ✅ Convert to plain objects
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .select("_id title slug content category views tags createdAt updatedAt")
+    .lean();
 
-  return blogs.map((blog) => ({
-    _id: blog._id.toString(), // ✅ Convert _id to string
-    title: blog.title,
-    slug: blog.slug,
-    content: blog.content,
-    category: blog.category,
-    views: blog.views,
-    tags: blog.tags,
-    isPublished: blog.isPublished,
-    createdAt: blog.createdAt.toISOString(), // ✅ Convert date to string
-    updatedAt: blog.updatedAt.toISOString(), // ✅ Convert date to string
-  }));
+  return {
+    blogs: blogs.map((blog) => ({
+      _id: blog._id.toString(),
+      title: blog.title,
+      slug: blog.slug,
+      content: blog.content,
+      category: blog.category,
+      views: blog.views,
+      tags: blog.tags,
+      createdAt: blog.createdAt.toISOString(),
+      updatedAt: blog.updatedAt.toISOString(),
+    })),
+    totalPages,
+  };
 }
-
 
 // GET BLOG BY ID
 export async function getBlogById(blogId: string) {

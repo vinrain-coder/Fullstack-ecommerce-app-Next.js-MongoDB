@@ -37,11 +37,14 @@ export async function generateMetadata(props: {
 
   return {
     title: product.name,
-    description: product.description,
+    description:
+      product.description || "Check out this amazing product at ShoePedi!",
     openGraph: {
+      type: "product",
       title: product.name,
-      description: product.description,
+      description: product.description || "Discover this product on ShoePedi!",
       url: `${site.url}/product/${product.slug}`,
+      siteName: "ShoePedi",
       images: [
         {
           url: ogImageUrl,
@@ -50,17 +53,45 @@ export async function generateMetadata(props: {
           alt: product.name,
         },
       ],
-      siteName: "ShoePedi",
-      price: product.price.toString(),
-      currency: "KES",
+      price: {
+        amount: product.price.toString(),
+        currency: "KES",
+      },
     },
     twitter: {
       card: "summary_large_image",
+      site: "@ShoePedi",
+      creator: "@ShoePedi",
       title: product.name,
-      description: product.description,
+      description: product.description || "Discover this product on ShoePedi!",
+      images: [ogImageUrl],
+    },
+    additionalMetaTags: [
+      {
+        property: "product:price:amount",
+        content: product.price.toString(),
+      },
+      {
+        property: "product:price:currency",
+        content: "KES",
+      },
+    ],
+    jsonLd: {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      name: product.name,
       image: ogImageUrl,
-      price: product.price.toString(),
-      currency: "KES",
+      description: product.description,
+      brand: {
+        "@type": "Brand",
+        name: "ShoePedi",
+      },
+      offers: {
+        "@type": "Offer",
+        url: `${site.url}/product/${product.slug}`,
+        priceCurrency: "KES",
+        price: product.price.toString(),
+      },
     },
   };
 }
