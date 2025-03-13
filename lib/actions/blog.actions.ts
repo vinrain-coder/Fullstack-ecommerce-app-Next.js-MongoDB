@@ -78,7 +78,10 @@ export async function getAllBlogs({
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit)
-    .select("_id title slug content category views tags createdAt updatedAt")
+    .select(
+      "_id title slug content category views tags createdAt updatedAt isPublished"
+    )
+
     .lean();
 
   return {
@@ -92,6 +95,7 @@ export async function getAllBlogs({
       tags: blog.tags,
       createdAt: blog.createdAt.toISOString(),
       updatedAt: blog.updatedAt.toISOString(),
+      isPublished: blog.isPublished,
     })),
     totalPages,
   };

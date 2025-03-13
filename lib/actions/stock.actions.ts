@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../db";
 import StockSubscription from "../db/models/stock-subscription.model";
 import Product from "../db/models/product.model";
-import { z } from "zod";
 import { sendStockSubscriptionNotification } from "@/emails";
 
 export const subscribeToStock = async (data: {
@@ -13,30 +12,22 @@ export const subscribeToStock = async (data: {
 }) => {
   try {
     await connectToDatabase();
-
     const { email, productId } = data;
 
     // Validate if product exists
     const product = await Product.findById(productId);
-    if (!product) {
-      return {
-        success: false,
-        message: "Product not found.",
-      };
-    }
+    if (!product) return { success: false, message: "Product not found." };
 
     // Check if already subscribed
     const existingSubscription = await StockSubscription.findOne({
       email,
       product: productId,
     });
-
-    if (existingSubscription) {
+    if (existingSubscription)
       return {
         success: false,
         message: "You are already subscribed to this product.",
       };
-    }
 
     // Create new subscription
     await StockSubscription.create({
@@ -53,7 +44,27 @@ export const subscribeToStock = async (data: {
   }
 };
 
-export const checkStockAndNotify = async (productId: string) => {
+export const getStockSubscriptions = async (
+  filter?: "notified" | "pending"
+) => {
+  try {
+    await connectToDatabase();
+
+    let query = {};
+    if (filter === "notified") query = { isNotified: true };
+    if (filter === "pending") query = { isNotified: false };
+
+    const subscriptions =
+      await StockSubscription.find(query).populate("product");
+
+    return { success: true, subscriptions };
+  } catch (error) {
+    console.error("Error fetching stock subscriptions:", error);
+    return { success: false, message: "An error occurred." };
+  }
+};
+
+export const notifySubscribers = async (productId: string) => {
   try {
     await connectToDatabase();
 
@@ -61,7 +72,6 @@ export const checkStockAndNotify = async (productId: string) => {
     if (!product) return { success: false, message: "Product not found." };
 
     if (product.countInStock > 0) {
-      // Fetch all pending subscriptions for this product
       const subscriptions = await StockSubscription.find({
         product: productId,
         isNotified: false,
@@ -70,7 +80,6 @@ export const checkStockAndNotify = async (productId: string) => {
       if (subscriptions.length === 0)
         return { success: true, message: "No subscribers to notify." };
 
-      // Send notification emails to all subscribers
       await Promise.all(
         subscriptions.map((sub) =>
           sendStockSubscriptionNotification({ email: sub.email, product })
@@ -93,7 +102,7 @@ export const checkStockAndNotify = async (productId: string) => {
 
     return { success: false, message: "Product is still out of stock." };
   } catch (error) {
-    console.error("❌ Stock check error:", error);
+    console.error("❌ Stock notification error:", error);
     return { success: false, message: "An error occurred." };
   }
 };

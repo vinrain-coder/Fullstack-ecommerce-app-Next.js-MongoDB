@@ -32,6 +32,10 @@ const links = [
     href: "/admin/blogs",
   },
   {
+    title: "StockSubs",
+    href: "/admin/stockSubs",
+  },
+  {
     title: "Settings",
     href: "/admin/settings",
   },

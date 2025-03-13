@@ -23,7 +23,7 @@ export default async function BlogAdminPage() {
   const session = await auth();
   if (session?.user.role !== "Admin") throw new Error("Admin permission required");
 
-  const blogs = await getAllBlogs({}); // ✅ Updated function call
+  const { blogs, totalPages } = await getAllBlogs({});
 
   return (
     <div className="space-y-2">
