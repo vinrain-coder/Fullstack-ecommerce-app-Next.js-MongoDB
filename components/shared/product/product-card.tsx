@@ -16,7 +16,7 @@ import ProductPrice from "./product-price";
 import ImageHover from "./image-hover";
 import AddToCart from "./add-to-cart";
 import WishlistIcon from "./wishlist-icon";
-import SubscribeButton from "./stock-subscription-button";
+import { Badge } from "@/components/ui/badge";
 
 const ProductCard = ({
   product,
@@ -128,9 +128,15 @@ const ProductCard = ({
           <CardContent className="p-3 flex-1 text-center">
             <ProductDetails />
           </CardContent>
+
           <CardFooter className="p-3">
             {product.countInStock === 0 ? (
-              <SubscribeButton productId={product.id} className="mx-auto" />
+              <Badge
+                variant="destructive"
+                className="mx-auto px-3 py-1 text-sm font-semibold rounded-full"
+              >
+                Out of Stock
+              </Badge>
             ) : (
               !hideAddToCart && <AddButton />
             )}
