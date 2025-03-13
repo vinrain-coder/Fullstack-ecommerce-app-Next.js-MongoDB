@@ -186,7 +186,7 @@ export default async function PurchaseReceiptEmail({
               <Text className="text-gray-500 text-sm">
                 If you have any questions, feel free to{" "}
                 <Link
-                  href={`${site.url}/pages/contact`}
+                  href={`${site.url}/page/contact`}
                   className="text-blue-600"
                 >
                   contact us
@@ -194,8 +194,7 @@ export default async function PurchaseReceiptEmail({
                 .
               </Text>
               <Text className="text-gray-400 text-xs mt-4">
-                &copy; {new Date().getFullYear()}
-                {site.name}. {site.copyright}
+                {site.name} . {site.copyright}
               </Text>
             </Section>
           </Container>

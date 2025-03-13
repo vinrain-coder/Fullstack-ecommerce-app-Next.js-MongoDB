@@ -172,13 +172,16 @@ export default async function AskReviewOrderItemsEmail({
               </Text>
               <Text className="text-gray-500 text-sm">
                 If you have any questions, feel free to{" "}
-                <Link href={`${site.url}/pages/contact`} className="text-blue-600">
+                <Link
+                  href={`${site.url}/page/contact`}
+                  className="text-blue-600"
+                >
                   contact us
                 </Link>
                 .
               </Text>
               <Text className="text-gray-400 text-xs mt-4">
-                &copy; {new Date().getFullYear()} {site.name}. {site.copyright}
+                {site.name}. {site.copyright}
               </Text>
             </Section>
           </Container>

@@ -16,6 +16,7 @@ import ProductPrice from "./product-price";
 import ImageHover from "./image-hover";
 import AddToCart from "./add-to-cart";
 import WishlistIcon from "./wishlist-icon";
+import SubscribeButton from "./stock-subscription-button";
 
 const ProductCard = ({
   product,
@@ -128,7 +129,11 @@ const ProductCard = ({
             <ProductDetails />
           </CardContent>
           <CardFooter className="p-3">
-            {!hideAddToCart && <AddButton />}
+            {product.countInStock === 0 ? (
+              <SubscribeButton productId={product.id} className="mx-auto" />
+            ) : (
+              !hideAddToCart && <AddButton />
+            )}
           </CardFooter>
         </>
       )}

@@ -77,13 +77,13 @@ export default function StockSubscriptionNotificationEmail({
               <Text className="text-xl font-semibold text-gray-900 mt-2">
                 Price:{" "}
                 <span className="text-green-600">
-                  ${product.price.toFixed(2)}
+                  KES {product.price.toFixed(2)}
                 </span>
               </Text>
               <Text className="text-md text-gray-600 mt-1">
                 {product.countInStock > 0 ? (
                   <span className="text-green-500 font-medium">
-                    In Stock: {product.countInStock} available
+                    In Stock: {product.countInStock} products
                   </span>
                 ) : (
                   <span className="text-red-500 font-medium">Out of Stock</span>
@@ -118,7 +118,7 @@ export default function StockSubscriptionNotificationEmail({
               <Text className="text-gray-500 text-sm">
                 If you have any questions, feel free to{" "}
                 <Link
-                  href={`${siteUrl}/pages/contact`}
+                  href={`${siteUrl}/page/contact`}
                   className="text-blue-600"
                 >
                   contact us
@@ -126,7 +126,7 @@ export default function StockSubscriptionNotificationEmail({
                 .
               </Text>
               <Text className="text-gray-400 text-xs mt-4">
-                &copy; {new Date().getFullYear()} {siteName}. {siteCopyright}
+                {siteName} . {siteCopyright}
               </Text>
             </Section>
           </Container>

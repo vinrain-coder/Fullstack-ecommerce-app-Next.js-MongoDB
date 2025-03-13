@@ -18,9 +18,13 @@ import { Button } from "@/components/ui/button";
 
 type SubscribeButtonProps = {
   productId: string;
+  className?: string;
 };
 
-export default function SubscribeButton({ productId }: SubscribeButtonProps) {
+export default function SubscribeButton({
+  productId,
+  className,
+}: SubscribeButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const {
     register,
@@ -49,7 +53,7 @@ export default function SubscribeButton({ productId }: SubscribeButtonProps) {
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button className="px-4 py-2 rounded-md w-full">
+          <Button className={`px-4 py-2 rounded-full w-auto ${className}`}>
             Notify Me When Available
           </Button>
         </DialogTrigger>
