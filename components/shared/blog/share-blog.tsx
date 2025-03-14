@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 
 function ShareBlog({ slug, title }: { slug: string; title: string }) {
   const [copied, setCopied] = useState(false);
-  const blogUrl = `${window.location.origin}/blog/${slug}`;
+  const blogUrl = `${window.location.origin}/blogs/${slug}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(blogUrl).then(() => {

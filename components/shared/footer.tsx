@@ -181,8 +181,8 @@ export default function Footer() {
                     gradientTransform="translate(.305 -.206)"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop offset="0" stop-color="#4c4c4c"></stop>
-                    <stop offset="1" stop-color="#343434"></stop>
+                    <stop offset="0" stopColor="#4c4c4c"></stop>
+                    <stop offset="1" stopColor="#343434"></stop>
                   </linearGradient>
                   <path
                     fill="url(#dYJkfAQNfP2dCzgdw4ruIa_fdfLpA6fsXN2_gr1)"

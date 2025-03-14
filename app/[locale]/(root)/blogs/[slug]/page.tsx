@@ -22,9 +22,18 @@ export async function generateMetadata({
   const blog = await getBlogBySlug(params.slug);
   if (!blog) return {};
 
-  const firstImageUrl = extractFirstImageUrl(blog.content);
-
   const { site } = await getSetting();
+
+  // Extract first image URL from the blog content
+  let firstImageUrl = extractFirstImageUrl(blog.content);
+
+  // Ensure absolute URL
+  if (firstImageUrl && !firstImageUrl.startsWith("http")) {
+    firstImageUrl = `${site.url}${firstImageUrl}`;
+  }
+
+  // Fallback to a default image if no image is found
+  const ogImage = firstImageUrl || `${site.url}/default-image.jpg`;
 
   return {
     title: `${blog.title} | ShoePedi Blog`,
@@ -34,13 +43,13 @@ export async function generateMetadata({
       description: "Discover expert insights on footwear trends at ShoePedi!",
       url: `${site.url}/blogs/${blog.slug}`,
       type: "article",
-      images: firstImageUrl ? [firstImageUrl] : [],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: blog.title,
       description: blog.content.slice(0, 160),
-      images: firstImageUrl ? [firstImageUrl] : [],
+      images: [ogImage],
     },
   };
 }
@@ -76,7 +85,7 @@ export default async function BlogPage({
       </p>
 
       {/* Blog Content */}
-      <article className="prose prose-lg max-w-none mt-6 dark:text-gray-300 text-gray-800">
+      <article className="prose prose-lg max-w-none mt-6">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{

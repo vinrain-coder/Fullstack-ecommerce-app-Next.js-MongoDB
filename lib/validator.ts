@@ -324,3 +324,19 @@ export const StockSubscriptionSchema = z.object({
   subscribedAt: z.date().default(() => new Date()),
   isNotified: z.boolean().default(false),
 });
+
+export const ResetPasswordSchema = z.object({
+  user: MongoId,
+  token: z.string().min(1, "Token is required"),
+  expiresAt: z.date(),
+});
+
+export const ResetPasswordInputSchema = z
+  .object({
+    password: z.string().min(6, "Password must be at least 6 characters long."),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });

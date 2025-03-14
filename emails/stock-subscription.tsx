@@ -118,7 +118,7 @@ export default function StockSubscriptionNotificationEmail({
               <Text className="text-gray-500 text-sm">
                 If you have any questions, feel free to{" "}
                 <Link
-                  href={`${siteUrl}/page/contact`}
+                  href={`${siteUrl}/page/contact-us`}
                   className="text-blue-600"
                 >
                   contact us

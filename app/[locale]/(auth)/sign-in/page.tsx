@@ -1,28 +1,20 @@
-import { Metadata } from "next";
+
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
 import { auth } from "@/auth";
 import SeparatorWithOr from "@/components/shared/separator-or";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import CredentialsSignInForm from "./credentials-signin-form";
 import { GoogleSignInForm } from "./google-signin-form";
 import { Button } from "@/components/ui/button";
 import { getSetting } from "@/lib/actions/setting.actions";
-
-export const metadata: Metadata = {
-  title: "Sign In",
-};
+import ForgotPasswordDialog from "@/components/shared/forgot-password-dialog";
 
 export default async function SignInPage(props: {
-  searchParams: Promise<{
-    callbackUrl: string;
-  }>;
+  searchParams: Promise<{ callbackUrl: string }>;
 }) {
   const searchParams = await props.searchParams;
   const { site } = await getSetting();
-
   const { callbackUrl = "/" } = searchParams;
 
   const session = await auth();
@@ -43,9 +35,13 @@ export default async function SignInPage(props: {
             <div className="mt-4">
               <GoogleSignInForm />
             </div>
+            <div className="mt-4 text-center">
+              <ForgotPasswordDialog />
+            </div>
           </div>
         </CardContent>
       </Card>
+
       <SeparatorWithOr>New to {site.name}?</SeparatorWithOr>
 
       <Link href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}>

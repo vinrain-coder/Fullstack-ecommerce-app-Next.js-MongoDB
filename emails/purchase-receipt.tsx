@@ -1,6 +1,5 @@
 import {
   Body,
-  Button,
   Column,
   Container,
   Head,
@@ -186,7 +185,7 @@ export default async function PurchaseReceiptEmail({
               <Text className="text-gray-500 text-sm">
                 If you have any questions, feel free to{" "}
                 <Link
-                  href={`${site.url}/page/contact`}
+                  href={`${site.url}/page/contact-us`}
                   className="text-blue-600"
                 >
                   contact us

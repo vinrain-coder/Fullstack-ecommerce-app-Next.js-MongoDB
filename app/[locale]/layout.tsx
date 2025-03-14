@@ -40,7 +40,9 @@ export default async function AppLayout({
   const currencyCookie = (await cookies()).get("currency");
   const currency = currencyCookie ? currencyCookie.value : "KES";
 
-  const { locale } = params;
+  const { locale } = await params;
+  // Ensure that the incoming `locale` is valid
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }

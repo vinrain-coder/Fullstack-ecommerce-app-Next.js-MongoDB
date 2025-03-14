@@ -7,6 +7,7 @@ import {
   OrderItemSchema,
   PaymentMethodSchema,
   ProductInputSchema,
+  ResetPasswordSchema,
   ReviewInputSchema,
   SettingInputSchema,
   ShippingAddressSchema,
@@ -91,3 +92,5 @@ export type PaymentMethod = z.infer<typeof PaymentMethodSchema>;
 export type DeliveryDate = z.infer<typeof DeliveryDateSchema>;
 
 export type StockSubscription = z.infer<typeof StockSubscriptionSchema>;
+
+export type PasswordResetToken = z.infer<typeof ResetPasswordSchema>;

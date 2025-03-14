@@ -6,6 +6,7 @@ import { IOrder } from "@/lib/db/models/order.model";
 import { IProduct } from "@/lib/db/models/product.model";
 import { SENDER_EMAIL, SENDER_NAME } from "@/lib/constants";
 import { getSetting } from "@/lib/actions/setting.actions";
+import PasswordResetEmail from "./reset-password";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
 
@@ -42,11 +43,9 @@ export const sendStockSubscriptionNotification = async ({
   const { site } = await getSetting();
 
   if (!product) {
-    // If no product found, log and exit
     return { success: false, message: "Product not found." };
   }
 
-  // Sending email logic
   await resend.emails.send({
     from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
     to: email,
@@ -70,4 +69,28 @@ export const sendStockSubscriptionNotification = async ({
     success: true,
     message: "Stock subscription email sent successfully",
   };
+};
+
+export const sendPasswordResetEmail = async (email: string, token: string) => {
+  const { site } = await getSetting();
+
+  const resetLink = `${site.url}/reset-password?token=${token}`;
+
+  await resend.emails.send({
+    from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
+    to: email,
+    subject: "🔑 Reset Your Password",
+    react: (
+      <PasswordResetEmail
+        resetLink={resetLink}
+        siteName={site.name}
+        siteUrl={site.url}
+        siteCopyright={site.copyright}
+      />
+    ),
+  });
+
+  console.log(`✅ Password reset email sent to ${email}`);
+
+  return { success: true, message: "Password reset email sent successfully" };
 };

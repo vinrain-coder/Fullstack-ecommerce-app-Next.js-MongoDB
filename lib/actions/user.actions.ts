@@ -2,7 +2,7 @@
 
 import bcrypt from "bcryptjs";
 import { auth, signIn, signOut } from "@/auth";
-import { IUserName, IUserSignIn, IUserSignUp } from "@/types";
+import { IUserName, IUserSignUp } from "@/types";
 import { UserSignUpSchema, UserUpdateSchema } from "../validator";
 import { connectToDatabase } from "../db";
 import User, { IUser } from "../db/models/user.model";
@@ -56,7 +56,6 @@ export async function signInWithCredentials(user: {
 
   return await signIn("credentials", { ...user, redirect: false });
 }
-
 
 // DELETE
 

@@ -2,7 +2,6 @@ import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
 import { getWebPageBySlug } from "@/lib/actions/web-page.actions";
 import remarkGfm from "remark-gfm";
-import { cn } from "@/lib/utils"; // Ensure you have a `cn` utility for class merging
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -29,7 +28,7 @@ export default async function WebPage(props: {
   if (!webPage) notFound();
 
   return (
-    <div className="p-6 md:p-8 max-w-3xl mx-auto bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg">
+    <div className="p-6 md:p-8 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 pb-4">
         {webPage.title}
       </h1>
