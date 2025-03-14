@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Clipboard, ClipboardCheck, Facebook, MessageCircle, Share2, Twitter } from "lucide-react";
+import { Clipboard, ClipboardCheck, MessageCircle, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {  } from "react-icons";
 
 function ShareProduct({ slug, name }: { slug: string; name: string }) {
   const [copied, setCopied] = useState(false);
