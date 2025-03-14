@@ -10,130 +10,124 @@ import { formatError } from "../utils";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { toast } from "sonner";
 import { getSetting } from "./setting.actions";
-import { request } from "@arcjet/next";
-import { handleArcjetDecision } from "@/lib/arcjet";
-import { arcjetInstance } from "../arcjetInstance";
+import { validateRequest } from "../arcjet";
 
-// CREATE
-
-// ✅ Fix: Ensure handleArcjetDecision is awaited
+// ✅ Register User with Arcjet Protection
 export async function registerUser(userSignUp: IUserSignUp) {
   try {
-    const user = await UserSignUpSchema.parseAsync({
-      name: userSignUp.name,
-      email: userSignUp.email,
-      password: userSignUp.password,
-      confirmPassword: userSignUp.confirmPassword,
-    });
+    const user = await UserSignUpSchema.parseAsync(userSignUp);
 
     // Arcjet Protection
-    const req = await request();
-    const decision = await arcjetInstance.protect(req, { email: user.email });
-    const protection = await handleArcjetDecision(decision); // ✅ Add "await"
-    if (!protection.success) return protection;
+    const protection = await validateRequest(user.email);
+    if (!protection.success) return protection; // Return error object to frontend
 
     await connectToDatabase();
     await User.create({
       ...user,
       password: await bcrypt.hash(user.password, 5),
     });
+
     return { success: true, message: "User created successfully" };
   } catch (error) {
     return { success: false, error: formatError(error) };
   }
 }
 
-// ✅ Fix: Ensure handleArcjetDecision is awaited
+// ✅ Sign In with Credentials and Arcjet Protection
 export async function signInWithCredentials(user: {
   email: string;
   password: string;
 }) {
-  const req = await request();
-  const decision = await arcjetInstance.protect(req, { email: user.email });
-  const protection = await handleArcjetDecision(decision); // ✅ Add "await"
-  if (!protection.success) return protection;
+  const protection = await validateRequest(user.email);
+  if (!protection.success) return protection; // Return error object
 
   return await signIn("credentials", { ...user, redirect: false });
 }
 
-// DELETE
+// ✅ Sign In with Google
+export const SignInWithGoogle = async () => {
+  await signIn("google");
+  toast.success("Signed in with Google!");
+};
 
+// ✅ Sign Out
+export const SignOut = async () => {
+  const redirectTo = await signOut({ redirect: false });
+  toast.success("Signed out successfully!");
+  redirect(redirectTo.redirect);
+};
+
+// ✅ Delete User
 export async function deleteUser(id: string) {
   try {
     await connectToDatabase();
     const res = await User.findByIdAndDelete(id);
-    if (!res) throw new Error("Use not found");
+    if (!res) throw new Error("User not found");
+
     revalidatePath("/admin/users");
-    return {
-      success: true,
-      message: "User deleted successfully",
-    };
+    toast.success("User deleted successfully!");
+    return { success: true, message: "User deleted successfully" };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const errorMessage = formatError(error);
+    toast.error(errorMessage);
+    return { success: false, message: errorMessage };
   }
 }
-// UPDATE
 
+// ✅ Update User (Admin)
 export async function updateUser(user: z.infer<typeof UserUpdateSchema>) {
   try {
     await connectToDatabase();
     const dbUser = await User.findById(user._id);
     if (!dbUser) throw new Error("User not found");
+
     dbUser.name = user.name;
     dbUser.email = user.email;
     dbUser.role = user.role;
+
     const updatedUser = await dbUser.save();
     revalidatePath("/admin/users");
+
+    toast.success("User updated successfully!");
     return {
       success: true,
       message: "User updated successfully",
       data: JSON.parse(JSON.stringify(updatedUser)),
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const errorMessage = formatError(error);
+    toast.error(errorMessage);
+    return { success: false, message: errorMessage };
   }
 }
+
+// ✅ Update User Name (For Profile)
 export async function updateUserName(user: IUserName) {
   try {
     await connectToDatabase();
     const session = await auth();
     const currentUser = await User.findById(session?.user?.id);
     if (!currentUser) throw new Error("User not found");
+
     currentUser.name = user.name;
     const updatedUser = await currentUser.save();
+
+    toast.success("User name updated successfully!");
     return {
       success: true,
       message: "User updated successfully",
       data: JSON.parse(JSON.stringify(updatedUser)),
     };
   } catch (error) {
-    return { success: false, message: formatError(error) };
+    const errorMessage = formatError(error);
+    toast.error(errorMessage);
+    return { success: false, message: errorMessage };
   }
 }
 
-// // Sign in with Arcjet Protection
-// export async function signInWithCredentials(user: {
-//   email: string;
-//   password: string;
-// }) {
-//   const req = await request();
-//   const decision = await arcjetInstance.protect(req, { email: user.email });
-//   const protection = handleArcjetDecision(decision);
-//   if (!protection.success) return protection;
-
-//   return await signIn("credentials", { ...user, redirect: false });
-// }
-
-export const SignInWithGoogle = async () => {
-  await signIn("google");
-};
-export const SignOut = async () => {
-  const redirectTo = await signOut({ redirect: false });
-  redirect(redirectTo.redirect);
-};
-
-// GET
+// ✅ Get All Users
 export async function getAllUsers({
   limit,
   page,
@@ -147,10 +141,9 @@ export async function getAllUsers({
     common: { pageSize },
   } = await getSetting();
   limit = limit || pageSize;
+
   await connectToDatabase();
-
-  const skipAmount = (Number(page) - 1) * limit;
-
+  const skipAmount = (page - 1) * limit;
   const query = search
     ? {
         $or: [
@@ -159,12 +152,10 @@ export async function getAllUsers({
         ],
       }
     : {};
-
   const users = await User.find(query)
     .sort({ createdAt: "asc" })
     .skip(skipAmount)
     .limit(limit);
-
   const usersCount = await User.countDocuments(query);
 
   return {
@@ -173,9 +164,11 @@ export async function getAllUsers({
   };
 }
 
+// ✅ Get User by ID
 export async function getUserById(userId: string) {
   await connectToDatabase();
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
+
   return JSON.parse(JSON.stringify(user)) as IUser;
 }

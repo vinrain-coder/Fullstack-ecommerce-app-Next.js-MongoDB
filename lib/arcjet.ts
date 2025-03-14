@@ -1,29 +1,29 @@
 "use server";
 
 import { request } from "@arcjet/next";
-import { arcjetInstance } from "@/lib/arcjetInstance"; // Import from separate file
+import { arcjetInstance } from "@/lib/arcjetInstance";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function handleArcjetDecision(decision: any) {
-  const errorResponse = (message: string) => ({
-    error: message,
-    success: false,
-    status: 403,
-  });
-
   if (decision.isDenied()) {
+    let errorMessage = "Unauthorized request detected.";
+
     if (decision.reason.isEmail()) {
       const emailTypes = decision.reason.emailTypes;
       if (emailTypes.includes("DISPOSABLE"))
-        return errorResponse("Disposable email addresses are not allowed.");
-      if (emailTypes.includes("INVALID")) return errorResponse("Invalid email.");
+        errorMessage = "Disposable emails are not allowed.";
+      if (emailTypes.includes("INVALID"))
+        errorMessage = "Invalid email address.";
       if (emailTypes.includes("NO_MX_RECORDS"))
-        return errorResponse("Email domain has no valid MX records.");
+        errorMessage = "Email domain is not valid.";
     }
-    if (decision.reason.isBot()) return errorResponse("Bot activity detected.");
+    if (decision.reason.isBot()) errorMessage = "Bot activity detected.";
     if (decision.reason.isRateLimit())
-      return errorResponse("Too many requests! Try again later.");
-    return errorResponse("Unauthorized request detected.");
+      errorMessage = "Too many requests! Try again later.";
+
+    return { error: errorMessage, success: false, status: 403 };
   }
+
   return { success: true };
 }
 

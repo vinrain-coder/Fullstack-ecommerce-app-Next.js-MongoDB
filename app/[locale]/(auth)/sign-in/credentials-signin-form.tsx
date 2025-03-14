@@ -1,6 +1,6 @@
 "use client";
-import { redirect, useSearchParams } from "next/navigation";
 
+import { redirect, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -16,7 +16,6 @@ import {
 import { useForm } from "react-hook-form";
 import { IUserSignIn } from "@/types";
 import { signInWithCredentials } from "@/lib/actions/user.actions";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSignInSchema } from "@/lib/validator";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
@@ -49,16 +48,23 @@ export default function CredentialsSignInForm() {
 
   const onSubmit = async (data: IUserSignIn) => {
     try {
-      await signInWithCredentials({
+      const res = await signInWithCredentials({
         email: data.email,
         password: data.password,
       });
+
+      if (!res.success) {
+        toast.error(res.error || "Invalid email or password");
+        return;
+      }
+
+      toast.success("Signed in successfully!");
       redirect(callbackUrl);
     } catch (error) {
       if (isRedirectError(error)) {
         throw error;
       }
-      toast.error("Invalid email or password");
+      toast.error("Something went wrong. Please try again.");
     }
   };
 

@@ -1,6 +1,6 @@
 "use client";
-import { redirect, useSearchParams } from "next/navigation";
 
+import { redirect, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -57,20 +57,25 @@ export default function CredentialsSignInForm() {
   const onSubmit = async (data: IUserSignUp) => {
     try {
       const res = await registerUser(data);
+
       if (!res.success) {
-        toast.error("Invalid email or password");
+        toast.error(res.error || "Registration failed. Please try again.");
         return;
       }
+
+      toast.success("Account created successfully! Logging in...");
+
       await signInWithCredentials({
         email: data.email,
         password: data.password,
       });
+
       redirect(callbackUrl);
     } catch (error) {
       if (isRedirectError(error)) {
         throw error;
       }
-      toast.error("Invalid email or password");
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -86,7 +91,7 @@ export default function CredentialsSignInForm() {
               <FormItem className="w-full">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter name address" {...field} />
+                  <Input placeholder="Enter name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
