@@ -7,10 +7,12 @@ export default async function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-1 flex flex-col">{children}</main>
-      <Footer />
-    </div>
+    <html lang="en">
+      <body className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1 flex flex-col">{children}</main>
+        <Footer />
+      </body>
+    </html>
   );
 }

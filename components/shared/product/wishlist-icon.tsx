@@ -3,22 +3,25 @@
 import { useWishlist } from "@/hooks/use-wishlist-store";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 const WishlistIcon = ({ productId }: { productId: string }) => {
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const isInWishlist = wishlist.includes(productId);
   const router = useRouter();
+  const pathname = usePathname(); // Get current path
   const { data: session } = useSession(); // Get session data
 
   const toggleWishlist = () => {
     if (!session) {
-      // Show login toast if user is not logged in
+      // Redirect user to login with a callbackUrl
+      const loginUrl = `/login?callbackUrl=${encodeURIComponent(pathname)}`;
+
       toast.error("You need to log in to use the wishlist", {
         action: {
           label: "Login",
-          onClick: () => router.push("/login"),
+          onClick: () => router.push(loginUrl),
         },
       });
       return;

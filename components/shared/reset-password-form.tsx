@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resetPassword } from "@/lib/actions/reset-password.actions";
@@ -41,6 +47,9 @@ export default function ResetPasswordForm({ token }: Props) {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Reset Password</CardTitle>
+          <CardDescription>
+            Enter and confirm your new password to sign in
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Input
@@ -56,7 +65,7 @@ export default function ResetPasswordForm({ token }: Props) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={loading}
-            className="mt-2"
+            className="mt-4"
           />
           <Button
             onClick={handleSubmit}

@@ -173,9 +173,7 @@ export default async function ProductDetails(props: {
                 <ProductPrice price={product.price} />
                 {product.countInStock > 0 && product.countInStock <= 3 && (
                   <div className="text-destructive font-bold">
-                    {t("Only few left in stock - order soon", {
-                      count: product.countInStock,
-                    })}
+                    Only few left in stock - order soon
                   </div>
                 )}
 
