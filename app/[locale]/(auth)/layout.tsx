@@ -2,6 +2,7 @@ import { getSetting } from "@/lib/actions/setting.actions";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { Toaster } from "sonner";
 
 export default async function AuthLayout({
   children,
@@ -40,6 +41,7 @@ export default async function AuthLayout({
             <p className="text-gray-400">{site.copyright}</p>
           </div>
         </footer>
+        <Toaster duration={4000} richColors closeButton visibleToasts={3} />
       </body>
     </html>
   );

@@ -25,7 +25,7 @@ export default function ForgotPasswordDialog() {
     if (res?.error) {
       toast.error(res.error);
     } else {
-      toast.success("Password reset email sent!");
+      toast.success("Check your email to reset the password!");
     }
   };
 

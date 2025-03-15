@@ -1,5 +1,6 @@
 import Header from "@/components/shared/header";
 import Footer from "@/components/shared/footer";
+import { Toaster } from "sonner";
 
 export default async function HomeLayout({
   children,
@@ -12,6 +13,7 @@ export default async function HomeLayout({
         <Header />
         <main className="flex-1 flex flex-col">{children}</main>
         <Footer />
+        <Toaster duration={4000} richColors closeButton visibleToasts={3} />
       </body>
     </html>
   );
