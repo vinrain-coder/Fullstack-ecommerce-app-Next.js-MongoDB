@@ -340,3 +340,45 @@ export const ResetPasswordInputSchema = z
     message: "Passwords do not match.",
     path: ["confirmPassword"],
   });
+
+// Enum for discount types
+export enum DiscountType {
+  PERCENTAGE = "percentage",
+  FIXED = "fixed",
+}
+
+// Coupon input schema
+export const CouponInputSchema = z.object({
+  code: z
+    .string()
+    .trim()
+    .min(3, "Coupon code must be at least 3 characters")
+    .max(20, "Coupon code must be at most 20 characters")
+    .toUpperCase(),
+  discountType: z.nativeEnum(DiscountType, {
+    errorMap: () => ({
+      message: "Discount type must be 'percentage' or 'fixed'",
+    }),
+  }),
+  discountValue: Price("Discount value"), // Correct ✅
+  minPurchase: Price("Minimum purchase").optional(), // Correct ✅
+
+  expiryDate: z
+    .date()
+    .optional()
+    .refine(
+      (value) => !value || value > new Date(),
+      "Expiry date must be in the future"
+    ),
+  maxUsage: z
+    .number()
+    .int()
+    .positive("Max usage must be a positive integer")
+    .optional(),
+  isActive: z.boolean().default(true),
+});
+
+// Coupon update schema (includes `_id`)
+export const CouponUpdateSchema = CouponInputSchema.extend({
+  _id: MongoId,
+});

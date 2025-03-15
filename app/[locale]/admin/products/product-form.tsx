@@ -1,18 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  Controller,
   FormProvider,
   useForm,
-  useFormContext,
 } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -23,14 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 import { IProduct } from "@/lib/db/models/product.model";
-import { UploadButton } from "@/lib/uploadthing";
 import { ProductInputSchema, ProductUpdateSchema } from "@/lib/validator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toSlug } from "@/lib/utils";
 import { IProductInput } from "@/types";
-import { ImagePlus, Trash, Upload, X } from "lucide-react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useState } from "react";
+import {  X } from "lucide-react";
 import ImageUploader from "./image-uploader";
 import { toast } from "sonner";
 import { AutoResizeTextarea } from "@/components/shared/Textarea";
@@ -127,6 +119,7 @@ const ProductForm = ({
       }
     }
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const images = form.watch("images");
 
   return (

@@ -36,6 +36,10 @@ const links = [
     href: "/admin/stockSubs",
   },
   {
+    title: "Coupons",
+    href: "/admin/coupons",
+  },
+  {
     title: "Settings",
     href: "/admin/settings",
   },
@@ -61,7 +65,7 @@ export function AdminNav({
           key={item.href}
           href={item.href}
           className={cn(
-            "px-2 py-2 rounded-lg hover:text-primary active:bg-gray-300 transition duration-200", 
+            "px-2 py-2 rounded-lg hover:text-primary active:bg-gray-300 transition duration-200",
             pathname.includes(item.href)
               ? "font-semibold text-primary"
               : "text-muted-foreground"

@@ -214,7 +214,8 @@
     "Status": "Status",
     "Actions": "Actions",
     "Details": "Details",
-    "StockSubs": "StockSubs"
+    "StockSubs": "StockSubs",
+    "Coupons": "Coupons"
   },
 
   "Blog": {
