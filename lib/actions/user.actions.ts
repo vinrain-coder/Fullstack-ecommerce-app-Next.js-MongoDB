@@ -39,10 +39,12 @@ export async function registerUser(userSignUp: IUserSignUp) {
 }
 
 // Google Sign-In: Send Welcome Email If It's the First Time
-export const SignInWithGoogle = async () => {
+export const handleGoogleUser = async () => {
   const session = await auth();
 
-  if (!session?.user?.email) return;
+  if (!session?.user?.email) {
+    return { success: false, error: "No user session found" };
+  }
 
   await connectToDatabase();
 
@@ -55,11 +57,14 @@ export const SignInWithGoogle = async () => {
       password: null, // No password for Google sign-in users
     });
 
-    // Send welcome email for first-time Google sign-in users
-    await sendWelcomeEmail(existingUser.email, existingUser.name);
+    try {
+      await sendWelcomeEmail(existingUser.email, existingUser.name);
+    } catch (error) {
+      console.error("Error sending welcome email:", error);
+    }
   }
 
-  await signIn("google");
+  return { success: true };
 };
 
 // DELETE
@@ -130,6 +135,7 @@ export async function getAllUsers({
 }: {
   limit?: number;
   page: number;
+  search?: string;
 }) {
   const {
     common: { pageSize },

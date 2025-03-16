@@ -39,13 +39,11 @@ export default async function WelcomeEmail({ name }: WelcomeEmailProps) {
                 board! Start exploring the best shoes and fashion accessories
                 today.
               </Text>
-
               {/* Shop Now Button */}
-              <Button
-                href="https://shoepedi.com/shop"
-                className="bg-orange-500 text-white px-6 py-3 mt-6 rounded-xl text-lg font-bold shadow-md transition"
-              >
-                Start Shopping
+              <Button className="bg-orange-500 text-white px-6 py-3 mt-6 rounded-xl text-lg font-bold shadow-md transition">
+                <Link href={`${site.url}`} className="w-full h-full block">
+                  Start Shopping
+                </Link>
               </Button>
             </Section>
 

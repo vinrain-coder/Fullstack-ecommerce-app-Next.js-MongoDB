@@ -1,21 +1,32 @@
 "use client";
-import { useFormStatus } from "react-dom";
 
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { SignInWithGoogle } from "@/lib/actions/user.actions";
+import { useState } from "react";
+import { Loader2, Circle } from "lucide-react";
 
 export function GoogleSignInForm() {
-  const SignInButton = () => {
-    const { pending } = useFormStatus();
-    return (
-      <Button disabled={pending} className="w-full" variant="outline">
-        {pending ? "Redirecting to Google..." : "Sign In with Google"}
-      </Button>
-    );
+  const [loading, setLoading] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    await signIn("google");
+    setLoading(false);
   };
+
   return (
-    <form action={SignInWithGoogle}>
-      <SignInButton />
-    </form>
+    <Button
+      onClick={handleGoogleSignIn}
+      disabled={loading}
+      className="w-full flex items-center gap-2"
+      variant="outline"
+    >
+      {loading ? (
+        <Loader2 className="animate-spin w-5 h-5" />
+      ) : (
+        <Circle className="w-5 h-5 text-red-500" />
+      )}
+      {loading ? "Redirecting to Google..." : "Sign in with Google"}
+    </Button>
   );
 }

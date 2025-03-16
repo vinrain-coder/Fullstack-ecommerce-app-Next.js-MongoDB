@@ -13,6 +13,7 @@ import { getStockSubscriptions } from "@/lib/actions/stock.actions";
 import { auth } from "@/auth";
 import { formatDateTime } from "@/lib/utils";
 import NotifyButton from "@/components/shared/notify-button";
+import Pagination from "@/components/shared/pagination"; // Import Pagination
 
 export const metadata: Metadata = {
   title: "Admin Stock Subscriptions",
@@ -24,20 +25,23 @@ type FilterType = (typeof validFilters)[number];
 export default async function StockSubscriptionsPage({
   searchParams,
 }: {
-  searchParams?: { filter?: string };
+  searchParams?: { page?: string; filter?: string };
 }) {
   const session = await auth();
   if (session?.user.role !== "Admin")
     throw new Error("Admin permission required");
 
-  // Ensure `filter` is either "pending" or "notified", default to "pending"
+  // Handle page and filter parameters
+  const page = Number(searchParams?.page) || 1;
   const filter: FilterType = validFilters.includes(
     searchParams?.filter as FilterType
   )
     ? (searchParams?.filter as FilterType)
     : "pending";
 
-  const { subscriptions = [] } = await getStockSubscriptions(filter);
+  // Fetch paginated subscriptions
+  const { data: subscriptions = [], totalPages = 1 } =
+    await getStockSubscriptions({ page, filter });
 
   return (
     <div className="space-y-4">
@@ -106,6 +110,9 @@ export default async function StockSubscriptionsPage({
           )}
         </TableBody>
       </Table>
+
+      {/* Pagination */}
+      {totalPages > 1 && <Pagination page={page} totalPages={totalPages} />}
     </div>
   );
 }
