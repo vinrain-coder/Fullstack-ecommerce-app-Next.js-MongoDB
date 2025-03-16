@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getSetting } from "./setting.actions";
+import { sendWelcomeEmail } from "@/emails";
 
 // CREATE
 export async function registerUser(userSignUp: IUserSignUp) {
@@ -23,34 +24,58 @@ export async function registerUser(userSignUp: IUserSignUp) {
     });
 
     await connectToDatabase();
-    await User.create({
+    const newUser = await User.create({
       ...user,
       password: await bcrypt.hash(user.password, 5),
     });
+
+    // Send welcome email
+    await sendWelcomeEmail(newUser.email, newUser.name);
+
     return { success: true, message: "User created successfully" };
   } catch (error) {
     return { success: false, error: formatError(error) };
   }
 }
 
-// DELETE
+// Google Sign-In: Send Welcome Email If It's the First Time
+export const SignInWithGoogle = async () => {
+  const session = await auth();
 
+  if (!session?.user?.email) return;
+
+  await connectToDatabase();
+
+  let existingUser = await User.findOne({ email: session.user.email });
+
+  if (!existingUser) {
+    existingUser = await User.create({
+      name: session.user.name,
+      email: session.user.email,
+      password: null, // No password for Google sign-in users
+    });
+
+    // Send welcome email for first-time Google sign-in users
+    await sendWelcomeEmail(existingUser.email, existingUser.name);
+  }
+
+  await signIn("google");
+};
+
+// DELETE
 export async function deleteUser(id: string) {
   try {
     await connectToDatabase();
     const res = await User.findByIdAndDelete(id);
-    if (!res) throw new Error("Use not found");
+    if (!res) throw new Error("User not found");
     revalidatePath("/admin/users");
-    return {
-      success: true,
-      message: "User deleted successfully",
-    };
+    return { success: true, message: "User deleted successfully" };
   } catch (error) {
     return { success: false, message: formatError(error) };
   }
 }
-// UPDATE
 
+// UPDATE
 export async function updateUser(user: z.infer<typeof UserUpdateSchema>) {
   try {
     await connectToDatabase();
@@ -70,6 +95,7 @@ export async function updateUser(user: z.infer<typeof UserUpdateSchema>) {
     return { success: false, message: formatError(error) };
   }
 }
+
 export async function updateUserName(user: IUserName) {
   try {
     await connectToDatabase();
@@ -91,9 +117,7 @@ export async function updateUserName(user: IUserName) {
 export async function signInWithCredentials(user: IUserSignIn) {
   return await signIn("credentials", { ...user, redirect: false });
 }
-export const SignInWithGoogle = async () => {
-  await signIn("google");
-};
+
 export const SignOut = async () => {
   const redirectTo = await signOut({ redirect: false });
   redirect(redirectTo.redirect);

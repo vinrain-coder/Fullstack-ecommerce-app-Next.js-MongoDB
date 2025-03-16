@@ -166,7 +166,7 @@ export default async function SearchPage(props: {
         <CollapsibleOnMobile title={t("Search.Filters")}>
           <div className="space-y-4">
             <div>
-              <div className="font-bold">{t("Search.Department")}</div>
+              <div className="font-bold">{t("Search.Category")}</div>
               <ul>
                 <li>
                   <Link

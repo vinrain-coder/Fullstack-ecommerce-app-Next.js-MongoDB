@@ -15,6 +15,7 @@ const publicPages = [
   "/page/(.*)",
   "/blogs",
   "/blogs/(.*)",
+  "/reset-password(.*)",
   // (/secret requires auth)
 ];
 

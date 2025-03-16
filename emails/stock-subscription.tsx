@@ -83,7 +83,8 @@ export default function StockSubscriptionNotificationEmail({
               <Text className="text-md text-gray-600 mt-1">
                 {product.countInStock > 0 ? (
                   <span className="text-green-500 font-medium">
-                    In Stock: {product.countInStock} products
+                    In Stock: {product.countInStock} products as of{" "}
+                    {new Date().toLocaleString()}
                   </span>
                 ) : (
                   <span className="text-red-500 font-medium">Out of Stock</span>

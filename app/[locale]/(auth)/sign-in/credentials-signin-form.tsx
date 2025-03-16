@@ -106,7 +106,9 @@ export default function CredentialsSignInForm() {
           />
 
           <div>
-            <Button type="submit">Sign In</Button>
+            <Button type="submit" className="w-full">
+              Sign In
+            </Button>
           </div>
           <div className="text-sm">
             By signing in, you agree to {site.name}&apos;s{" "}

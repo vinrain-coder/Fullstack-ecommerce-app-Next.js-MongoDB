@@ -7,6 +7,7 @@ import { IProduct } from "@/lib/db/models/product.model";
 import { SENDER_EMAIL, SENDER_NAME } from "@/lib/constants";
 import { getSetting } from "@/lib/actions/setting.actions";
 import PasswordResetEmail from "./reset-password";
+import WelcomeEmail from "./welcome-email";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
 
@@ -93,4 +94,22 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
   console.log(`✅ Password reset email sent to ${email}`);
 
   return { success: true, message: "Password reset email sent successfully" };
+};
+
+export const sendWelcomeEmail = async (email: string, name: string) => {
+
+  try {
+    await resend.emails.send({
+      from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
+      to: email,
+      subject: "🎉 Welcome to Shoepedi!",
+      react: <WelcomeEmail name={name} />,
+    });
+
+    console.log(`✅ Welcome email sent to ${email}`);
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Error sending welcome email:", error);
+    return { success: false, error };
+  }
 };
