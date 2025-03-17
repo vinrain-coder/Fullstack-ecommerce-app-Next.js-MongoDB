@@ -9,11 +9,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Metadata } from "next";
-import { getStockSubscriptions } from "@/lib/actions/stock.actions";
 import { auth } from "@/auth";
 import { formatDateTime } from "@/lib/utils";
 import NotifyButton from "@/components/shared/notify-button";
 import Pagination from "@/components/shared/pagination"; // Import Pagination
+import { getAllStockSubscriptions } from "@/lib/actions/stock.actions";
 
 export const metadata: Metadata = {
   title: "Admin Stock Subscriptions",
@@ -40,8 +40,10 @@ export default async function StockSubscriptionsPage({
     : "pending";
 
   // Fetch paginated subscriptions
-  const { data: subscriptions = [], totalPages = 1 } =
-    await getStockSubscriptions({ page, filter });
+  const { data: subscriptions, totalPages } = await getAllStockSubscriptions({
+    page,
+    filter,
+  });
 
   return (
     <div className="space-y-4">

@@ -40,10 +40,11 @@ export default async function WelcomeEmail({ name }: WelcomeEmailProps) {
                 today.
               </Text>
               {/* Shop Now Button */}
-              <Button className="bg-orange-500 text-white px-6 py-3 mt-6 rounded-xl text-lg font-bold shadow-md transition">
-                <Link href={`${site.url}`} className="w-full h-full block">
-                  Start Shopping
-                </Link>
+              <Button
+                href={site.url}
+                className="bg-orange-500 text-white px-6 py-3 mt-6 rounded-xl text-lg font-bold shadow-md transition text-center"
+              >
+                Start Shopping
               </Button>
             </Section>
 

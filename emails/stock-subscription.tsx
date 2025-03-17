@@ -26,7 +26,7 @@ type StockSubscriptionEmailProps = {
 
 export default function StockSubscriptionNotificationEmail({
   product,
-  email,
+  // email,
   siteUrl,
   siteName,
   siteCopyright,
@@ -106,7 +106,7 @@ export default function StockSubscriptionNotificationEmail({
                 You received this email because you subscribed to be notified
                 when this product is back in stock.
               </Text>
-              <Text className="text-gray-500 text-sm">
+              {/* <Text className="text-gray-500 text-sm">
                 If you no longer wish to receive these notifications, you can{" "}
                 <Link
                   href={`${siteUrl}/unsubscribe?email=${email}&product=${product._id}`}
@@ -115,7 +115,7 @@ export default function StockSubscriptionNotificationEmail({
                   unsubscribe here
                 </Link>
                 .
-              </Text>
+              </Text> */}
               <Text className="text-gray-500 text-sm">
                 If you have any questions, feel free to{" "}
                 <Link

@@ -7,6 +7,9 @@ import Product from "../db/models/product.model";
 import { sendStockSubscriptionNotification } from "@/emails";
 import { getSetting } from "./setting.actions";
 
+/**
+ * Subscribe to stock notifications for a product.
+ */
 export const subscribeToStock = async (data: {
   email: string;
   productId: string;
@@ -46,7 +49,10 @@ export const subscribeToStock = async (data: {
   }
 };
 
-export const getStockSubscriptions = async ({
+/**
+ * Fetch stock subscriptions with optional filtering.
+ */
+export async function getAllStockSubscriptions({
   limit,
   page,
   filter,
@@ -54,39 +60,40 @@ export const getStockSubscriptions = async ({
   limit?: number;
   page: number;
   filter?: "notified" | "pending";
-}) => {
-  try {
-    const {
-      common: { pageSize },
-    } = await getSetting();
+}) {
+  const {
+    common: { pageSize },
+  } = await getSetting();
+  
+  // Ensure limit is always a number
+  limit = Number(limit ?? pageSize);
+  
+  await connectToDatabase();
 
-    limit = Number(limit ?? pageSize);
-    await connectToDatabase();
+  const skipAmount = (Number(page) - 1) * limit;
 
-    const skipAmount = (Number(page) - 1) * limit;
+  let query = {};
+  if (filter === "notified") query = { isNotified: true };
+  if (filter === "pending") query = { isNotified: false };
 
-    let query = {};
-    if (filter === "notified") query = { isNotified: true };
-    if (filter === "pending") query = { isNotified: false };
+  const subscriptions = await StockSubscription.find(query)
+    .populate("product")
+    .sort({ subscribedAt: "desc" }) // Sorting by latest subscriptions first
+    .skip(skipAmount)
+    .limit(limit);
 
-    const subscriptions = await StockSubscription.find(query)
-      .populate("product")
-      .sort({ subscribedAt: "desc" })
-      .skip(skipAmount)
-      .limit(limit);
+  const totalSubscriptions = await StockSubscription.countDocuments(query);
 
-    const totalSubscriptions = await StockSubscription.countDocuments(query);
+  return {
+    data: JSON.parse(JSON.stringify(subscriptions)),
+    totalPages: Math.ceil(totalSubscriptions / limit),
+  };
+}
 
-    return {
-      data: JSON.parse(JSON.stringify(subscriptions)),
-      totalPages: Math.ceil(totalSubscriptions / limit),
-    };
-  } catch (error) {
-    console.error("Error fetching stock subscriptions:", error);
-    return { success: false, message: "An error occurred." };
-  }
-};
 
+/**
+ * Notify all subscribers about product restock.
+ */
 export const notifySubscribers = async (productId: string) => {
   try {
     await connectToDatabase();
