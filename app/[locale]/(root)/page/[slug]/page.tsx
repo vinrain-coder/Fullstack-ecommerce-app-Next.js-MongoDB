@@ -81,30 +81,16 @@ export default async function WebPage(props: {
             li: ({ children }) => (
               <li className="text-gray-800 dark:text-gray-300">{children}</li>
             ),
-            a: ({ href, children }) => {
-              if (!href) return <a>{children}</a>;
-
-              const isInternal =
-                href.startsWith("/") || href.startsWith(window.location.origin);
-
-              return isInternal ? (
-                <a
-                  href={href}
-                  className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition"
-                >
-                  {children}
-                </a>
-              ) : (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition"
-                >
-                  {children}
-                </a>
-              );
-            },
+            a: ({ href, children }) => (
+              <a
+                href={href ?? "#"}
+                target="_self"
+                rel="noopener noreferrer"
+                className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition"
+              >
+                {children}
+              </a>
+            ),
             table: ({ children }) => (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 text-left">

@@ -137,31 +137,14 @@ export default async function BlogPage({
                 {...props}
               />
             ),
-            a: ({ href, children }) => {
-              if (!href) return <a>{children}</a>;
-
-              const isInternal =
-                href.startsWith("/") || href.startsWith(window.location.origin);
-
-              return isInternal ? (
-                <a
-                  href={href}
-                  className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition"
-                >
-                  {children}
-                </a>
-              ) : (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition"
-                >
-                  {children}
-                </a>
-              );
-            },
-
+            a: (props) => (
+              <a
+                target="_self"
+                rel="noopener noreferrer"
+                className="text-blue-500 font-medium hover:underline dark:text-blue-400"
+                {...props}
+              />
+            ),
             strong: (props) => (
               <strong
                 className="font-semibold dark:text-white text-gray-900"
