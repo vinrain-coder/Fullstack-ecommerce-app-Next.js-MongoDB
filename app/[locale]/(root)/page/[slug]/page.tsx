@@ -52,7 +52,11 @@ export default async function WebPage(props: {
                 {children}
               </h3>
             ),
-            p: ({ children }) => <p className="leading-7 text-gray-800 dark:text-gray-300">{children}</p>,
+            p: ({ children }) => (
+              <p className="leading-7 text-gray-800 dark:text-gray-300">
+                {children}
+              </p>
+            ),
             blockquote: ({ children }) => (
               <blockquote className="border-l-4 border-blue-500 dark:border-blue-400 pl-4 italic text-gray-700 dark:text-gray-300">
                 {children}
@@ -68,19 +72,39 @@ export default async function WebPage(props: {
                 {children}
               </pre>
             ),
-            ul: ({ children }) => <ul className="list-disc ml-6 space-y-2">{children}</ul>,
-            ol: ({ children }) => <ol className="list-decimal ml-6 space-y-2">{children}</ol>,
-            li: ({ children }) => <li className="text-gray-800 dark:text-gray-300">{children}</li>,
-            a: ({ href, children }) => (
-              <a
-                href={href ?? "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition"
-              >
-                {children}
-              </a>
+            ul: ({ children }) => (
+              <ul className="list-disc ml-6 space-y-2">{children}</ul>
             ),
+            ol: ({ children }) => (
+              <ol className="list-decimal ml-6 space-y-2">{children}</ol>
+            ),
+            li: ({ children }) => (
+              <li className="text-gray-800 dark:text-gray-300">{children}</li>
+            ),
+            a: ({ href, children }) => {
+              if (!href) return <a>{children}</a>;
+
+              const isInternal =
+                href.startsWith("/") || href.startsWith(window.location.origin);
+
+              return isInternal ? (
+                <a
+                  href={href}
+                  className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition"
+                >
+                  {children}
+                </a>
+              ) : (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 transition"
+                >
+                  {children}
+                </a>
+              );
+            },
             table: ({ children }) => (
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 text-left">
