@@ -9,6 +9,9 @@ import { IProductInput } from "@/types";
 import { z } from "zod";
 import { getSetting } from "./setting.actions";
 import mongoose from "mongoose";
+import { UTApi } from "uploadthing/server";
+
+const utapi = new UTApi(); // Initialize UTApi instance
 
 // CREATE
 export async function createProduct(data: IProductInput) {
@@ -42,20 +45,40 @@ export async function updateProduct(data: z.infer<typeof ProductUpdateSchema>) {
   }
 }
 // DELETE
+
 export async function deleteProduct(id: string) {
   try {
     await connectToDatabase();
-    const res = await Product.findByIdAndDelete(id);
-    if (!res) throw new Error("Product not found");
+
+    const product = await Product.findById(id);
+    if (!product) throw new Error("Product not found");
+
+    // Delete images from UploadThing
+    if (product.images && product.images.length > 0) {
+      await Promise.all(
+        product.images.map(async (imageUrl: string) => {
+          const fileKeys = imageUrl.split("/").pop(); // Extract file key
+          if (fileKeys) {
+            await utapi.deleteFiles(fileKeys); // Use the UTApi instance
+          }
+        })
+      );
+    }
+
+    // Delete product from the database
+    await Product.findByIdAndDelete(id);
+
     revalidatePath("/admin/products");
+
     return {
       success: true,
-      message: "Product deleted successfully",
+      message: "Product and associated images deleted successfully",
     };
   } catch (error) {
     return { success: false, message: formatError(error) };
   }
 }
+
 // GET ONE PRODUCT BY ID
 export async function getProductById(productId: string) {
   await connectToDatabase();

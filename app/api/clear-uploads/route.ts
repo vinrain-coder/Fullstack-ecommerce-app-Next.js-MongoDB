@@ -1,8 +1,8 @@
 "use server";
 
-import { connectToDatabase } from "@/lib/db";
-// import Product from "@/lib/db/models/product.model";
 import { UTApi } from "uploadthing/server";
+import { connectToDatabase } from "@/lib/db";
+import Product from "@/lib/db/models/product.model";
 
 export async function GET(req: Request) {
   try {
@@ -15,46 +15,34 @@ export async function GET(req: Request) {
       );
     }
 
-    // Access the database
-    const db = await connectToDatabase();
+    await connectToDatabase();
 
-    // Find products where images are not associated with any product (or have null/empty productId)
-    const unusedImages = await db
-      .collection("products")
-      .find({
-        images: { $exists: true, $not: { $size: 0 } }, // Ensure that images array exists and is not empty
-        ...(process.env.NODE_ENV === "production"
-          ? {
-              createdAt: {
-                $lte: new Date(Date.now() - 1000 * 60 * 60 * 24),
-              },
-            }
-          : {}),
-      })
-      .toArray();
+    // Get all images currently used in products
+    const products = await Product.find({}, "images");
+    const usedImages = new Set(products.flatMap((p) => p.images));
 
-    // Extract image URLs from products
-    const imageUrls = unusedImages.flatMap((product) =>
-      product.images.map((url: string) => url)
-    );
-
-    // Delete unused images from UploadThing
+    // Fetch all uploaded files from UploadThing
     const utApi = new UTApi();
-    await utApi.deleteFiles(
-      imageUrls.map(
-        (url) => url.split(`/a/${process.env.UPLOADTHING_TOKEN}/`)[1]
-      )
+    const uploadedFiles = (await utApi.listFiles()).files;
+
+    if (!uploadedFiles.length) {
+      return Response.json({ success: true, message: "No files to delete." });
+    }
+
+    // Find unused files (not in any product)
+    const unusedFiles = uploadedFiles.filter(
+      (file) => !usedImages.has(`https://utfs.io/f/${file.key}`)
     );
 
-    // Optional: Remove these image URLs from the products
-    await db
-      .collection("products")
-      .updateMany(
-        { images: { $in: imageUrls } },
-        { $pull: { images: { $in: imageUrls } } }
-      );
+    if (unusedFiles.length > 0) {
+      const fileKeys = unusedFiles.map((file) => file.key);
+      await utApi.deleteFiles(fileKeys);
+    }
 
-    return new Response();
+    return Response.json({
+      success: true,
+      deletedCount: unusedFiles.length,
+    });
   } catch (error) {
     console.error(error);
     return Response.json({ error: "Internal server error" }, { status: 500 });
