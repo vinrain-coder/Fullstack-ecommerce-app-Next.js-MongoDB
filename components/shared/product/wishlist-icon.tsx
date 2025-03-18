@@ -10,6 +10,7 @@ import {
   removeFromWishlist,
   getWishlist,
 } from "@/lib/actions/wishlist.actions";
+import { motion, AnimatePresence } from "framer-motion";
 
 const WishlistIcon = ({ productId }: { productId: string }) => {
   const { data: session } = useSession();
