@@ -44,8 +44,8 @@ export async function updateProduct(data: z.infer<typeof ProductUpdateSchema>) {
     return { success: false, message: formatError(error) };
   }
 }
-// DELETE
 
+// DELETE
 export async function deleteProduct(id: string) {
   try {
     await connectToDatabase();
