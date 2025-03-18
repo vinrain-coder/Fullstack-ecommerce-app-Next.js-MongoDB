@@ -14,13 +14,12 @@ type Product = {
   category: string;
   images: string[];
   price: number;
-  listPrice?: number;
   avgRating?: number;
+  tags?: string[];
 };
 
 export default function ProductToast() {
-  const [shuffledProducts, setShuffledProducts] = useState<Product[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,30 +27,26 @@ export default function ProductToast() {
         query: "all",
         category: "all",
         tag: "all",
-        limit: 50, // Increase limit to fetch more products
+        limit: 20,
         page: 1,
         price: "all",
         rating: "all",
         sort: "best-selling",
       });
 
-      if (products.length) {
-        setShuffledProducts(
-          products
-            .map((p) => ({
-              ...p,
-              _id: p._id.toString(), // Ensure _id is a string
-            }))
-            .sort(() => Math.random() - 0.5)
-        );
-      }
+      setProducts(
+        products.map((p) => ({
+          ...p,
+          _id: p._id.toString(),
+        }))
+      );
     };
 
     fetchProducts();
   }, []);
 
   useEffect(() => {
-    if (!shuffledProducts.length) return;
+    if (!products.length) return;
 
     const messages = [
       "Someone just viewed",
@@ -59,18 +54,36 @@ export default function ProductToast() {
       "Limited stock!",
       "Hot deal:",
       "Popular pick:",
+      "Just purchased in",
     ];
-    const locations = ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret"];
 
-    const showToast = () => {
-      const product = shuffledProducts[currentIndex];
+    const locations = [
+      "Nairobi",
+      "Mombasa",
+      "Kisumu",
+      "Nakuru",
+      "Eldoret",
+      "Thika",
+      "Malindi",
+      "Garissa",
+      "Kitale",
+      "Nyeri",
+      "Machakos",
+      "Kericho",
+      "Embu",
+      "Kakamega",
+      "Kisii",
+      "Migori",
+    ];
+
+    // const sound = new Audio("/notification.mp3");
+
+    const showRandomToast = () => {
+      const product = products[Math.floor(Math.random() * products.length)];
       const message = messages[Math.floor(Math.random() * messages.length)];
       const location = locations[Math.floor(Math.random() * locations.length)];
-      const discount = product.listPrice
-        ? Math.round(
-            ((product.listPrice - product.price) / product.listPrice) * 100
-          )
-        : 0;
+
+      // sound.play().catch((err) => console.warn("Sound play error:", err));
 
       toast.custom(
         () => (
@@ -79,44 +92,55 @@ export default function ProductToast() {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 100 }}
-            className="w-[250px] opacity-0 animate-fadeIn"
+            className="w-[260px] bg-white shadow-md p-3 rounded-lg border border-gray-200 cursor-pointer hover:shadow-lg transition-all"
           >
-            <Link href={`/product/${product.slug}`} className="block">
-              <div className="flex items-center gap-3 bg-white shadow-lg p-3 rounded-lg border border-gray-200 cursor-pointer hover:shadow-xl transition-all">
-                <Image
-                  src={product.images[0]}
-                  alt={product.name}
-                  width={50}
-                  height={50}
-                  className="rounded-md"
-                />
-                <div className="gap-3">
-                  <p className="text-xs text-gray-500">
-                    {message} ({location})
-                  </p>
-                  <p className="text-sm font-bold line-clamp-2 text-gray-700">
-                    {product.name}
-                  </p>
+            <Link
+              href={`/product/${product.slug}`}
+              className="flex items-center gap-3"
+            >
+              <Image
+                src={product.images[0]}
+                alt={product.name}
+                width={50}
+                height={50}
+                className="rounded-md"
+              />
+              <div className="flex flex-col w-full">
+                <p className="text-xs text-gray-500 font-medium">
+                  {message} {location}
+                </p>
+                <p className="text-sm font-semibold text-gray-800 line-clamp-2">
+                  {product.name}
+                </p>
 
-                  {/* Star Rating */}
-                  {product.avgRating !== undefined && (
-                    <div className="flex gap-1 text-primary text-sm">
-                      {"★".repeat(Math.round(product.avgRating))}
-                      {"☆".repeat(5 - Math.round(product.avgRating))}
-                    </div>
-                  )}
+                {/* Star Rating */}
+                {product.avgRating !== undefined && (
+                  <div className="flex gap-[2px] text-primary text-sm">
+                    {"★".repeat(Math.round(product.avgRating))}
+                    {"☆".repeat(5 - Math.round(product.avgRating))}{" "}
+                    <span className="text-gray-700 ml-4">Avg. ratings</span>
+                  </div>
+                )}
 
-                  <p className="text-xs font-semibold text-gray-600">
-                    KES {product.price}
-                  </p>
+                <p className="text-sm font-bold text-gray-900">
+                  KES {product.price}
+                </p>
 
-                  {/* Discount Badge */}
-                  {discount > 0 && (
-                    <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-md">
-                      {discount}% OFF
-                    </span>
-                  )}
-                </div>
+                {/* Product Tags */}
+                {product.tags && product.tags.length > 0 && (
+                  <div className="flex gap-1 mt-[4px]">
+                    {product.tags.slice(0, 3).map((tag, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-100 text-blue-700 text-[12px] px-2 py-[2px] rounded"
+                      >
+                        {tag
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </Link>
           </motion.div>
@@ -126,20 +150,11 @@ export default function ProductToast() {
           duration: 5000,
         }
       );
-
-      // Move to the next product or restart cycle
-      setCurrentIndex((prevIndex) =>
-        prevIndex + 1 < shuffledProducts.length ? prevIndex + 1 : 0
-      );
     };
 
-    const interval = setInterval(
-      showToast,
-      Math.random() * (25000 - 10000) + 10000
-    );
-
+    const interval = setInterval(showRandomToast, 10000);
     return () => clearInterval(interval);
-  }, [shuffledProducts, currentIndex]);
+  }, [products]);
 
   return <Toaster richColors closeButton />;
 }
