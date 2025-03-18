@@ -92,7 +92,7 @@ export default function ProductToast() {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 100 }}
-            className="w-[260px] bg-white shadow-md p-3 rounded-lg border border-gray-200 cursor-pointer hover:shadow-lg transition-all"
+            className="w-[240px] bg-white shadow-md p-2 rounded-lg border border-gray-200 cursor-pointer hover:shadow-lg transition-all"
           >
             <Link
               href={`/product/${product.slug}`}
@@ -109,7 +109,7 @@ export default function ProductToast() {
                 <p className="text-xs text-gray-500 font-medium">
                   {message} {location}
                 </p>
-                <p className="text-sm font-semibold text-gray-800 line-clamp-2">
+                <p className="text-sm font-semibold text-gray-800 line-clamp-1">
                   {product.name}
                 </p>
 
@@ -148,6 +148,7 @@ export default function ProductToast() {
         {
           position: "bottom-left",
           duration: 5000,
+          closeButton: true,
         }
       );
     };
@@ -156,5 +157,5 @@ export default function ProductToast() {
     return () => clearInterval(interval);
   }, [products]);
 
-  return <Toaster richColors closeButton />;
+  return <Toaster richColors />;
 }
