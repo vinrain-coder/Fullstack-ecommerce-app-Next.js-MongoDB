@@ -1,61 +1,79 @@
 "use server";
 
-import mongoose, { Types } from "mongoose";
-import { connectToDatabase } from "../db";
 import { auth } from "@/auth";
-import User from "../db/models/user.model";
+import { connectToDatabase } from "@/lib/db";
+import User from "@/lib/db/models/user.model";
+import mongoose from "mongoose";
+import { IProduct } from "../db/models/product.model";
 
+// Get wishlist product IDs
 export async function getWishlist() {
   await connectToDatabase();
   const session = await auth();
-
   if (!session) return [];
 
-  const user = await User.findOne({ email: session.user?.email }).populate("wishlist");
-
-  if (!user) return [];
-
-  return user.wishlist.map((item: any) => item._id.toString());
+  const user = await User.findOne({ email: session.user?.email }).select(
+    "wishlist"
+  );
+  return (
+    user?.wishlist.map((id: mongoose.Types.ObjectId) => id.toString()) || []
+  );
 }
 
+// Add product to wishlist
 export async function addToWishlist(productId: string) {
   await connectToDatabase();
   const session = await auth();
-
   if (!session) return [];
 
-  let user = await User.findOne({ email: session.user?.email });
+  const user = await User.findOneAndUpdate(
+    { email: session.user?.email },
+    { $addToSet: { wishlist: new mongoose.Types.ObjectId(productId) } },
+    { new: true }
+  ).select("wishlist");
 
-  if (!user) {
-    return [];
-  }
-
-  const productObjectId = new mongoose.Types.ObjectId(productId); // Convert to ObjectId
-
-  if (!user.wishlist.includes(productObjectId)) {
-    user.wishlist.push(productObjectId);
-    await user.save();
-  }
-
-  return user.wishlist.map((item: any) => item.toString());
+  return (
+    user?.wishlist.map((id: mongoose.Types.ObjectId) => id.toString()) || []
+  );
 }
 
+// Remove product from wishlist
 export async function removeFromWishlist(productId: string) {
   await connectToDatabase();
   const session = await auth();
-
   if (!session) return [];
 
-  let user = await User.findOne({ email: session.user?.email });
+  const user = await User.findOneAndUpdate(
+    { email: session.user?.email },
+    { $pull: { wishlist: new mongoose.Types.ObjectId(productId) } },
+    { new: true }
+  ).select("wishlist");
 
-  if (!user) {
-    return [];
-  }
+  return (
+    user?.wishlist.map((id: mongoose.Types.ObjectId) => id.toString()) || []
+  );
+}
 
-  const productObjectId = new mongoose.Types.ObjectId(productId); // Convert to ObjectId
+// Fetch full product details for wishlist
+export async function getWishlistProducts(): Promise<IProduct[]> {
+  await connectToDatabase();
+  const session = await auth();
+  if (!session) return [];
 
-  user.wishlist = user.wishlist.filter((id) => !id.equals(productObjectId));
-  await user.save();
+  const user = await User.findOne({ email: session.user?.email })
+    .populate<{ wishlist: IProduct[] }>({
+      path: "wishlist",
+      model: "Product",
+    })
+    .lean(); // Convert Mongoose documents to plain JS objects
 
-  return user.wishlist.map((item: any) => item.toString());
+  if (!user?.wishlist) return [];
+
+  // Convert _id fields to strings
+  const sanitizedWishlist = user.wishlist.map((product) => ({
+    ...product,
+    _id: product._id.toString(), // Convert ObjectId to string
+  }));
+
+  return sanitizedWishlist;
 }

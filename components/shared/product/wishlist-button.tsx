@@ -1,28 +1,40 @@
 "use client";
 
-import { useWishlist } from "@/hooks/use-wishlist-store";
+import { useState, useTransition } from "react";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import {
+  addToWishlist,
+  removeFromWishlist,
+  getWishlist,
+} from "@/lib/actions/wishlist.actions";
 
 interface WishlistButtonProps {
   productId: string;
 }
 
 const WishlistButton: React.FC<WishlistButtonProps> = ({ productId }) => {
-  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  const isInWishlist = wishlist.includes(productId);
+  const { data: session } = useSession();
   const router = useRouter();
-  const pathname = usePathname(); // Get current path
-  const { data: session } = useSession(); // Get user session
+  const pathname = usePathname();
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [pending, startTransition] = useTransition();
+
+  // Fetch wishlist status on mount
+  useState(() => {
+    async function checkWishlist() {
+      const wishlist = await getWishlist();
+      setIsInWishlist(wishlist.includes(productId));
+    }
+    checkWishlist();
+  });
 
   const toggleWishlist = () => {
     if (!session) {
-      // Redirect user to login with callbackUrl
       const loginUrl = `/login?callbackUrl=${encodeURIComponent(pathname)}`;
-
       toast.error("You need to log in to use the wishlist", {
         action: {
           label: "Login",
@@ -32,13 +44,17 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({ productId }) => {
       return;
     }
 
-    if (isInWishlist) {
-      removeFromWishlist(productId);
-      toast.success("Removed from wishlist");
-    } else {
-      addToWishlist(productId);
-      toast.success("Added to wishlist");
-    }
+    startTransition(async () => {
+      if (isInWishlist) {
+        await removeFromWishlist(productId);
+        toast.success("Removed from wishlist");
+        setIsInWishlist(false);
+      } else {
+        await addToWishlist(productId);
+        toast.success("Added to wishlist");
+        setIsInWishlist(true);
+      }
+    });
   };
 
   return (
@@ -46,6 +62,7 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({ productId }) => {
       onClick={toggleWishlist}
       variant="outline"
       className="flex items-center rounded-full w-full gap-1"
+      disabled={pending}
     >
       <Heart
         className={`w-6 h-6 text-red-500 ${isInWishlist ? "fill-red-500" : ""}`}

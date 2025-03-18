@@ -2,7 +2,7 @@ import { Document, Model, model, models, Schema, Types } from "mongoose";
 import { IProductInput } from "@/types";
 
 export interface IProduct extends Document, IProductInput {
-  _id: Types.ObjectId;
+  _id: Types.ObjectId | string;
   createdAt: Date;
   updatedAt: Date;
 }

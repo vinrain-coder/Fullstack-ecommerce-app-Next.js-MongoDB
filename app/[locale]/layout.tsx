@@ -11,7 +11,6 @@ import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SessionProvider } from "next-auth/react";
-import WishlistSync from "@/components/wishlist-sync";
 
 const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
@@ -58,7 +57,6 @@ export default async function AppLayout({
         className={`min-h-screen ${lora.className} antialiased leading-relaxed tracking-wide`}
       >
         <SessionProvider>
-          <WishlistSync />
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ClientProviders setting={{ ...setting, currency }}>
               {children}
