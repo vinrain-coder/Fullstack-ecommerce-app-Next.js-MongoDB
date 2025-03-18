@@ -4,12 +4,12 @@ import withNextIntl from "next-intl/plugin";
 const nextConfig: NextConfig = withNextIntl()({
   /* config options here */
 
-  // Experimental configurations
-  experimental: {
-    staleTimes: {
-      dynamic: 1800, // Customize cache expiration for dynamic content (e.g., dynamic routes like /product/:slug)
-    },
-  },
+  // // Experimental configurations
+  // experimental: {
+  //   staleTimes: {
+  //     dynamic: 1800, // Customize cache expiration for dynamic content (e.g., dynamic routes like /product/:slug)
+  //   },
+  // },
 
   // ESLint and TypeScript settings
   eslint: {

@@ -49,12 +49,10 @@ export default function ProductToast() {
     if (!products.length) return;
 
     const messages = [
-      "Someone just viewed",
-      "Trending now:",
-      "Limited stock!",
-      "Hot deal:",
-      "Popular pick:",
-      "Just purchased in",
+      "Just viewed in",
+      "Trending now in",
+      "Just ordered in",
+      "Just enquired in",
     ];
 
     const locations = [
@@ -96,7 +94,7 @@ export default function ProductToast() {
           >
             <Link
               href={`/product/${product.slug}`}
-              className="flex items-center gap-3"
+              className="flex items-center gap-2"
             >
               <Image
                 src={product.images[0]}
@@ -148,14 +146,13 @@ export default function ProductToast() {
         {
           position: "bottom-left",
           duration: 5000,
-          closeButton: true,
         }
       );
     };
 
-    const interval = setInterval(showRandomToast, 10000);
+    const interval = setInterval(showRandomToast, 15000);
     return () => clearInterval(interval);
   }, [products]);
 
-  return <Toaster richColors />;
+  return <Toaster richColors closeButton />;
 }
