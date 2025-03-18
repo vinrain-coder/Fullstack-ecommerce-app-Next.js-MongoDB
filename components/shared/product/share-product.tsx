@@ -1,23 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Clipboard, ClipboardCheck, MessageCircle, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 function ShareProduct({ slug, name }: { slug: string; name: string }) {
   const [copied, setCopied] = useState(false);
-  const [productUrl, setProductUrl] = useState("");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setProductUrl(`${window.location.origin}/product/${slug}`);
-    }
-  }, [slug]);
+  const productUrl = `${window.location.origin}/product/${slug}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(productUrl).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
+      setTimeout(() => setCopied(false), 3000); 
     });
   };
 
@@ -37,10 +31,7 @@ function ShareProduct({ slug, name }: { slug: string; name: string }) {
     <div className="flex gap-3 mt-4">
       {/* Copy Link Button */}
       <div>
-        <Button
-          onClick={handleCopy}
-          className="flex gap-2 items-center bg-slate-600 hover:bg-slate-800 text-white"
-        >
+        <Button onClick={handleCopy} className="flex gap-2 items-center bg-slate-600 hover:bg-slate-800 text-white">
           {copied ? <ClipboardCheck size={18} /> : <Clipboard size={18} />}
           {copied ? "Copied!" : "Copy Link"}
         </Button>
@@ -48,10 +39,7 @@ function ShareProduct({ slug, name }: { slug: string; name: string }) {
 
       {/* Mobile Share Button */}
       <div>
-        <Button
-          onClick={shareOnMobile}
-          className="flex gap-2 items-center bg-gray-700 hover:bg-gray-800 text-white"
-        >
+        <Button onClick={shareOnMobile} className="flex gap-2 items-center bg-gray-700 hover:bg-gray-800 text-white">
           <Share2 size={18} />
           Share
         </Button>

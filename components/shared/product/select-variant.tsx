@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { IProduct } from "@/lib/db/models/product.model";
+import Link from "next/link";
 
 export default function SelectVariant({
   product,
@@ -23,13 +24,13 @@ export default function SelectVariant({
   );
   const [selectedSize, setSelectedSize] = useState(size || product.sizes[0]);
 
-  // Sync local state with URL parameters when they change
+  // Sync with URL changes
   useEffect(() => {
     setSelectedColor(color || product.colors[0]);
     setSelectedSize(size || product.sizes[0]);
-  }, [color, size, product.colors, product.sizes]); // ✅ Updated dependencies
+  }, [color, size, product]);
 
-  // Function to update the variant instantly and then update the URL
+  // Function to update the variant instantly and update the URL
   const updateVariant = (newColor: string, newSize: string) => {
     setSelectedColor(newColor);
     setSelectedSize(newSize);
@@ -38,11 +39,7 @@ export default function SelectVariant({
     const params = new URLSearchParams(searchParams.toString());
     params.set("color", newColor);
     params.set("size", newSize);
-
-    // Use setTimeout to allow UI to update first before changing the URL
-    setTimeout(() => {
-      router.replace(`?${params.toString()}`, { scroll: false });
-    }, 0);
+    router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   return (
