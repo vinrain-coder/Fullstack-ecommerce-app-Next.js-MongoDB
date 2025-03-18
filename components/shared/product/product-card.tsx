@@ -23,16 +23,21 @@ const ProductCard = ({
   hideBorder = false,
   hideDetails = false,
   hideAddToCart = false,
+  isInWishlist = false,
 }: {
   product: IProduct;
   hideDetails?: boolean;
   hideBorder?: boolean;
   hideAddToCart?: boolean;
+  isInWishlist?: boolean;
 }) => {
   const ProductImage = () => (
     <div className="relative h-52">
       <div className="absolute top-1 right-1 z-10">
-        <WishlistIcon productId={product._id.toString()} />
+        <WishlistIcon
+          productId={product._id.toString()}
+          initialInWishlist={isInWishlist}
+        />
       </div>
 
       <Link href={`/product/${product.slug}`}>
