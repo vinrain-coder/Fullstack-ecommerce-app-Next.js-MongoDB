@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter, usePathname } from "next/navigation";
@@ -18,16 +18,16 @@ const WishlistIcon = ({ productId }: { productId: string }) => {
   const pathname = usePathname();
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [pending, startTransition] = useTransition();
-  const [showSparkle, setShowSparkle] = useState(false);
+  const [showStar, setShowStar] = useState(false);
 
-  // Fetch wishlist status on mount
-  useState(() => {
+  // ✅ Fetch wishlist status on mount
+  useEffect(() => {
     async function checkWishlist() {
       const wishlist = await getWishlist();
       setIsInWishlist(wishlist.includes(productId));
     }
     checkWishlist();
-  });
+  }, [productId]);
 
   const toggleWishlist = () => {
     if (!session) {
@@ -50,11 +50,11 @@ const WishlistIcon = ({ productId }: { productId: string }) => {
         await addToWishlist(productId);
         toast.success("Added to wishlist");
         setIsInWishlist(true);
-        setShowSparkle(true); // Trigger sparkle effect
+        setShowStar(true);
 
-        // Hide sparkle after animation ends
+        // Hide star after animation
         setTimeout(() => {
-          setShowSparkle(false);
+          setShowStar(false);
         }, 500);
       }
     });
@@ -62,17 +62,17 @@ const WishlistIcon = ({ productId }: { productId: string }) => {
 
   return (
     <button onClick={toggleWishlist} className="relative" disabled={pending}>
-      {/* Sparkle Effect */}
+      {/* ⭐ Red Star Effect */}
       <AnimatePresence>
-        {showSparkle && (
+        {showStar && (
           <motion.div
-            className="absolute -top-2 -right-2 text-yellow-400"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1.5 }}
-            exit={{ opacity: 0, scale: 0 }}
+            className="absolute -top-3 -right-3 text-red-500 text-lg font-bold"
+            initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
+            animate={{ opacity: 1, scale: 1.5, rotate: 0 }}
+            exit={{ opacity: 0, scale: 0, rotate: 20 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            ✨
+            ★
           </motion.div>
         )}
       </AnimatePresence>

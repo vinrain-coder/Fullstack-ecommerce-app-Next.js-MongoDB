@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter, usePathname } from "next/navigation";
@@ -23,14 +23,13 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({ productId }) => {
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [pending, startTransition] = useTransition();
 
-  // Fetch wishlist status on mount
-  useState(() => {
+  useEffect(() => {
     async function checkWishlist() {
-      const wishlist = await getWishlist();
+      const wishlist = await getWishlist(); // ✅ Fetch initial wishlist status
       setIsInWishlist(wishlist.includes(productId));
     }
     checkWishlist();
-  });
+  }, [productId]);
 
   const toggleWishlist = () => {
     if (!session) {

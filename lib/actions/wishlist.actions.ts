@@ -70,10 +70,8 @@ export async function getWishlistProducts(): Promise<IProduct[]> {
   if (!user?.wishlist) return [];
 
   // Convert _id fields to strings
-  const sanitizedWishlist = user.wishlist.map((product) => ({
+  return user.wishlist.map((product) => ({
     ...product,
     _id: product._id.toString(), // Convert ObjectId to string
   }));
-
-  return sanitizedWishlist;
 }

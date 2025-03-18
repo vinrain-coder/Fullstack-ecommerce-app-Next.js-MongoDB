@@ -122,7 +122,11 @@ export default async function ProductDetails(props: {
       <section>
         <div className="grid grid-cols-1 md:grid-cols-5">
           <div className="col-span-2">
-            <ProductGallery images={product.images} />
+            <ProductGallery
+              images={product.images}
+              colors={product.colors}
+              selectedColor={searchParams.color || product.colors[0]}
+            />
           </div>
 
           <div className="flex w-full flex-col gap-2 md:p-5 col-span-2">
