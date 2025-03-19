@@ -23,6 +23,7 @@ export default function ProductToast() {
   const notificationSound = useRef(
     typeof Audio !== "undefined" ? new Audio("/sounds/notification.wav") : null
   );
+  const toastInterval = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -155,8 +156,38 @@ export default function ProductToast() {
       );
     };
 
-    const interval = setInterval(showRandomToast, 120000);
-    return () => clearInterval(interval);
+    const startToastInterval = () => {
+      if (!toastInterval.current) {
+        toastInterval.current = setInterval(showRandomToast, 120000);
+      }
+    };
+
+    const stopToastInterval = () => {
+      if (toastInterval.current) {
+        clearInterval(toastInterval.current);
+        toastInterval.current = null;
+      }
+    };
+
+    // Handle visibility change
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopToastInterval();
+      } else {
+        startToastInterval();
+      }
+    };
+
+    // Start interval when component mounts
+    startToastInterval();
+
+    // Listen for page visibility changes
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      stopToastInterval();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [products]);
 
   return <Toaster richColors closeButton visibleToasts={1} />;

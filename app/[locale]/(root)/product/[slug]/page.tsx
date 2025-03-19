@@ -210,7 +210,10 @@ export default async function ProductDetails(props: {
                           color: searchParams.color || product.colors[0],
                         }}
                       />
-                      <WishlistButton productId={product._id.toString()} />
+                      <WishlistButton
+                        productId={product._id.toString()}
+                        initialWishlist={[]}
+                      />
                     </div>
                   </div>
                 )}
@@ -247,3 +250,4 @@ export default async function ProductDetails(props: {
     </div>
   );
 }
+
