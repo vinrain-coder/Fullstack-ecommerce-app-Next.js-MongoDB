@@ -55,7 +55,7 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/blogs" className="hover:text-gray-300">
-                {t("Footer.Blog")}
+                {t("Footer.Blogs")}
               </Link>
             </li>
             <li>

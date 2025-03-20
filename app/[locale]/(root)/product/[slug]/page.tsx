@@ -211,11 +211,14 @@ export default async function ProductDetails(props: {
                           color: searchParams.color || product.colors[0],
                         }}
                       />
-                        <OrderViaWhatsApp
-                          productName={product.name}
-                          variant={searchParams.color || product.colors[0]}
-                          size={searchParams.size || product.sizes[0]}
-                        />
+                      <OrderViaWhatsApp
+                        productName={product.name}
+                        variant={searchParams.color || product.colors[0]}
+                        size={searchParams.size || product.sizes[0]}
+                        quantity={1}
+                        price={product.price}
+                      />
+
                       <WishlistButton
                         productId={product._id.toString()}
                         initialWishlist={[]}
