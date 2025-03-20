@@ -14,7 +14,7 @@ export default async function BlogPage({
 
   return (
     <div className="space-y-6">
-      <div className="bg-card grid md:grid-cols-5 md:gap-4">
+      <div className="bg-card grid md:grid-cols-3 md:gap-4">
         <div className="md:col-span-4 space-y-4">
           <div>
             <h1 className="font-bold text-2xl">Latest Blogs</h1>
@@ -23,7 +23,7 @@ export default async function BlogPage({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {blogs.length === 0 ? (
               <p>No blogs found.</p>
             ) : (
@@ -36,7 +36,6 @@ export default async function BlogPage({
               <Pagination page={currentPage} totalPages={totalPages} />
             </div>
           )}
-
         </div>
       </div>
       <BrowsingHistoryList className="mt-16" />

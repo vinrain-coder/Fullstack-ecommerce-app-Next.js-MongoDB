@@ -1,8 +1,12 @@
+import BlogSlider from "@/components/shared/blog/blog-slider";
 import BrowsingHistoryList from "@/components/shared/browsing-history-list";
+import { AboutCarousel } from "@/components/shared/home/about-carousel";
 import { HomeCard } from "@/components/shared/home/home-card";
 import { HomeCarousel } from "@/components/shared/home/home-carousel";
+import { TestimonialCarousel } from "@/components/shared/home/testimonials-carousel";
 import ProductSlider from "@/components/shared/product/product-slider";
 import { Card, CardContent } from "@/components/ui/card";
+import { fetchLatestBlogs } from "@/lib/actions/blog.actions";
 
 import {
   getProductsForCard,
@@ -18,6 +22,8 @@ export default async function HomePage() {
   const { carousels } = await getSetting();
   const todaysDeals = await getProductsByTag({ tag: "todays-deal" });
   const bestSellingProducts = await getProductsByTag({ tag: "best-seller" });
+
+  const blogs = await fetchLatestBlogs();
 
   const categories = (await getAllCategories()).slice(0, 4);
   const newArrivals = await getProductsForCard({
@@ -91,6 +97,18 @@ export default async function HomePage() {
 
       <div className="p-4 bg-background">
         <BrowsingHistoryList />
+      </div>
+
+      <div className="p-4 bg-background">
+        <AboutCarousel />
+      </div>
+
+      <div className="p-4 bg-background">
+        <TestimonialCarousel />
+      </div>
+
+      <div className="p-4 bg-background">
+        <BlogSlider title="Our Latest Stories" blogs={blogs} />
       </div>
     </>
   );

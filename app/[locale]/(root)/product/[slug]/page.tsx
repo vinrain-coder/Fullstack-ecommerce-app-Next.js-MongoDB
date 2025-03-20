@@ -21,6 +21,7 @@ import { getSetting } from "@/lib/actions/setting.actions";
 import ShareProduct from "@/components/shared/product/share-product";
 import WishlistButton from "@/components/shared/product/wishlist-button";
 import SubscribeButton from "@/components/shared/product/stock-subscription-button";
+import OrderViaWhatsApp from "@/components/shared/product/order-via-whatsapp";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -210,6 +211,11 @@ export default async function ProductDetails(props: {
                           color: searchParams.color || product.colors[0],
                         }}
                       />
+                        <OrderViaWhatsApp
+                          productName={product.name}
+                          variant={searchParams.color || product.colors[0]}
+                          size={searchParams.size || product.sizes[0]}
+                        />
                       <WishlistButton
                         productId={product._id.toString()}
                         initialWishlist={[]}
@@ -250,4 +256,3 @@ export default async function ProductDetails(props: {
     </div>
   );
 }
-

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -160,4 +161,9 @@ export async function getMostViewedBlogs(limit: number = 5) {
   } catch (error) {
     return [];
   }
+}
+
+export async function fetchLatestBlogs() {
+  await connectToDatabase();
+  return await Blog.find().sort({ createdAt: -1 }).limit(4); // Fetch latest 4 blogs
 }

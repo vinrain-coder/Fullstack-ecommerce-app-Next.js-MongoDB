@@ -41,7 +41,7 @@ export default async function AuthLayout({
             <p className="text-gray-400">{site.copyright}</p>
           </div>
         </footer>
-        <Toaster duration={4000} richColors closeButton visibleToasts={3} />
+        <Toaster duration={4000} richColors closeButton />
       </body>
     </html>
   );

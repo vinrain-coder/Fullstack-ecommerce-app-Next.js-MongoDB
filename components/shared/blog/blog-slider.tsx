@@ -1,6 +1,6 @@
+"use client";
 
-import { getMostViewedBlogs } from "@/lib/actions/blog.actions";
-import BlogCard from "@/components/shared/blog/blog-card";
+import * as React from "react";
 import {
   Carousel,
   CarouselContent,
@@ -8,26 +8,43 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import BlogCard from "./blog-card";
 import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
-export default async function MostViewedBlogs() {
-  const blogs = await getMostViewedBlogs(); // Fetch most viewed blogs
+export default function BlogSlider({
+  title,
+  blogs,
+}: {
+  title?: string;
+  blogs: {
+    _id: string;
+    title: string;
+    slug: string;
+    content: string;
+    category: string;
+    tags: string[];
+    createdAt: string | Date;
+  }[];
+}) {
   const displayedBlogs = blogs.slice(0, 4); // Limit to max 4 blogs
 
   return (
-    <div className="mt-8">
-      <h2 className="text-xl font-bold">Our Popular Stories</h2>
+    <div className="w-full">
+      <Separator className={cn("mb-4")} />
+      {title && <h2 className="h2-bold mb-5">{title}</h2>}
       <Carousel
         opts={{
           align: "start",
         }}
-        className="w-full mt-4"
+        className="w-full"
       >
         <CarouselContent>
           {displayedBlogs.map((blog) => (
             <CarouselItem
               key={blog._id}
-              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+              className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
             >
               <BlogCard blog={blog} />
             </CarouselItem>
@@ -39,10 +56,7 @@ export default async function MostViewedBlogs() {
 
       {/* View All Blogs Link */}
       <div className="mt-6 text-center">
-        <Link
-          href="/blogs"
-          className="text-primary font-medium hover:underline"
-        >
+        <Link href="/blogs" className="font-medium hover:underline">
           View All Blogs →
         </Link>
       </div>

@@ -33,7 +33,7 @@ export default function BlogCard({
   const firstImageUrl = extractFirstImageUrl(blog.content);
 
   return (
-    <div className="border rounded-xl shadow-md dark:shadow-lg overflow-hidden bg-white dark:bg-gray-900 transition-all duration-300 hover:shadow-xl dark:hover:shadow-2xl">
+    <div className="border rounded-xl h-96 max-w-80 shadow-md dark:shadow-lg overflow-hidden bg-white dark:bg-gray-900 transition-all duration-300 hover:shadow-xl dark:hover:shadow-2xl">
       {/* Blog Image */}
       <Link href={`/blogs/${blog.slug}`} className="block group">
         <div className="relative w-full h-56 overflow-hidden">
@@ -62,18 +62,26 @@ export default function BlogCard({
         </div>
 
         {/* Tags & Category */}
-        <div className="mt-4 flex flex-wrap gap-2 text-xs">
+        <div className="mt-4 flex flex-wrap gap-2 text-sm items-center justify-between">
           <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 font-medium">
             {blog.category}
           </span>
-          {blog.tags.map((tag) => (
+          {/* {blog.tags.map((tag) => (
             <span
               key={tag}
               className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 font-medium"
             >
               {tag}
             </span>
-          ))}
+          ))} */}
+          <span>
+            <Link
+              href={`/blogs${blog.slug}`}
+              className="hover:underline hover:text-primary"
+            >
+              Read more →
+            </Link>
+          </span>
         </div>
       </div>
     </div>
