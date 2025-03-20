@@ -28,7 +28,7 @@ export default async function WebPage(props: {
   if (!webPage) notFound();
 
   return (
-    <div className="p-6 md:p-8 max-w-3xl mx-auto">
+    <div className="p-1 sm:p-2 md:p-8 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 pb-4">
         {webPage.title}
       </h1>

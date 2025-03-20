@@ -47,15 +47,16 @@ export default function OrderViaWhatsApp({
 - Quantity: ${quantity}
 - Price: ${formattedPrice}
 
-Link: ${pageUrl}
-
-Can you provide more details?`
+Link: ${pageUrl}`
   );
 
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
 
   return (
-    <Button asChild className="bg-green-500 hover:bg-green-600 text-white">
+    <Button
+      asChild
+      className="bg-green-500 hover:bg-green-600 text-white rounded-full w-full"
+    >
       <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
         <MessageCircle className="w-6 h-6" />
         Order via WhatsApp

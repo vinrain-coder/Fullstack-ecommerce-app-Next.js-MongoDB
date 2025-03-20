@@ -54,7 +54,7 @@ export function TestimonialCarousel() {
   return (
     <div className="w-full mx-auto my-4">
       <Separator className={cn("mb-4")} />
-      <h1 className="text-xl font-bold mb-4">Some Customer Reviews</h1>
+      <h2 className="text-xl font-bold mb-4">Some Customer Reviews</h2>
       <Carousel
         dir="ltr"
         plugins={[plugin.current]}
@@ -69,7 +69,7 @@ export function TestimonialCarousel() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="flex flex-col items-center text-center rounded-xl shadow-md"
+                className="flex flex-col items-center text-center rounded-xl"
               >
                 <Image
                   src={testimonial.image}

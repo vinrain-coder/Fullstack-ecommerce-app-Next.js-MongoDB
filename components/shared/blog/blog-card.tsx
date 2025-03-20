@@ -76,7 +76,7 @@ export default function BlogCard({
           ))} */}
           <span>
             <Link
-              href={`/blogs${blog.slug}`}
+              href={`/blogs/${blog.slug}`}
               className="hover:underline hover:text-primary"
             >
               Read more →

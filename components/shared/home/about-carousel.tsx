@@ -45,7 +45,7 @@ export function AboutCarousel() {
     <div className="w-full my-4">
       <Separator className={cn("mb-4")} />
       {/* Section Heading */}
-      <h1 className="font-bold text-xl mb-4">Why You Should Choose Us</h1>
+      <h2 className="font-bold text-xl mb-4">Why You Should Choose Us</h2>
 
       {/* Show Carousel on Small Screens */}
       <div className="block md:hidden">
@@ -59,7 +59,7 @@ export function AboutCarousel() {
           <CarouselContent>
             {aboutItems.map((item, index) => (
               <CarouselItem key={index} className="flex justify-center">
-                <div className="flex flex-col items-center text-center gap-4 p-6 md:p-12 dark:bg-gray-800 rounded-lg shadow-md">
+                <div className="flex flex-col items-center text-center gap-4 p-6 md:p-12 rounded-lg">
                   {item.icon}
                   <h3 className="text-lg font-bold">{item.title}</h3>
                   <p className="text-gray-800 dark:text-gray-300">
@@ -79,7 +79,7 @@ export function AboutCarousel() {
         {aboutItems.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col items-center text-center gap-4 p-6 dark:bg-gray-800 rounded-lg shadow-md"
+            className="flex flex-col items-center text-center gap-4 p-6 rounded-lg"
           >
             {item.icon}
             <h3 className="text-lg font-bold">{item.title}</h3>

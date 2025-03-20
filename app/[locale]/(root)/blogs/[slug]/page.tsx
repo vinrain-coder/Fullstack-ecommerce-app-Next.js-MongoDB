@@ -74,7 +74,7 @@ export default async function BlogPage({
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-5 md:px-0">
+    <div className="max-w-3xl mx-auto px-1 sm:px-2 md:px-4">
       {/* Blog Header */}
       <h1 className="text-4xl font-extrabold dark:text-gray-600 mb-3 leading-tight">
         {blog.title}
