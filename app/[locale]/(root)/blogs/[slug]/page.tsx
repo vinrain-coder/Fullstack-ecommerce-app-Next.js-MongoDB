@@ -64,14 +64,12 @@ export default async function BlogPage({
 
   incrementBlogViews(params.slug); // Async view increment
 
-  const formatDate = (date: string | Date) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      weekday: "long",
+  const formatDate = (date: string | Date) =>
+    new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
     });
-  };
 
   return (
     <div className="max-w-3xl mx-auto px-1 sm:px-2 md:px-4">
@@ -81,7 +79,7 @@ export default async function BlogPage({
       </h1>
       <p className="text-gray-600 text-sm">
         By <span className="font-semibold">ShoePedi</span> •{" "}
-        {formatDate(blog.createdAt)} • 👀 {blog.views} views
+        {formatDate(blog.createdAt)} • 👁 {blog.views} views
       </p>
 
       {/* Blog Content */}
