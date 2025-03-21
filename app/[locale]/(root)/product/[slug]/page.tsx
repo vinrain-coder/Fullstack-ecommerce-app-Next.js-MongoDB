@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import AddToCart from "@/components/shared/product/add-to-cart";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  getAllProductSlugs,
   getProductBySlug,
   getRelatedProductsByCategory,
 } from "@/lib/actions/product.actions";
@@ -23,26 +22,15 @@ import ShareProduct from "@/components/shared/product/share-product";
 import WishlistButton from "@/components/shared/product/wishlist-button";
 import SubscribeButton from "@/components/shared/product/stock-subscription-button";
 import OrderViaWhatsApp from "@/components/shared/product/order-via-whatsapp";
-import { notFound } from "next/navigation";
-
-export async function generateStaticParams() {
-  const slugs = await getAllProductSlugs();
-
-  return slugs.slice(0, 100).map((slug) => ({
-    slug,
-  }));
-}
-
-export const revalidate = 3600;
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }) {
-  // const t = await getTranslations();
+  const t = await getTranslations();
   const params = await props.params;
   const product = await getProductBySlug(params.slug);
   if (!product) {
-    return notFound();
+    return { title: t("Product.Product not found") };
   }
 
   const ogImageUrl = product.images[0];
@@ -118,9 +106,6 @@ export default async function ProductDetails(props: {
   const { slug } = params;
   const session = await auth();
   const product = await getProductBySlug(slug);
-  if (!product) {
-    return notFound();
-  }
   const relatedProducts = await getRelatedProductsByCategory({
     category: product.category,
     productId: product._id.toString(),

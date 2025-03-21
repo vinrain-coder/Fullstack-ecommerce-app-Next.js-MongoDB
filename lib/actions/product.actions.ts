@@ -205,7 +205,7 @@ export async function getProductsByTag({
 // GET ONE PRODUCT BY SLUG
 export async function getProductBySlug(slug: string) {
   await connectToDatabase();
-  const product = await Product.findOne({ slug, isPublished: true }).lean();
+  const product = await Product.findOne({ slug, isPublished: true });
   if (!product) throw new Error("Product not found");
   return JSON.parse(JSON.stringify(product)) as IProduct;
 }
@@ -360,11 +360,4 @@ export async function getAllTags() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ")
   );
-}
-
-// GET ALL PRODUCT SLUGS
-export async function getAllProductSlugs() {
-  await connectToDatabase();
-  const slugs = await Product.find({ isPublished: true }).distinct("slug");
-  return slugs;
 }
