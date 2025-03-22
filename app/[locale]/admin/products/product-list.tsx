@@ -22,6 +22,7 @@ import React, { useEffect, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { formatDateTime, formatId } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 type ProductListDataProps = {
   products: IProduct[];
@@ -114,6 +115,7 @@ const ProductList = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Id</TableHead>
+                <TableHead>Image</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead className="text-right">Price</TableHead>
                 <TableHead>Category</TableHead>
@@ -128,6 +130,20 @@ const ProductList = () => {
               {data?.products.map((product: IProduct) => (
                 <TableRow key={product._id.toString()}>
                   <TableCell>{formatId(product._id.toString())}</TableCell>
+                  <TableCell>
+                    {product.images?.length > 0 ? (
+                      <Image
+                        src={product.images[0]}
+                        alt={product.name}
+                        width={64}
+                        height={64}
+                        className="object-cover rounded-md border"
+                      />
+                    ) : (
+                      <span>No Image</span>
+                    )}
+                  </TableCell>
+
                   <TableCell>
                     <Link href={`/admin/products/${product._id.toString()}`}>
                       {product.name}
