@@ -28,6 +28,11 @@ export default function Footer() {
   const locale = useLocale();
   const t = useTranslations();
 
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const message = encodeURIComponent("Hello, ShoePedi!");
+
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
+
   return (
     <footer className="bg-black text-white underline-link">
       {/* Back to Top Button */}
@@ -222,12 +227,12 @@ export default function Footer() {
           </div>
           <div className="my-2">
             <Link
-              href="https://www.whatsapp.com/yourprofile"
+              href={whatsappLink}
               target="_blank"
               className="hover:text-gray-300 flex items-center gap-1"
             >
               <MessageCircle size={20} className="text-green-500" />
-              Ask on Whatsapp
+              Ask on WhatsApp
             </Link>
           </div>
         </div>
@@ -238,13 +243,15 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto py-6 px-4 flex flex-wrap items-center justify-center md:justify-between gap-y-4">
           {/* Logo and Language Selection */}
           <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
-            <Image
-              src="/icons/logo.svg"
-              alt={`${site.name} logo`}
-              width={48}
-              height={48}
-              className="w-12 h-auto"
-            />
+            <Link href="/">
+              <Image
+                src={site.logo}
+                alt={`${site.name} logo`}
+                width={48}
+                height={48}
+                className="w-12 h-auto"
+              />
+            </Link>
             <Select
               value={locale}
               onValueChange={(value) => {

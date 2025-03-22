@@ -58,6 +58,7 @@ export const sendStockSubscriptionNotification = async ({
         siteUrl={site.url}
         siteName={site.name}
         siteCopyright={site.copyright}
+        siteLogo={site.logo}
       />
     ),
   });
@@ -87,6 +88,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
         siteName={site.name}
         siteUrl={site.url}
         siteCopyright={site.copyright}
+        siteLogo={site.logo}
       />
     ),
   });
@@ -97,7 +99,6 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 };
 
 export const sendWelcomeEmail = async (email: string, name: string) => {
-
   try {
     await resend.emails.send({
       from: `${SENDER_NAME} <${SENDER_EMAIL}>`,

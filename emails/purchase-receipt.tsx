@@ -16,6 +16,7 @@ import {
 
 import { IOrder } from "@/lib/db/models/order.model";
 import { getSetting } from "@/lib/actions/setting.actions";
+import { formatCurrency } from "@/lib/utils";
 
 type OrderInformationProps = {
   order: IOrder;
@@ -96,7 +97,9 @@ export default async function PurchaseReceiptEmail({
                 </Column>
                 <Column className="w-full sm:w-1/3 mb-4">
                   <Text className="text-gray-500">Price Paid</Text>
-                  <Text className="font-semibold">KES.{order.totalPrice}</Text>
+                  <Text className="font-semibold">
+                    KES.{formatCurrency(order.totalPrice)}
+                  </Text>
                 </Column>
               </Row>
             </Section>
@@ -131,7 +134,9 @@ export default async function PurchaseReceiptEmail({
                     </Text>
                   </Column>
                   <Column align="right">
-                    <Text className="font-semibold">KES.{item.price}</Text>
+                    <Text className="font-semibold">
+                      KES.{formatCurrency(item.price)}
+                    </Text>
                   </Column>
                 </Row>
               ))}
@@ -147,7 +152,7 @@ export default async function PurchaseReceiptEmail({
                   <Row key={name} className="flex justify-between py-1">
                     <Column className="font-semibold">{name}:</Column>
                     <Column align="right">
-                      <Text className="m-0">KES.{price}</Text>
+                      <Text className="m-0">KES.{formatCurrency(price)}</Text>
                     </Column>
                   </Row>
                 ))}
@@ -193,7 +198,7 @@ export default async function PurchaseReceiptEmail({
                 .
               </Text>
               <Text className="text-gray-400 text-xs mt-4">
-                {site.name} . {site.copyright}
+                {site.logo} . {site.name} . {site.copyright}
               </Text>
             </Section>
           </Container>

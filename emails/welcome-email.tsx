@@ -61,7 +61,7 @@ export default async function WelcomeEmail({ name }: WelcomeEmailProps) {
                 .
               </Text>
               <Text className="text-gray-400 text-xs mt-4">
-                {site.name} . {site.copyright}
+                {site.name} . {site.name} . {site.copyright}
               </Text>
             </Section>
           </Container>

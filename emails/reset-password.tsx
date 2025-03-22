@@ -17,13 +17,15 @@ type PasswordResetEmailProps = {
   siteName: string;
   siteUrl: string;
   siteCopyright: string;
+  siteLogo: string;
 };
 
 export default function PasswordResetEmail({
   resetLink,
   siteName,
   siteUrl,
-  siteCopyright
+  siteCopyright,
+  siteLogo,
 }: PasswordResetEmailProps) {
   return (
     <Html>
@@ -62,7 +64,7 @@ export default function PasswordResetEmail({
 
             {/* Footer */}
             <Section className="mt-8 text-center border-t pt-4">
-            <Text className="text-gray-500 text-sm">
+              <Text className="text-gray-500 text-sm">
                 If you have any questions, feel free to{" "}
                 <Link
                   href={`${siteUrl}/page/contact-us`}
@@ -73,7 +75,7 @@ export default function PasswordResetEmail({
                 .
               </Text>
               <Text className="text-gray-400 text-xs mt-4">
-                {siteName} . {siteCopyright}
+                {siteLogo} . {siteName} . {siteCopyright}
               </Text>
             </Section>
           </Container>

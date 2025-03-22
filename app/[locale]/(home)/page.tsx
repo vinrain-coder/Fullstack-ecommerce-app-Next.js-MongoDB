@@ -3,7 +3,7 @@ import BrowsingHistoryList from "@/components/shared/browsing-history-list";
 import { AboutCarousel } from "@/components/shared/home/about-carousel";
 import { HomeCard } from "@/components/shared/home/home-card";
 import { HomeCarousel } from "@/components/shared/home/home-carousel";
-import { TestimonialCarousel } from "@/components/shared/home/testimonials-carousel";
+// import { TestimonialCarousel } from "@/components/shared/home/testimonials-carousel";
 import ProductSlider from "@/components/shared/product/product-slider";
 import { Card, CardContent } from "@/components/ui/card";
 import { fetchLatestBlogs } from "@/lib/actions/blog.actions";
@@ -103,9 +103,9 @@ export default async function HomePage() {
         <AboutCarousel />
       </div>
 
-      <div className="p-4 bg-background">
+      {/* <div className="p-4 bg-background">
         <TestimonialCarousel />
-      </div>
+      </div> */}
 
       <div className="p-4 bg-background">
         <BlogSlider title="Our Latest Stories" blogs={blogs} />

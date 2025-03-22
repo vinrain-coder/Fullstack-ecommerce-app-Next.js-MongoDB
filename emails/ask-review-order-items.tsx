@@ -79,7 +79,7 @@ export default async function AskReviewOrderItemsEmail({
           <Container className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
             {/* Header */}
             <Heading className="text-3xl font-bold text-center text-orange-500">
-              We'd Love Your Feedback!
+              We will Love Your Feedback!
             </Heading>
             <Text className="text-center text-gray-600 mt-2">
               Your review helps us improve and helps other customers.
@@ -181,7 +181,7 @@ export default async function AskReviewOrderItemsEmail({
                 .
               </Text>
               <Text className="text-gray-400 text-xs mt-4">
-                {site.name}. {site.copyright}
+                {site.logo} . {site.name}. {site.copyright}
               </Text>
             </Section>
           </Container>

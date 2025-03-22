@@ -11,7 +11,7 @@ import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SessionProvider } from "next-auth/react";
-import ProductToast from "@/components/shared/product/product-toast";
+// import ProductToast from "@/components/shared/product/product-toast";
 
 const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
@@ -66,7 +66,7 @@ export default async function AppLayout({
         </SessionProvider>
         <Analytics />
         <SpeedInsights />
-        <ProductToast />
+        {/* <ProductToast /> */}
       </body>
     </html>
   );
