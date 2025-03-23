@@ -77,7 +77,7 @@ const ProductCard = ({
         {product.name}
       </Link>
       <div className="flex gap-2 justify-center">
-        <Rating rating={product.avgRating} />
+        <Rating rating={product.avgRating} size={4} />
         <span>({formatNumber(product.numReviews)})</span>
       </div>
 
@@ -124,13 +124,13 @@ const ProductCard = ({
       )}
     </div>
   ) : (
-    <Card className="flex flex-col relative hover:shadow-lg">
+    <Card className="flex flex-col relative hover:shadow-lg rounded-sm">
       <CardHeader className="p-1">
         <ProductImage />
       </CardHeader>
       {!hideDetails && (
         <>
-          <CardContent className="p-3 flex-1 text-center">
+          <CardContent className="px-1 py-0 flex-1 text-center">
             <ProductDetails />
           </CardContent>
 
@@ -138,7 +138,7 @@ const ProductCard = ({
             {product.countInStock === 0 ? (
               <Badge
                 variant="destructive"
-                className="mx-auto px-3 py-1 text-sm font-semibold rounded-full"
+                className="mx-auto px-3 py-2 text-sm font-semibold rounded-full"
               >
                 Out of Stock
               </Badge>
