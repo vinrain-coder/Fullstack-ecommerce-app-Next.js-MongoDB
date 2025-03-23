@@ -1,11 +1,14 @@
+import { Loader2 } from "lucide-react";
+
 const Loading = () => {
   return (
-    <div className="fixed inset-0 flex justify-center items-center">
-      <div className="flex flex-col items-center space-y-4 animate-bounce">
-        <span className="text-xl font-semibold animate-pulse text-primary">
-          ShoePedi is Loading...
-        </span>
-      </div>
+    <div className="absolute top-0 left-0 w-full h-full justify-center items-center pointer-events-none flex flex-row gap-2 bg-secondary">
+      <span className="">
+        <Loader2 className="animate-spin size-5 text-primary" />
+      </span>
+      <span className="text-xl font-semibold text-primary animate-pulse">
+        ShoePedi is Loading...
+      </span>
     </div>
   );
 };

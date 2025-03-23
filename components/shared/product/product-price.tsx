@@ -40,7 +40,7 @@ const ProductPrice = ({
       currencyDisplay: "narrowSymbol",
     })
   ) : listPrice == 0 ? (
-    <div className={cn("text-3xl", className)}>
+    <div className={cn("text-2xl sm:text-3xl", className)}>
       <span className="text-xs align-super">{currency.symbol}</span>
       {intValue}
       <span className="text-xs align-super">{floatValue}</span>
@@ -56,14 +56,14 @@ const ProductPrice = ({
         </span>
       </div>
       <div
-        className={`flex ${forListing && "justify-center"} items-center gap-2`}
+        className={`flex ${forListing ? "justify-center" : "justify-start"} items-center gap-2 flex-wrap`}
       >
-        <div className={cn("text-3xl", className)}>
+        <div className={cn("text-2xl sm:text-3xl break-words", className)}>
           <span className="text-xs align-super">{currency.symbol}</span>
           {intValue}
           <span className="text-xs align-super">{floatValue}</span>
         </div>
-        <div className="text-muted-foreground text-xs py-2">
+        <div className="text-muted-foreground text-xs whitespace-nowrap">
           {t("Product.Was")}: KES.
           <span className="line-through">{listPrice}</span>
         </div>
