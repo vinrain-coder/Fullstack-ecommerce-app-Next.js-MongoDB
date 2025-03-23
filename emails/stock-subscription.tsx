@@ -128,8 +128,15 @@ export default function StockSubscriptionNotificationEmail({
                 </Link>
                 .
               </Text>
+              <Img
+                src={`${siteUrl}${siteLogo}`}
+                alt={siteName}
+                className="mt-4"
+                width={120}
+                height={50}
+              />
               <Text className="text-gray-400 text-xs mt-4">
-                {siteLogo} . {siteName} . {siteCopyright}
+                {siteName} . {siteCopyright}
               </Text>
             </Section>
           </Container>

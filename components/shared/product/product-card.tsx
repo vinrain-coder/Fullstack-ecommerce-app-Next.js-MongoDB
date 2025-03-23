@@ -124,7 +124,7 @@ const ProductCard = ({
       )}
     </div>
   ) : (
-    <Card className="flex flex-col relative">
+    <Card className="flex flex-col relative hover:shadow-lg">
       <CardHeader className="p-3">
         <ProductImage />
       </CardHeader>

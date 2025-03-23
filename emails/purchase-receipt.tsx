@@ -197,8 +197,15 @@ export default async function PurchaseReceiptEmail({
                 </Link>
                 .
               </Text>
+              <Img
+                src={`${site.url}${site.logo}`}
+                alt={site.name}
+                className="mt-4"
+                width={120}
+                height={50}
+              />
               <Text className="text-gray-400 text-xs mt-4">
-                {site.logo} . {site.name} . {site.copyright}
+                {site.name} . {site.copyright}
               </Text>
             </Section>
           </Container>
