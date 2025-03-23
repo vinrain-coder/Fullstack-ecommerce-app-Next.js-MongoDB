@@ -71,15 +71,17 @@ const ProductPrice = ({
     </div>
   ) : (
     <div className="">
-      <div className="flex justify-center gap-3">
-        <div className="text-3xl text-orange-700">-{discountPercent}%</div>
-        <div className={cn("text-3xl", className)}>
+      <div className="flex justify-center gap-2 flex-wrap items-center">
+        <div className="text-2xl sm:text-3xl text-orange-700 whitespace-nowrap">
+          -{discountPercent}%
+        </div>
+        <div className={cn("text-2xl sm:text-3xl break-words", className)}>
           <span className="text-xs align-super">{currency.symbol}</span>
           {intValue}
           <span className="text-xs align-super">{floatValue}</span>
         </div>
       </div>
-      <div className="text-muted-foreground text-xs py-2">
+      <div className="text-muted-foreground text-xs py-2 whitespace-nowrap">
         {t("Product.List price")}:{" "}
         <span className="line-through">KES {listPrice}</span>
       </div>
