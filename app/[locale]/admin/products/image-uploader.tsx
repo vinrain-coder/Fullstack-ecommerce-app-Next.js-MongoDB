@@ -8,18 +8,15 @@ import {
 } from "@/components/ui/form";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card, CardContent } from "@/components/ui/card";
-import { ImagePlus, X, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { UploadButton } from "@/lib/uploadthing";
-import { Button } from "@/components/ui/button";
-import { UploadThingError } from "uploadthing/server";
+import { UploadDropzone } from "@/lib/uploadthing";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 const ImageUploader = ({ form }: { form: any }) => {
   const [images, setImages] = useState<string[]>(
     form.getValues("images") || []
   );
-  const [isUploading, setIsUploading] = useState(false);
 
   // Handle image reordering with drag-and-drop
   const handleOnDragEnd = (result: any) => {
@@ -104,7 +101,7 @@ const ImageUploader = ({ form }: { form: any }) => {
                     You can upload up to 6 images (max: 512KB each).
                   </span>
                   <FormControl>
-                    <UploadButton
+                    <UploadDropzone
                       endpoint="imageUploader"
                       onClientUploadComplete={(res: { url: string }[]) => {
                         const uploadedImages = res.map((file) => file.url);

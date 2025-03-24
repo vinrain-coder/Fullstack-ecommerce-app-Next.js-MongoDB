@@ -125,7 +125,7 @@ const ProductCard = ({
     </div>
   ) : (
     <Card className="flex flex-col relative hover:shadow-lg rounded-sm">
-      <CardHeader className="p-1">
+      <CardHeader className="p-0">
         <ProductImage />
       </CardHeader>
       {!hideDetails && (
