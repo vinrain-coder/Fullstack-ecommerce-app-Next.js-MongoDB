@@ -98,7 +98,7 @@ const ImageUploader = ({ form }: { form: any }) => {
                 {/* Upload Dropzone */}
                 <div className="flex flex-col gap-2">
                   <span className="text-sm text-gray-500">
-                    You can upload up to 6 images (max: 512KB each).
+                    You can upload up to 6 images (max: 1MB each).
                   </span>
                   <FormControl>
                     <UploadDropzone

@@ -22,7 +22,6 @@ type StockSubscriptionEmailProps = {
   siteUrl: string;
   siteName: string;
   siteCopyright: string;
-  siteLogo: string;
 };
 
 export default function StockSubscriptionNotificationEmail({
@@ -31,7 +30,6 @@ export default function StockSubscriptionNotificationEmail({
   siteUrl,
   siteName,
   siteCopyright,
-  siteLogo,
 }: StockSubscriptionEmailProps) {
   if (!product) {
     return (
@@ -128,13 +126,6 @@ export default function StockSubscriptionNotificationEmail({
                 </Link>
                 .
               </Text>
-              <Img
-                src={`${siteUrl}${siteLogo}`}
-                alt={siteName}
-                className="mt-4"
-                width={120}
-                height={50}
-              />
               <Text className="text-gray-400 text-xs mt-4">
                 {siteName} . {siteCopyright}
               </Text>

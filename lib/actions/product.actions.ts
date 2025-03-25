@@ -155,11 +155,30 @@ export async function getAllProductsForAdmin({
 
 export async function getAllCategories() {
   await connectToDatabase();
-  const categories = await Product.find({ isPublished: true }).distinct(
-    "category"
+  const categories = await Product.aggregate([
+    { $match: { isPublished: true, category: { $exists: true, $ne: "" } } },
+    {
+      $project: {
+        category: {
+          $trim: { input: { $toLower: "$category" } }, // Trim spaces and convert to lowercase
+        },
+      },
+    },
+    { $group: { _id: "$category" } },
+    { $sort: { _id: 1 } },
+    { $project: { category: "$_id", _id: 0 } },
+  ]);
+
+  return categories.map(
+    (c) =>
+      c.category
+        .split(/\s+|-/) // Handle both spaces and dashes
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+        .trim() // Ensure no leading/trailing spaces
   );
-  return categories;
 }
+
 export async function getProductsForCard({
   tag,
   limit = 4,
@@ -342,22 +361,33 @@ export async function getAllProducts({
 export async function getAllTags() {
   await connectToDatabase();
   const tags = await Product.aggregate([
+    // Ensure tags exist and are not empty
+    { $match: { tags: { $exists: true, $ne: [] } } },
     // Unwind the tags array to process each tag individually
     { $unwind: "$tags" },
-    // Group by tag and count the number of products for each tag
-    { $group: { _id: "$tags", count: { $sum: 1 } } },
-    // Filter out tags with no products
-    { $match: { count: { $gt: 0 } } },
-    // Sort tags alphabetically
+    // Trim whitespace and convert to lowercase
+    {
+      $set: {
+        tags: {
+          $trim: { input: { $toLower: "$tags" } },
+        },
+      },
+    },
+    // Group by tag to ensure uniqueness
+    { $group: { _id: "$tags" } },
+    // Sort alphabetically
     { $sort: { _id: 1 } },
-    // Project the tag names
+    // Format the output
     { $project: { tag: "$_id", _id: 0 } },
   ]);
 
-  return tags.map((tag) =>
-    tag.tag
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
+  // Format tags: capitalize each word and handle dashes/spaces
+  return tags.map(
+    (t) =>
+      t.tag
+        .split(/\s+|-/) // Handle both spaces and dashes
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+        .trim() // Ensure no leading/trailing spaces
   );
 }
