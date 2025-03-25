@@ -2,6 +2,13 @@ import { getAllBlogs } from "@/lib/actions/blog.actions";
 import BlogCard from "@/components/shared/blog/blog-card";
 import Pagination from "@/components/shared/pagination";
 import BrowsingHistoryList from "@/components/shared/browsing-history-list";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Blogs & Trends",
+  description:
+    "Explore our latest shoe-related blogs, trends, and styling tips. Stay updated with the newest footwear fashion at ShoePedi.",
+};
 
 export default async function BlogPage({
   searchParams = {},
