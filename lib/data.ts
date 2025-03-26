@@ -35,7 +35,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash on Delivery",
+    paymentMethod: "Cash On Delivery",
     emailVerified: false,
   },
   {
@@ -69,7 +69,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash on Delivery",
+    paymentMethod: "Cash On Delivery",
     emailVerified: false,
   },
   {
@@ -120,7 +120,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash on Delivery",
+    paymentMethod: "Cash On Delivery",
     emailVerified: false,
   },
   {
@@ -188,7 +188,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash on Delivery",
+    paymentMethod: "Cash On Delivery",
     emailVerified: false,
   },
   {
@@ -239,7 +239,7 @@ const users: IUserInput[] = [
       country: "USA",
       phone: "123-456-7890",
     },
-    paymentMethod: "Cash on Delivery",
+    paymentMethod: "Cash On Delivery",
     emailVerified: false,
   },
   {
@@ -1244,16 +1244,16 @@ We also provide helpful resources such as order tracking, product guides, and FA
   settings: [
     {
       common: {
-        freeShippingMinPrice: 5000,
+        freeShippingMinPrice: 35,
         isMaintenanceMode: false,
         defaultTheme: "Light",
         defaultColor: "Gold",
         pageSize: 9,
       },
       site: {
-        name: "Shopper",
+        name: "NxtAmzn",
         description:
-          "Shopper is a sample Ecommerce website built with Next.js, Tailwind CSS, and MongoDB.",
+          "NxtAmzn is a sample Ecommerce website built with Next.js, Tailwind CSS, and MongoDB.",
         keywords: "Next Ecommerce, Next.js, Tailwind CSS, MongoDB",
         url: "https://next-mongo-ecommerce-final.vercel.app",
         logo: "/icons/logo.svg",
@@ -1298,39 +1298,32 @@ We also provide helpful resources such as order tracking, product guides, and FA
         },
         { name: "Euro", code: "EUR", symbol: "€", convertRate: 0.96 },
         { name: "UAE Dirham", code: "AED", symbol: "AED", convertRate: 3.67 },
-        {
-          name: "Kenyan Shilling",
-          code: "KES",
-          symbol: "KES",
-          convertRate: 132,
-        },
       ],
-      defaultCurrency: "KES",
+      defaultCurrency: "USD",
       availablePaymentMethods: [
         { name: "PayPal", commission: 0 },
         { name: "Stripe", commission: 0 },
-        { name: "Cash on Delivery", commission: 0 },
-        { name: "Manual Payment", commission: 0 },
+        { name: "Cash On Delivery", commission: 0 },
       ],
-      defaultPaymentMethod: "Cash on Delivery",
+      defaultPaymentMethod: "PayPal",
       availableDeliveryDates: [
         {
           name: "Tomorrow",
           daysToDeliver: 1,
-          shippingPrice: 400,
-          freeShippingMinPrice: 5000,
+          shippingPrice: 12.9,
+          freeShippingMinPrice: 0,
         },
         {
           name: "Next 3 Days",
           daysToDeliver: 3,
-          shippingPrice: 350,
-          freeShippingMinPrice: 5000,
+          shippingPrice: 6.9,
+          freeShippingMinPrice: 0,
         },
         {
           name: "Next 5 Days",
           daysToDeliver: 5,
-          shippingPrice: 300,
-          freeShippingMinPrice: 5000,
+          shippingPrice: 4.9,
+          freeShippingMinPrice: 35,
         },
       ],
       defaultDeliveryDate: "Next 5 Days",

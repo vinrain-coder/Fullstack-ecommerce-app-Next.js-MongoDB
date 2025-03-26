@@ -20,6 +20,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSignInSchema } from "@/lib/validator";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const signInDefaultValues =
   process.env.NODE_ENV === "development"
@@ -39,6 +41,8 @@ export default function CredentialsSignInForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<IUserSignIn>({
     resolver: zodResolver(UserSignInSchema),
     defaultValues: signInDefaultValues,
@@ -48,6 +52,8 @@ export default function CredentialsSignInForm() {
 
   const onSubmit = async (data: IUserSignIn) => {
     try {
+      setLoading(true);
+
       const res = await signInWithCredentials({
         email: data.email,
         password: data.password,
@@ -55,16 +61,22 @@ export default function CredentialsSignInForm() {
 
       if (!res.success) {
         toast.error(res.error || "Invalid email or password");
+        setLoading(false);
         return;
       }
 
       toast.success("Signed in successfully!");
-      redirect(callbackUrl);
+
+      // Delay redirect to allow toast to be visible
+      setTimeout(() => {
+        redirect(callbackUrl);
+      }, 1000);
     } catch (error) {
       if (isRedirectError(error)) {
         throw error;
       }
       toast.error("Something went wrong. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -106,10 +118,18 @@ export default function CredentialsSignInForm() {
           />
 
           <div>
-            <Button type="submit" className="w-full">
-              Sign In
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                  Signing In...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </div>
+
           <div className="text-sm">
             By signing in, you agree to {site.name}&apos;s{" "}
             <Link href="/page/conditions-of-use">Conditions of Use</Link> and{" "}

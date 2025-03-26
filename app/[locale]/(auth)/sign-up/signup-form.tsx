@@ -24,6 +24,8 @@ import { UserSignUpSchema } from "@/lib/validator";
 import { Separator } from "@/components/ui/separator";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const signUpDefaultValues =
   process.env.NODE_ENV === "development"
@@ -40,12 +42,14 @@ const signUpDefaultValues =
         confirmPassword: "",
       };
 
-export default function CredentialsSignInForm() {
+export default function CredentialsSignUpForm() {
   const {
     setting: { site },
   } = useSettingStore();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
+
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<IUserSignUp>({
     resolver: zodResolver(UserSignUpSchema),
@@ -56,10 +60,13 @@ export default function CredentialsSignInForm() {
 
   const onSubmit = async (data: IUserSignUp) => {
     try {
+      setLoading(true);
+
       const res = await registerUser(data);
 
       if (!res.success) {
         toast.error(res.error || "Registration failed. Please try again.");
+        setLoading(false);
         return;
       }
 
@@ -76,6 +83,7 @@ export default function CredentialsSignInForm() {
         throw error;
       }
       toast.error("Something went wrong. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -147,8 +155,15 @@ export default function CredentialsSignInForm() {
             )}
           />
           <div>
-            <Button type="submit" className="w-full">
-              Sign Up
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                  Creating Account...
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </div>
           <div className="text-sm">

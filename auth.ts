@@ -42,21 +42,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         await connectToDatabase();
-        if (credentials == null) return null;
+        if (!credentials) return null;
 
-        const user = await User.findOne({ email: credentials.email });
+        const user = await User.findOne({ email: credentials.email }).lean();
 
         if (user && user.password) {
           const isMatch = await bcrypt.compare(
-            credentials.password as string,
+            credentials.password,
             user.password
           );
           if (isMatch) {
             return {
-              id: user._id,
+              id: user._id.toString(), // Ensure this is a string
               name: user.name,
               email: user.email,
               role: user.role,
+              wishlist: user.wishlist || [], // Ensure wishlist is included
             };
           }
         }

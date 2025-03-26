@@ -46,22 +46,6 @@ export async function deleteBlog(id: string) {
   }
 }
 
-// 🔹 GET SINGLE BLOG (BY SLUG & INCREASE VIEWS)
-export async function getBlogBySlug(slug: string) {
-  try {
-    await connectToDatabase();
-    const blog = await Blog.findOneAndUpdate(
-      { slug, isPublished: true },
-      { $inc: { views: 1 } },
-      { new: true }
-    );
-    if (!blog) throw new Error("Blog not found");
-    return blog;
-  } catch (error) {
-    return null;
-  }
-}
-
 export async function getAllBlogs({
   page = 1,
   limit = 9,
@@ -102,11 +86,29 @@ export async function getAllBlogs({
   };
 }
 
-// GET BLOG BY ID
+export async function getBlogBySlug(slug: string): Promise<IBlog | null> {
+  const blog = await Blog.findOne({ slug }).lean();
+  if (!blog) return null;
+
+  return {
+    ...blog,
+    createdAt: new Date(blog.createdAt),
+    updatedAt: new Date(blog.updatedAt),
+  };
+}
+
 export async function getBlogById(blogId: string) {
   await connectToDatabase();
-  const blog = await Blog.findById(blogId);
-  return JSON.parse(JSON.stringify(blog)) as IBlog;
+  const blog = await Blog.findById(blogId).lean();
+
+  if (!blog) return null;
+
+  return {
+    ...blog,
+    _id: blog._id.toString(), // ✅ Convert ObjectId to string
+    createdAt: blog.createdAt.toISOString(),
+    updatedAt: blog.updatedAt.toISOString(),
+  };
 }
 
 // 🔹 GET ALL CATEGORIES (UNIQUE)

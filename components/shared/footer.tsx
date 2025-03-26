@@ -164,7 +164,7 @@ export default function Footer() {
                 className="hover:opacity-80 flex items-center gap-1"
               >
                 <Image
-                  src="/images/x.png"
+                  src="/icons/x.png"
                   alt="x.com"
                   width={20}
                   height={20}
@@ -180,7 +180,7 @@ export default function Footer() {
                 className="hover:opacity-80 flex items-center gap-1"
               >
                 <Image
-                  src="/images/tiktok.png"
+                  src="/icons/tiktok.png"
                   alt="Tiktok"
                   width={25}
                   height={25}

@@ -3,7 +3,8 @@
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Loader2, Circle } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export function GoogleSignInForm() {
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,12 @@ export function GoogleSignInForm() {
       {loading ? (
         <Loader2 className="animate-spin w-5 h-5" />
       ) : (
-        <Circle className="w-5 h-5 text-red-500" />
+        <Image
+          src="/icons/google.png"
+          alt="Google Logo"
+          width={20}
+          height={20}
+        />
       )}
       {loading ? "Redirecting to Google..." : "Sign in with Google"}
     </Button>
