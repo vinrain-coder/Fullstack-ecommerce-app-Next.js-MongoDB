@@ -38,7 +38,7 @@ export default function ResetPasswordForm({ token }: Props) {
       toast.error(res.error);
     } else {
       toast.success("Password reset successfully! Redirecting...");
-      setTimeout(() => router.push("/sign-in"), 2000);
+      setTimeout(() => router.push("/"), 2000);
     }
   };
 
