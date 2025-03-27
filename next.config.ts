@@ -35,7 +35,7 @@ const nextConfig: NextConfig = withNextIntl()({
     minimumCacheTTL: 2678400, // Cache images for 31 days
     formats: ["image/webp"], // Only use WebP for optimization
     deviceSizes: [320, 420, 768, 1024, 1200], // Limit device sizes
-    imageSizes: [16, 32, 48, 64, 96], // Restrict extra sizes
+    imageSizes: [16, 24, 32, 48, 64, 96], // Restrict extra sizes
   },
 });
 

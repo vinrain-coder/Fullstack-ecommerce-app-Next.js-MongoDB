@@ -168,9 +168,8 @@ export default function Footer() {
                 <Image
                   src={XIcon}
                   alt="x.com"
-                  width={24}
-                  height={24}
-                  unoptimized
+                  width={16}
+                  height={16}
                   className="bg-white rounded-sm"
                 />
               </Link>
@@ -187,7 +186,6 @@ export default function Footer() {
                   alt="Tiktok"
                   width={24}
                   height={24}
-                  unoptimized
                   className="rounded-sm"
                 />
               </Link>

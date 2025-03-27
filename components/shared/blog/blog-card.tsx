@@ -42,7 +42,6 @@ export default function BlogCard({
             alt={blog.title}
             layout="fill"
             objectFit="cover"
-            quality={75}
             className="group-hover:scale-105 transition-transform duration-300"
           />
         </div>
