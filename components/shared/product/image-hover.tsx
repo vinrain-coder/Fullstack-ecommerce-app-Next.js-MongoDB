@@ -34,6 +34,7 @@ const ImageHover = ({
         alt={alt}
         fill
         sizes="80vw"
+        quality={75}
         className={`object-contain transition-opacity duration-500 ${
           isHovered ? "opacity-0" : "opacity-100"
         }`}
@@ -43,6 +44,7 @@ const ImageHover = ({
         alt={alt}
         fill
         sizes="80vw"
+        quality={75}
         className={`absolute inset-0 object-contain transition-opacity duration-500 ${
           isHovered ? "opacity-100" : "opacity-0"
         }`}

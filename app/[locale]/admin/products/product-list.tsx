@@ -137,6 +137,7 @@ const ProductList = () => {
                         alt={product.name}
                         width={64}
                         height={64}
+                        quality={75}
                         className="object-cover rounded-md border"
                       />
                     ) : (

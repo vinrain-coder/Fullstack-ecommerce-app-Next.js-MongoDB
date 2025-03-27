@@ -4,12 +4,12 @@ import withNextIntl from "next-intl/plugin";
 const nextConfig: NextConfig = withNextIntl()({
   /* config options here */
 
-  // // Experimental configurations
-  // experimental: {
-  //   staleTimes: {
-  //     dynamic: 1800, // Customize cache expiration for dynamic content (e.g., dynamic routes like /product/:slug)
-  //   },
-  // },
+  // Experimental configurations
+  experimental: {
+    staleTimes: {
+      dynamic: 1800,
+    },
+  },
 
   // ESLint and TypeScript settings
   eslint: {
@@ -24,14 +24,18 @@ const nextConfig: NextConfig = withNextIntl()({
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "utfs.io", // Remote image hosting
+        hostname: "utfs.io",
         port: "",
       },
       {
         protocol: "https",
-        hostname: "i.postimg.cc", // Adding i.postimg.cc
+        hostname: "i.postimg.cc",
       },
     ],
+    minimumCacheTTL: 2678400, // Cache images for 31 days
+    formats: ["image/webp"], // Only use WebP for optimization
+    deviceSizes: [320, 420, 768, 1024, 1200], // Limit device sizes
+    imageSizes: [16, 32, 48, 64, 96], // Restrict extra sizes
   },
 });
 

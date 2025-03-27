@@ -39,7 +39,13 @@ export default function ProductGallery({
                 : "ring-1 ring-gray-300"
             }`}
           >
-            <Image src={image} alt="product image" width={48} height={48} />
+            <Image
+              src={image}
+              alt="product image"
+              width={48}
+              height={48}
+              quality={75}
+            />
           </button>
         ))}
       </div>
@@ -52,6 +58,7 @@ export default function ProductGallery({
               alt="product image"
               fill
               sizes="90vw"
+              quality={75}
               className="object-contain"
               priority
             />

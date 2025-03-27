@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
+import Google from "@/public/icons/google.png";
 
 export function GoogleSignInForm() {
   const [loading, setLoading] = useState(false);
@@ -26,10 +27,11 @@ export function GoogleSignInForm() {
         <Loader2 className="animate-spin w-5 h-5" />
       ) : (
         <Image
-          src="/icons/google.png"
+          src={Google}
           alt="Google Logo"
-          width={20}
-          height={20}
+          width={24}
+          height={24}
+          unoptimized
         />
       )}
       {loading ? "Redirecting to Google..." : "Sign in with Google"}

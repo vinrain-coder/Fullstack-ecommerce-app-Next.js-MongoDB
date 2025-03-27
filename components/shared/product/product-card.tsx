@@ -54,6 +54,7 @@ const ProductCard = ({
               alt={product.name}
               fill
               sizes="80vw"
+              quality={75}
               className="object-contain"
             />
           </div>

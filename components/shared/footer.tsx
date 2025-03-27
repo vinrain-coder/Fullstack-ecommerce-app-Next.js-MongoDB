@@ -16,6 +16,8 @@ import { SelectValue } from "@radix-ui/react-select";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { i18n } from "@/i18n-config";
+import XIcon from "@/public/icons/x.png";
+import Tiktok from "@/public/icons/tiktok.png";
 
 export default function Footer() {
   const router = useRouter();
@@ -164,10 +166,11 @@ export default function Footer() {
                 className="hover:opacity-80 flex items-center gap-1"
               >
                 <Image
-                  src="/icons/x.png"
+                  src={XIcon}
                   alt="x.com"
-                  width={20}
-                  height={20}
+                  width={24}
+                  height={24}
+                  unoptimized
                   className="bg-white rounded-sm"
                 />
               </Link>
@@ -180,10 +183,11 @@ export default function Footer() {
                 className="hover:opacity-80 flex items-center gap-1"
               >
                 <Image
-                  src="/icons/tiktok.png"
+                  src={Tiktok}
                   alt="Tiktok"
-                  width={25}
-                  height={25}
+                  width={24}
+                  height={24}
+                  unoptimized
                   className="rounded-sm"
                 />
               </Link>
@@ -222,6 +226,7 @@ export default function Footer() {
                 alt={`${site.name} logo`}
                 width={48}
                 height={48}
+                unoptimized
                 className="w-12 h-auto"
               />
             </Link>
