@@ -26,7 +26,7 @@ export default async function Header() {
                 width={40}
                 height={40}
                 alt={`${site.name} logo`}
-                unoptimized
+                priority
               />
               {site.name}
             </Link>

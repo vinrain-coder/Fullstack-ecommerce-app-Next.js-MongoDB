@@ -11,7 +11,9 @@ import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SessionProvider } from "next-auth/react";
-// import ProductToast from "@/components/shared/product/product-toast";
+import Header from "@/components/shared/header";
+import Footer from "@/components/shared/footer";
+import { Toaster } from "sonner";
 
 const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
@@ -72,9 +74,7 @@ export default async function AppLayout({
   const currencyCookie = (await cookies()).get("currency");
   const currency = currencyCookie ? currencyCookie.value : "KES";
 
-  const { locale } = await params;
-  // Ensure that the incoming `locale` is valid
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { locale } = params;
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
@@ -92,13 +92,17 @@ export default async function AppLayout({
         <SessionProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ClientProviders setting={{ ...setting, currency }}>
-              {children}
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1 flex flex-col">{children}</main>
+                <Footer />
+              </div>
+              <Toaster duration={4000} richColors closeButton />
             </ClientProviders>
           </NextIntlClientProvider>
         </SessionProvider>
         <Analytics />
         <SpeedInsights />
-        {/* <ProductToast /> */}
       </body>
     </html>
   );

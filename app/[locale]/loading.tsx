@@ -1,16 +1,14 @@
+"use client";
+
 import { Loader2 } from "lucide-react";
 
-const Loading = () => {
+export default function Loading() {
   return (
-    <div className="absolute top-0 left-0 w-full h-full justify-center items-center pointer-events-none flex flex-row gap-2">
-      <span className="">
-        <Loader2 className="animate-spin size-5 text-primary font-semibold" />
-      </span>
-      <span className="text-xl font-medium text-primary animate-pulse">
-        ShoePedi is Loading...
-      </span>
+    <div className="flex-1 flex items-center justify-center min-h-[40vh]">
+      <div className="flex flex-row items-center gap-3 animate-fade-in">
+        <Loader2 className="h-10 w-10 animate-spin" />
+        <p className="text-lg">Loading, please wait...</p>
+      </div>
     </div>
   );
-};
-
-export default Loading;
+}

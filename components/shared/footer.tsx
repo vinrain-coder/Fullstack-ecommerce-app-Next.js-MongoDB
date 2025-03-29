@@ -224,7 +224,7 @@ export default function Footer() {
                 alt={`${site.name} logo`}
                 width={48}
                 height={48}
-                unoptimized
+                priority
                 className="w-12 h-auto"
               />
             </Link>
