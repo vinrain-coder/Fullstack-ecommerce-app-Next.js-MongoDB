@@ -55,6 +55,7 @@ const ProductCard = ({
               fill
               sizes="80vw"
               className="object-contain"
+              priority
             />
           </div>
         )}
