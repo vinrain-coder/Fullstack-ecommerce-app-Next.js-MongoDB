@@ -1,4 +1,12 @@
-import { Lora } from "next/font/google";
+import {
+  Inter,
+  Lato,
+  Montserrat,
+  Open_Sans,
+  Playfair_Display,
+  Poppins,
+  Roboto,
+} from "next/font/google";
 import "../globals.css";
 import ClientProviders from "@/components/shared/client-providers";
 import { getDirection } from "@/i18n-config";
@@ -15,7 +23,14 @@ import Header from "@/components/shared/header";
 import Footer from "@/components/shared/footer";
 import { Toaster } from "sonner";
 
-const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
 
 export async function generateMetadata() {
   const {
@@ -87,7 +102,7 @@ export default async function AppLayout({
       suppressHydrationWarning
     >
       <body
-        className={`min-h-screen ${lora.className} antialiased leading-relaxed tracking-wide`}
+        className={`min-h-screen ${inter.className} antialiased leading-relaxed tracking-wide`}
       >
         <SessionProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>

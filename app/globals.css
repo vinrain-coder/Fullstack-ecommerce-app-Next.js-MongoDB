@@ -63,8 +63,8 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-     [data-rmiz-modal-overlay="visible"] {
-    background-color: black;
+    [data-rmiz-modal-overlay="visible"] {
+      background-color: black;
     }
   }
 }
@@ -100,5 +100,13 @@ body {
   }
   .flex-between {
     @apply flex justify-between items-center;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-playfair), serif;
   }
 }
