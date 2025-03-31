@@ -1,4 +1,12 @@
-import { Inter, Playfair_Display } from "next/font/google";
+import {
+  Inter,
+  Lato,
+  Montserrat,
+  Open_Sans,
+  Playfair_Display,
+  Poppins,
+  Roboto,
+} from "next/font/google";
 import "../globals.css";
 import ClientProviders from "@/components/shared/client-providers";
 import { getDirection } from "@/i18n-config";
@@ -12,7 +20,10 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
+<<<<<<< HEAD
 import ClientLayout from "@/components/shared/client-layout";
+=======
+>>>>>>> parent of a2eb42a (Fix layout)
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -98,7 +109,15 @@ export default async function AppLayout({
         <SessionProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ClientProviders setting={{ ...setting, currency }}>
+<<<<<<< HEAD
               <ClientLayout>{children}</ClientLayout>
+=======
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1 flex flex-col">{children}</main>
+                <Footer />
+              </div>
+>>>>>>> parent of a2eb42a (Fix layout)
               <Toaster duration={4000} richColors closeButton />
             </ClientProviders>
           </NextIntlClientProvider>
