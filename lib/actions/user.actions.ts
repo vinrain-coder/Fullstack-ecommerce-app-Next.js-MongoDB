@@ -13,31 +13,26 @@ import { z } from "zod";
 import { getSetting } from "./setting.actions";
 import { sendWelcomeEmail } from "@/emails";
 
-// 📌 Register New User
+// CREATE
 export async function registerUser(userSignUp: IUserSignUp) {
   try {
 <<<<<<< HEAD
 <<<<<<< HEAD
     const user = await UserSignUpSchema.parseAsync(userSignUp);
+
     await connectToDatabase();
-
-    const existingUser = await User.findOne({ email: user.email });
-    if (existingUser) {
-      return { success: false, error: "Email is already registered." };
-    }
-
     const verificationToken = crypto.randomBytes(32).toString("hex");
-    const hashedPassword = await bcrypt.hash(user.password, 10);
 
     const newUser = await User.create({
       ...user,
-      password: hashedPassword,
+      password: await bcrypt.hash(user.password, 5),
       emailVerified: false,
       verificationToken,
-      verificationTokenExpires: Date.now() + 24 * 60 * 60 * 1000, // 24 Hours Expiry
+      verificationTokenExpires: Date.now() + 24 * 60 * 60 * 1000, // Expires in 24 hours
     });
 
     await sendVerificationEmail(newUser.email, newUser.verificationToken);
+
     return {
       success: true,
       message: "User registered. Check email to verify.",
@@ -80,13 +75,17 @@ export async function registerUser(userSignUp: IUserSignUp) {
 =======
 >>>>>>> parent of e5fb598 (Implement email verification)
   } catch (error) {
-    return { success: false, error: "Registration failed. Please try again." };
+    return { success: false, error: formatError(error) };
   }
 }
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // 📌 Verify Email
+=======
+// verify email
+>>>>>>> parent of b3cda32 (edit form)
 export async function verifyEmail(token: string) {
   await connectToDatabase();
   const user = await User.findOne({ verificationToken: token });
@@ -104,32 +103,25 @@ export async function verifyEmail(token: string) {
   user.verificationTokenExpires = undefined;
   await user.save();
 
-  // Send Welcome Email
+  // Send welcome email
   await sendWelcomeEmail(user.email, user.name);
 
-  // Auto Sign-In After Verification
-  const signInResponse = await signIn("credentials", {
-    email: user.email,
-    password: user.password,
-    redirect: false, // Prevent auto-redirect issues
-  });
-
-  if (!signInResponse.ok) {
-    return {
-      success: false,
-      message: "Verification successful, but auto-login failed.",
-    };
-  }
+  // Automatically sign in after verification
+  await signIn("credentials", { email: user.email, password: user.password });
 
   return { success: true, message: "Email verified. You are now logged in." };
 }
 
+<<<<<<< HEAD
 // 📌 Handle Google Sign-In
 =======
 =======
 >>>>>>> parent of e5fb598 (Implement email verification)
 // Google Sign-In: Send Welcome Email If It's the First Time
 >>>>>>> parent of e5fb598 (Implement email verification)
+=======
+// Google Sign-In: Send Welcome Email If It's the First Time
+>>>>>>> parent of b3cda32 (edit form)
 export const handleGoogleUser = async () => {
   const session = await auth();
 
@@ -143,8 +135,9 @@ export const handleGoogleUser = async () => {
 
   if (!existingUser) {
     existingUser = await User.create({
-      name: session.user.name || "Google User", // Prevent undefined names
+      name: session.user.name,
       email: session.user.email,
+<<<<<<< HEAD
 <<<<<<< HEAD
       password: null, // Google users don't have a password
       emailVerified: true,
@@ -154,6 +147,10 @@ export const handleGoogleUser = async () => {
 >>>>>>> parent of e5fb598 (Implement email verification)
 =======
 >>>>>>> parent of e5fb598 (Implement email verification)
+=======
+      password: null, // No password for Google sign-in users
+      emailVerified: true, // Google users are automatically verified
+>>>>>>> parent of b3cda32 (edit form)
     });
 
     try {
@@ -166,7 +163,7 @@ export const handleGoogleUser = async () => {
   return { success: true };
 };
 
-// 📌 Delete User
+// DELETE
 export async function deleteUser(id: string) {
   try {
     await connectToDatabase();
@@ -179,20 +176,17 @@ export async function deleteUser(id: string) {
   }
 }
 
-// 📌 Update User
+// UPDATE
 export async function updateUser(user: z.infer<typeof UserUpdateSchema>) {
   try {
     await connectToDatabase();
     const dbUser = await User.findById(user._id);
     if (!dbUser) throw new Error("User not found");
-
     dbUser.name = user.name;
     dbUser.email = user.email;
     dbUser.role = user.role;
-
     const updatedUser = await dbUser.save();
     revalidatePath("/admin/users");
-
     return {
       success: true,
       message: "User updated successfully",
@@ -203,17 +197,14 @@ export async function updateUser(user: z.infer<typeof UserUpdateSchema>) {
   }
 }
 
-// 📌 Update User Name
 export async function updateUserName(user: IUserName) {
   try {
     await connectToDatabase();
     const session = await auth();
     const currentUser = await User.findById(session?.user?.id);
     if (!currentUser) throw new Error("User not found");
-
     currentUser.name = user.name;
     const updatedUser = await currentUser.save();
-
     return {
       success: true,
       message: "User updated successfully",
@@ -224,41 +215,28 @@ export async function updateUserName(user: IUserName) {
   }
 }
 
-// 📌 Sign-In With Credentials
 export async function signInWithCredentials(user: IUserSignIn) {
-  try {
-    const response = await signIn("credentials", { ...user, redirect: false });
-    if (!response.ok) throw new Error("Invalid email or password.");
-    return response;
-  } catch (error) {
-    return { success: false, message: formatError(error) };
-  }
+  return await signIn("credentials", { ...user, redirect: false });
 }
 
-// 📌 Sign Out
 export const SignOut = async () => {
-  try {
-    const redirectTo = await signOut({ redirect: false });
-    redirect(redirectTo.redirect);
-  } catch (error) {
-    console.error("❌ Error signing out:", error);
-    return { success: false, message: "Failed to sign out." };
-  }
+  const redirectTo = await signOut({ redirect: false });
+  redirect(redirectTo.redirect);
 };
 
-// 📌 Get All Users (Paginated)
+// GET
 export async function getAllUsers({
   limit,
   page,
 }: {
   limit?: number;
   page: number;
+  search?: string;
 }) {
   const {
     common: { pageSize },
   } = await getSetting();
   limit = limit || pageSize;
-
   await connectToDatabase();
 
   const skipAmount = (Number(page) - 1) * limit;
@@ -267,14 +245,12 @@ export async function getAllUsers({
     .skip(skipAmount)
     .limit(limit);
   const usersCount = await User.countDocuments();
-
   return {
     data: JSON.parse(JSON.stringify(users)) as IUser[],
     totalPages: Math.ceil(usersCount / limit),
   };
 }
 
-// 📌 Get User By ID
 export async function getUserById(userId: string) {
   await connectToDatabase();
   const user = await User.findById(userId);

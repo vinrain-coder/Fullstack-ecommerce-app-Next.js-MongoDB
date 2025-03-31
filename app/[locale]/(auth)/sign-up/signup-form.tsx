@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -23,9 +22,14 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSignUpSchema } from "@/lib/validator";
 import { Separator } from "@/components/ui/separator";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { toast } from "sonner";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import { useState } from "react";
+>>>>>>> parent of b3cda32 (edit form)
 import { Loader2, MailCheck } from "lucide-react";
 
 const signUpDefaultValues = {
@@ -76,16 +80,28 @@ export default function CredentialsSignUpForm() {
   const { control, handleSubmit } = form;
 
   const onSubmit = async (data: IUserSignUp) => {
-    setLoading(true);
-    const res = await registerUser(data);
+    try {
+      setLoading(true);
+
+      const res = await registerUser(data);
+
+      if (!res.success) {
+        toast.error(res.error || "Registration failed. Please try again.");
+        setLoading(false);
+        return;
+      }
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (res.success) {
+=======
+>>>>>>> parent of b3cda32 (edit form)
       toast.success(
         "Account created successfully! Check your email to verify."
       );
       setEmailSent(true);
+<<<<<<< HEAD
       reset();
     } else {
       toast.error(res.error || "Registration failed. Please try again.");
@@ -100,17 +116,26 @@ export default function CredentialsSignUpForm() {
       });
 
       redirect(callbackUrl);
+=======
+      reset(); // Reset form fields
+>>>>>>> parent of b3cda32 (edit form)
     } catch (error) {
       if (isRedirectError(error)) {
         throw error;
       }
       toast.error("Something went wrong. Please try again.");
+<<<<<<< HEAD
       setLoading(false);
 >>>>>>> parent of e5fb598 (Implement email verification)
     }
 
 <<<<<<< HEAD
     setLoading(false);
+=======
+    } finally {
+      setLoading(false);
+    }
+>>>>>>> parent of b3cda32 (edit form)
   };
 
 =======

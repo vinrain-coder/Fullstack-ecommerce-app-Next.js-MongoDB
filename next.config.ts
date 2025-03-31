@@ -2,17 +2,16 @@ import type { NextConfig } from "next";
 import withNextIntl from "next-intl/plugin";
 
 const nextConfig: NextConfig = withNextIntl()({
-  // ✅ Enable React strict mode for catching errors
-  reactStrictMode: true,
+  /* config options here */
 
-  // ✅ Experimental features
+  // Experimental configurations
   experimental: {
     staleTimes: {
-      dynamic: 1800, // Cache dynamic pages for 30 minutes
+      dynamic: 1800,
     },
   },
 
-  // ✅ ESLint & TypeScript settings (avoiding build interruptions)
+  // ESLint and TypeScript settings
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -20,34 +19,23 @@ const nextConfig: NextConfig = withNextIntl()({
     ignoreBuildErrors: true,
   },
 
-  // ✅ Image optimization settings
+  // Image optimization settings
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "utfs.io",
+        port: "",
       },
       {
         protocol: "https",
         hostname: "i.postimg.cc",
       },
     ],
-    minimumCacheTTL: 31 * 24 * 60 * 60, // Cache images for 31 days
+    minimumCacheTTL: 2678400, // Cache images for 31 days
     formats: ["image/webp"], // Only use WebP for optimization
-    deviceSizes: [320, 420, 768, 1024, 1200], // Optimize for key device sizes
-    imageSizes: [16, 24, 32, 48, 64, 96], // Optimize small UI elements
-  },
-
-  // ✅ Webpack optimizations for better performance
-  webpack: (config) => {
-    config.resolve.fallback = {
-      fs: false,
-      net: false,
-      tls: false,
-      "fs/promises": false,
-      "timers/promises": false,
-    };
-    return config;
+    deviceSizes: [320, 420, 768, 1024, 1200], // Limit device sizes
+    imageSizes: [16, 24, 32, 48, 64, 96], // Restrict extra sizes
   },
 });
 
