@@ -15,6 +15,7 @@ import {
   Text,
 } from "@react-email/components";
 import { IProduct } from "@/lib/db/models/product.model";
+import SocialLinks from "./social-links";
 
 type StockSubscriptionEmailProps = {
   product: IProduct;
@@ -126,6 +127,9 @@ export default function StockSubscriptionNotificationEmail({
                 </Link>
                 .
               </Text>
+
+              <SocialLinks />
+
               <Text className="text-gray-400 text-xs mt-4">
                 {siteName} . {siteCopyright}
               </Text>
