@@ -5,6 +5,7 @@ import {
   Head,
   Heading,
   Html,
+  Link,
   Preview,
   Section,
   Tailwind,
@@ -13,10 +14,12 @@ import {
 
 type VerificationEmailProps = {
   verificationLink: string;
+  siteUrl: string;
 };
 
 export default function VerificationEmail({
   verificationLink,
+  siteUrl,
 }: VerificationEmailProps) {
   return (
     <Html>
@@ -34,7 +37,7 @@ export default function VerificationEmail({
                 sign up for a <strong>ShoePedi</strong> account.
               </Text>
               <Button
-                href={verificationLink}
+                href={`${siteUrl}/verify-email?token=${verificationLink}`}
                 className="bg-orange-500 text-white px-6 py-3 mt-4 rounded-lg text-xl font-bold shadow-md transition hover:bg-orange-600"
               >
                 Verify Email
@@ -43,14 +46,14 @@ export default function VerificationEmail({
                 If you didn’t request this, you can safely ignore this email.
                 This link will expire in <strong>24 hours</strong>.
               </Text>
-              <Text className="text-gray-600 text-sm mt-2">
+              <Text className="text-gray-500 text-sm">
                 Need help?{" "}
-                <a
-                  href="mailto:support@shoepedi.com"
-                  className="text-blue-500 underline"
+                <Link
+                  href={`${siteUrl}/page/contact-us`}
+                  className="text-blue-600"
                 >
-                  Contact Support
-                </a>
+                  Contact our support team
+                </Link>
                 .
               </Text>
             </Section>

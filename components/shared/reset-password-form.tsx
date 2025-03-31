@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -20,6 +20,9 @@ type Props = {
 
 export default function ResetPasswordForm({ token }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,7 +41,7 @@ export default function ResetPasswordForm({ token }: Props) {
       toast.error(res.error);
     } else {
       toast.success("Password reset successfully! Redirecting...");
-      setTimeout(() => router.push("/"), 2000);
+      setTimeout(() => router.replace(callbackUrl), 2000);
     }
   };
 

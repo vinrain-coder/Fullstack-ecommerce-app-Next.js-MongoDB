@@ -42,7 +42,7 @@ export async function registerUser(userSignUp: IUserSignUp) {
   }
 }
 
-// verify email
+// VERIFY EMAIL
 export async function verifyEmail(token: string) {
   await connectToDatabase();
   const user = await User.findOne({ verificationToken: token });
@@ -52,7 +52,7 @@ export async function verifyEmail(token: string) {
     !user.verificationTokenExpires ||
     user.verificationTokenExpires < Date.now()
   ) {
-    return { success: false, message: "Invalid or expired token" };
+    return { success: false, message: "Invalid or expired token." };
   }
 
   user.emailVerified = true;
@@ -63,10 +63,21 @@ export async function verifyEmail(token: string) {
   // Send welcome email
   await sendWelcomeEmail(user.email, user.name);
 
-  // Automatically sign in after verification
-  await signIn("credentials", { email: user.email, password: user.password });
+  // Automatically sign in user by setting session cookies
+  const loginResult = await signIn("credentials", {
+    email: user.email,
+    password: user.password,
+    redirect: false, // Important: Prevents unwanted redirect
+  });
 
-  return { success: true, message: "Email verified. You are now logged in." };
+  if (loginResult?.error) {
+    return {
+      success: false,
+      message: "Verification successful, but auto-login failed.",
+    };
+  }
+
+  return { success: true, message: "Email verified! You are now logged in." };
 }
 
 // gogle sign-in

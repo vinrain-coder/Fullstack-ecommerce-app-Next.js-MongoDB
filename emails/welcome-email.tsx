@@ -12,6 +12,7 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
+import SocialLinks from "./social-links";
 
 type WelcomeEmailProps = {
   name: string;
@@ -42,11 +43,17 @@ export default async function WelcomeEmail({ name }: WelcomeEmailProps) {
                 accessories.
               </Text>
               <Text className="text-gray-900 font-semibold text-lg mt-4">
-                🎁 Enjoy **10% OFF** your first order!
+                🎁 Enjoy up to **40% OFF**!
               </Text>
-              <Text className="text-gray-700">
-                Use code **WELCOME10** at checkout. Don&apos;t miss out on our
-                hottest deals!
+              <Text className="text-gray-600 text-sm mt-6">
+                Check out our
+                <Link
+                  href={`${site.url}/search?tag=todays-deal`}
+                  className="text-blue-600 font-semibold"
+                >
+                  Offers
+                </Link>
+                .
               </Text>
 
               {/* Shop Now Button */}
@@ -61,7 +68,7 @@ export default async function WelcomeEmail({ name }: WelcomeEmailProps) {
               <Text className="text-gray-600 text-sm mt-6">
                 Looking for inspiration? Check out our
                 <Link
-                  href={`${site.url}/search?category=BestSellers`}
+                  href={`${site.url}/search?tag=best-seller`}
                   className="text-blue-600 font-semibold"
                 >
                   Bestsellers
@@ -82,22 +89,7 @@ export default async function WelcomeEmail({ name }: WelcomeEmailProps) {
                 </Link>
                 .
               </Text>
-              <Text className="text-gray-500 text-sm mt-4">
-                Follow us for the latest drops & deals:
-                <Link
-                  href="https://www.instagram.com/shoepedi"
-                  className="text-blue-600 ml-1"
-                >
-                  Instagram
-                </Link>
-                |
-                <Link
-                  href="https://www.tiktok.com/@shoepedi"
-                  className="text-blue-600 ml-1"
-                >
-                  TikTok
-                </Link>
-              </Text>
+              <SocialLinks />
               <Text className="text-gray-400 text-xs mt-4">
                 {site.name} | {site.copyright}
               </Text>

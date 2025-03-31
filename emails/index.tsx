@@ -20,7 +20,12 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
     to: email,
     subject: "Verify Your Email",
-    react: <VerificationEmail verificationLink={verificationLink} />,
+    react: (
+      <VerificationEmail
+        siteUrl={site.url}
+        verificationLink={verificationLink}
+      />
+    ),
   });
 
   console.log(`✅ Verification email sent to ${email}`);
