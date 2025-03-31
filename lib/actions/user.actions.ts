@@ -17,6 +17,7 @@ import { sendWelcomeEmail } from "@/emails";
 export async function registerUser(userSignUp: IUserSignUp) {
   try {
 <<<<<<< HEAD
+<<<<<<< HEAD
     const user = await UserSignUpSchema.parseAsync(userSignUp);
     await connectToDatabase();
 
@@ -55,16 +56,35 @@ export async function registerUser(userSignUp: IUserSignUp) {
       password: await bcrypt.hash(user.password, 5),
     });
 
+=======
+    const user = await UserSignUpSchema.parseAsync({
+      name: userSignUp.name,
+      email: userSignUp.email,
+      password: userSignUp.password,
+      confirmPassword: userSignUp.confirmPassword,
+    });
+
+    await connectToDatabase();
+    const newUser = await User.create({
+      ...user,
+      password: await bcrypt.hash(user.password, 5),
+    });
+
+>>>>>>> parent of e5fb598 (Implement email verification)
     // Send welcome email
     await sendWelcomeEmail(newUser.email, newUser.name);
 
     return { success: true, message: "User created successfully" };
+<<<<<<< HEAD
+>>>>>>> parent of e5fb598 (Implement email verification)
+=======
 >>>>>>> parent of e5fb598 (Implement email verification)
   } catch (error) {
     return { success: false, error: "Registration failed. Please try again." };
   }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 // 📌 Verify Email
 export async function verifyEmail(token: string) {
@@ -106,6 +126,8 @@ export async function verifyEmail(token: string) {
 
 // 📌 Handle Google Sign-In
 =======
+=======
+>>>>>>> parent of e5fb598 (Implement email verification)
 // Google Sign-In: Send Welcome Email If It's the First Time
 >>>>>>> parent of e5fb598 (Implement email verification)
 export const handleGoogleUser = async () => {
@@ -128,6 +150,9 @@ export const handleGoogleUser = async () => {
       emailVerified: true,
 =======
       password: null, // No password for Google sign-in users
+<<<<<<< HEAD
+>>>>>>> parent of e5fb598 (Implement email verification)
+=======
 >>>>>>> parent of e5fb598 (Implement email verification)
     });
 

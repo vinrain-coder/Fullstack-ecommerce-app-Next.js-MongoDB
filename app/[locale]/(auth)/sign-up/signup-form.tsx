@@ -25,6 +25,7 @@ import { UserSignUpSchema } from "@/lib/validator";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Loader2, MailCheck } from "lucide-react";
 
 const signUpDefaultValues = {
@@ -34,6 +35,8 @@ const signUpDefaultValues = {
   confirmPassword: "",
 };
 =======
+=======
+>>>>>>> parent of e5fb598 (Implement email verification)
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -51,6 +54,9 @@ const signUpDefaultValues =
         password: "",
         confirmPassword: "",
       };
+<<<<<<< HEAD
+>>>>>>> parent of e5fb598 (Implement email verification)
+=======
 >>>>>>> parent of e5fb598 (Implement email verification)
 
 export default function CredentialsSignUpForm() {
@@ -74,6 +80,7 @@ export default function CredentialsSignUpForm() {
     const res = await registerUser(data);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (res.success) {
       toast.success(
         "Account created successfully! Check your email to verify."
@@ -83,6 +90,8 @@ export default function CredentialsSignUpForm() {
     } else {
       toast.error(res.error || "Registration failed. Please try again.");
 =======
+=======
+>>>>>>> parent of e5fb598 (Implement email verification)
       toast.success("Account created successfully! Logging in...");
 
       await signInWithCredentials({
@@ -100,9 +109,12 @@ export default function CredentialsSignUpForm() {
 >>>>>>> parent of e5fb598 (Implement email verification)
     }
 
+<<<<<<< HEAD
     setLoading(false);
   };
 
+=======
+>>>>>>> parent of e5fb598 (Implement email verification)
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
