@@ -11,31 +11,61 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getSetting } from "./setting.actions";
-import { sendWelcomeEmail } from "@/emails";
+import { sendVerificationEmail, sendWelcomeEmail } from "@/emails";
+import crypto from "crypto";
 
 // CREATE
 export async function registerUser(userSignUp: IUserSignUp) {
   try {
-    const user = await UserSignUpSchema.parseAsync({
-      name: userSignUp.name,
-      email: userSignUp.email,
-      password: userSignUp.password,
-      confirmPassword: userSignUp.confirmPassword,
-    });
+    const user = await UserSignUpSchema.parseAsync(userSignUp);
 
     await connectToDatabase();
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
     const newUser = await User.create({
       ...user,
       password: await bcrypt.hash(user.password, 5),
+      emailVerified: false,
+      verificationToken,
+      verificationTokenExpires: Date.now() + 24 * 60 * 60 * 1000, // Expires in 24 hours
     });
 
-    // Send welcome email
-    await sendWelcomeEmail(newUser.email, newUser.name);
+    await sendVerificationEmail(newUser.email, newUser.verificationToken);
 
-    return { success: true, message: "User created successfully" };
+    return {
+      success: true,
+      message: "User registered. Check email to verify.",
+    };
   } catch (error) {
     return { success: false, error: formatError(error) };
   }
+}
+
+// verify email
+export async function verifyEmail(token: string) {
+  await connectToDatabase();
+  const user = await User.findOne({ verificationToken: token });
+
+  if (
+    !user ||
+    !user.verificationTokenExpires ||
+    user.verificationTokenExpires < Date.now()
+  ) {
+    return { success: false, message: "Invalid or expired token" };
+  }
+
+  user.emailVerified = true;
+  user.verificationToken = undefined;
+  user.verificationTokenExpires = undefined;
+  await user.save();
+
+  // Send welcome email
+  await sendWelcomeEmail(user.email, user.name);
+
+  // Automatically sign in after verification
+  await signIn("credentials", { email: user.email, password: user.password });
+
+  return { success: true, message: "Email verified. You are now logged in." };
 }
 
 // Google Sign-In: Send Welcome Email If It's the First Time
@@ -55,12 +85,15 @@ export const handleGoogleUser = async () => {
       name: session.user.name,
       email: session.user.email,
       password: null, // No password for Google sign-in users
+      emailVerified: true, // Google users are automatically verified
     });
 
     try {
       await sendWelcomeEmail(existingUser.email, existingUser.name);
+      console.log(`✅ Welcome email sent to ${existingUser.email}`);
     } catch (error) {
-      console.error("Error sending welcome email:", error);
+      console.error("❌ Error sending welcome email:", error);
+      return { success: false, error: "Failed to send welcome email" };
     }
   }
 

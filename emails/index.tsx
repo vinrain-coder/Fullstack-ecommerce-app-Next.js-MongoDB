@@ -8,8 +8,28 @@ import { SENDER_EMAIL, SENDER_NAME } from "@/lib/constants";
 import { getSetting } from "@/lib/actions/setting.actions";
 import PasswordResetEmail from "./reset-password";
 import WelcomeEmail from "./welcome-email";
+import VerificationEmail from "./verification-email";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
+
+export const sendVerificationEmail = async (email: string, token: string) => {
+  const { site } = await getSetting();
+  const verificationLink = `${site.url}/verify-email?token=${token}`;
+
+  await resend.emails.send({
+    from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
+    to: email,
+    subject: "Verify Your Email",
+    react: (
+      <VerificationEmail
+        siteUrl={site.url}
+        verificationLink={verificationLink}
+      />
+    ),
+  });
+
+  console.log(`✅ Verification email sent to ${email}`);
+};
 
 export const sendPurchaseReceipt = async ({ order }: { order: IOrder }) => {
   await resend.emails.send({
