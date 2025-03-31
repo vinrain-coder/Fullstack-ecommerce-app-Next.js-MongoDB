@@ -11,12 +11,12 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getSetting } from "./setting.actions";
-import { sendVerificationEmail, sendWelcomeEmail } from "@/emails";
-import crypto from "crypto";
+import { sendWelcomeEmail } from "@/emails";
 
 // 📌 Register New User
 export async function registerUser(userSignUp: IUserSignUp) {
   try {
+<<<<<<< HEAD
     const user = await UserSignUpSchema.parseAsync(userSignUp);
     await connectToDatabase();
 
@@ -41,11 +41,31 @@ export async function registerUser(userSignUp: IUserSignUp) {
       success: true,
       message: "User registered. Check email to verify.",
     };
+=======
+    const user = await UserSignUpSchema.parseAsync({
+      name: userSignUp.name,
+      email: userSignUp.email,
+      password: userSignUp.password,
+      confirmPassword: userSignUp.confirmPassword,
+    });
+
+    await connectToDatabase();
+    const newUser = await User.create({
+      ...user,
+      password: await bcrypt.hash(user.password, 5),
+    });
+
+    // Send welcome email
+    await sendWelcomeEmail(newUser.email, newUser.name);
+
+    return { success: true, message: "User created successfully" };
+>>>>>>> parent of e5fb598 (Implement email verification)
   } catch (error) {
     return { success: false, error: "Registration failed. Please try again." };
   }
 }
 
+<<<<<<< HEAD
 // 📌 Verify Email
 export async function verifyEmail(token: string) {
   await connectToDatabase();
@@ -85,6 +105,9 @@ export async function verifyEmail(token: string) {
 }
 
 // 📌 Handle Google Sign-In
+=======
+// Google Sign-In: Send Welcome Email If It's the First Time
+>>>>>>> parent of e5fb598 (Implement email verification)
 export const handleGoogleUser = async () => {
   const session = await auth();
 
@@ -100,16 +123,18 @@ export const handleGoogleUser = async () => {
     existingUser = await User.create({
       name: session.user.name || "Google User", // Prevent undefined names
       email: session.user.email,
+<<<<<<< HEAD
       password: null, // Google users don't have a password
       emailVerified: true,
+=======
+      password: null, // No password for Google sign-in users
+>>>>>>> parent of e5fb598 (Implement email verification)
     });
 
     try {
       await sendWelcomeEmail(existingUser.email, existingUser.name);
-      console.log(`✅ Welcome email sent to ${existingUser.email}`);
     } catch (error) {
-      console.error("❌ Error sending welcome email:", error);
-      return { success: false, error: "Failed to send welcome email" };
+      console.error("Error sending welcome email:", error);
     }
   }
 
