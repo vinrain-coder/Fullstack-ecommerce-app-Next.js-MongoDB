@@ -18,7 +18,6 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import { IOrder } from "@/lib/db/models/order.model";
 import { getSetting } from "@/lib/actions/setting.actions";
-import SocialLinks from "./social-links";
 
 type OrderInformationProps = {
   order: IOrder;
@@ -181,9 +180,6 @@ export default async function AskReviewOrderItemsEmail({
                 </Link>
                 .
               </Text>
-
-              <SocialLinks />
-
               <Text className="text-gray-400 text-xs mt-4">
                 {site.name}. {site.copyright}
               </Text>

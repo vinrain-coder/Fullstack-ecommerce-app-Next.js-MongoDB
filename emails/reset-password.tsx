@@ -11,7 +11,6 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
-import SocialLinks from "./social-links";
 
 type PasswordResetEmailProps = {
   resetLink: string;
@@ -74,9 +73,6 @@ export default function PasswordResetEmail({
                 </Link>
                 .
               </Text>
-
-              <SocialLinks />
-
               <Text className="text-gray-400 text-xs mt-4">
                 {siteName} . {siteCopyright}
               </Text>
