@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -15,21 +15,13 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { IUserSignUp } from "@/types";
-import {
-  registerUser,
-  signInWithCredentials,
-} from "@/lib/actions/user.actions";
+import { registerUser } from "@/lib/actions/user.actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSignUpSchema } from "@/lib/validator";
 import { Separator } from "@/components/ui/separator";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { toast } from "sonner";
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import { useState } from "react";
->>>>>>> parent of b3cda32 (edit form)
 import { Loader2, MailCheck } from "lucide-react";
 
 const signUpDefaultValues = {
@@ -38,30 +30,6 @@ const signUpDefaultValues = {
   password: "",
   confirmPassword: "",
 };
-=======
-=======
->>>>>>> parent of e5fb598 (Implement email verification)
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
-
-const signUpDefaultValues =
-  process.env.NODE_ENV === "development"
-    ? {
-        name: "john doe",
-        email: "john@me.com",
-        password: "123456",
-        confirmPassword: "123456",
-      }
-    : {
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      };
-<<<<<<< HEAD
->>>>>>> parent of e5fb598 (Implement email verification)
-=======
->>>>>>> parent of e5fb598 (Implement email verification)
 
 export default function CredentialsSignUpForm() {
   const {
@@ -71,13 +39,14 @@ export default function CredentialsSignUpForm() {
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const form = useForm<IUserSignUp>({
     resolver: zodResolver(UserSignUpSchema),
     defaultValues: signUpDefaultValues,
   });
 
-  const { control, handleSubmit } = form;
+  const { control, handleSubmit, reset } = form;
 
   const onSubmit = async (data: IUserSignUp) => {
     try {
@@ -91,60 +60,46 @@ export default function CredentialsSignUpForm() {
         return;
       }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    if (res.success) {
-=======
->>>>>>> parent of b3cda32 (edit form)
       toast.success(
         "Account created successfully! Check your email to verify."
       );
       setEmailSent(true);
-<<<<<<< HEAD
-      reset();
-    } else {
-      toast.error(res.error || "Registration failed. Please try again.");
-=======
-=======
->>>>>>> parent of e5fb598 (Implement email verification)
-      toast.success("Account created successfully! Logging in...");
-
-      await signInWithCredentials({
-        email: data.email,
-        password: data.password,
-      });
-
-      redirect(callbackUrl);
-=======
       reset(); // Reset form fields
->>>>>>> parent of b3cda32 (edit form)
     } catch (error) {
       if (isRedirectError(error)) {
         throw error;
       }
       toast.error("Something went wrong. Please try again.");
-<<<<<<< HEAD
-      setLoading(false);
->>>>>>> parent of e5fb598 (Implement email verification)
-    }
-
-<<<<<<< HEAD
-    setLoading(false);
-=======
     } finally {
       setLoading(false);
     }
->>>>>>> parent of b3cda32 (edit form)
   };
 
-=======
->>>>>>> parent of e5fb598 (Implement email verification)
+  if (emailSent) {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-6 p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto">
+        <MailCheck className="w-16 h-16 text-green-500" />
+        <h2 className="text-xl font-bold text-center">
+          Check your email to verify your account
+        </h2>
+        <p className="text-gray-600 text-center">
+          We’ve sent a confirmation link to your email. Please check your inbox
+          and follow the instructions to complete your registration.
+        </p>
+        <Link href="/sign-in">
+          <Button className="w-full">Go to Sign In</Button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="hidden" name="callbackUrl" value={callbackUrl} />
-        <div className="space-y-6">
+    <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto">
+      <h2 className="text-2xl font-bold text-center mb-6">Create an Account</h2>
+      <Form {...form}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <input type="hidden" name="callbackUrl" value={callbackUrl} />
+
           <FormField
             control={control}
             name="name"
@@ -152,7 +107,11 @@ export default function CredentialsSignUpForm() {
               <FormItem className="w-full">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter name" {...field} />
+                  <Input
+                    placeholder="Enter your name"
+                    {...field}
+                    disabled={loading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -166,7 +125,11 @@ export default function CredentialsSignUpForm() {
               <FormItem className="w-full">
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter email address" {...field} />
+                  <Input
+                    placeholder="Enter your email"
+                    {...field}
+                    disabled={loading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -184,12 +147,14 @@ export default function CredentialsSignUpForm() {
                     type="password"
                     placeholder="Enter password"
                     {...field}
+                    disabled={loading}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={control}
             name="confirmPassword"
@@ -199,40 +164,58 @@ export default function CredentialsSignUpForm() {
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Confirm Password"
+                    placeholder="Confirm password"
                     {...field}
+                    disabled={loading}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
-                  Creating Account...
-                </>
-              ) : (
-                "Sign Up"
-              )}
-            </Button>
-          </div>
-          <div className="text-sm">
+
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                Creating Account...
+              </>
+            ) : (
+              "Sign Up"
+            )}
+          </Button>
+
+          <p className="text-sm text-center text-gray-600">
             By creating an account, you agree to {site.name}&apos;s{" "}
-            <Link href="/page/conditions-of-use">Conditions of Use</Link> and{" "}
-            <Link href="/page/privacy-policy"> Privacy Notice. </Link>
-          </div>
+            <Link
+              href="/page/conditions-of-use"
+              className="text-blue-500 hover:underline"
+            >
+              Conditions of Use
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/page/privacy-policy"
+              className="text-blue-500 hover:underline"
+            >
+              Privacy Notice
+            </Link>
+            .
+          </p>
+
           <Separator className="mb-4" />
-          <div className="text-sm">
+
+          <p className="text-sm text-center">
             Already have an account?{" "}
-            <Link className="link" href={`/sign-in?callbackUrl=${callbackUrl}`}>
+            <Link
+              className="text-blue-500 hover:underline"
+              href={`/sign-in?callbackUrl=${callbackUrl}`}
+            >
               Sign In
             </Link>
-          </div>
-        </div>
-      </form>
-    </Form>
+          </p>
+        </form>
+      </Form>
+    </div>
   );
 }

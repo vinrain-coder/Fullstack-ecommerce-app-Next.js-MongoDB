@@ -11,13 +11,13 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getSetting } from "./setting.actions";
-import { sendWelcomeEmail } from "@/emails";
+import { sendVerificationEmail, sendWelcomeEmail } from "@/emails";
+import crypto from "crypto";
 
 // CREATE
+
 export async function registerUser(userSignUp: IUserSignUp) {
   try {
-<<<<<<< HEAD
-<<<<<<< HEAD
     const user = await UserSignUpSchema.parseAsync(userSignUp);
 
     await connectToDatabase();
@@ -37,55 +37,12 @@ export async function registerUser(userSignUp: IUserSignUp) {
       success: true,
       message: "User registered. Check email to verify.",
     };
-=======
-    const user = await UserSignUpSchema.parseAsync({
-      name: userSignUp.name,
-      email: userSignUp.email,
-      password: userSignUp.password,
-      confirmPassword: userSignUp.confirmPassword,
-    });
-
-    await connectToDatabase();
-    const newUser = await User.create({
-      ...user,
-      password: await bcrypt.hash(user.password, 5),
-    });
-
-=======
-    const user = await UserSignUpSchema.parseAsync({
-      name: userSignUp.name,
-      email: userSignUp.email,
-      password: userSignUp.password,
-      confirmPassword: userSignUp.confirmPassword,
-    });
-
-    await connectToDatabase();
-    const newUser = await User.create({
-      ...user,
-      password: await bcrypt.hash(user.password, 5),
-    });
-
->>>>>>> parent of e5fb598 (Implement email verification)
-    // Send welcome email
-    await sendWelcomeEmail(newUser.email, newUser.name);
-
-    return { success: true, message: "User created successfully" };
-<<<<<<< HEAD
->>>>>>> parent of e5fb598 (Implement email verification)
-=======
->>>>>>> parent of e5fb598 (Implement email verification)
   } catch (error) {
     return { success: false, error: formatError(error) };
   }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-// 📌 Verify Email
-=======
 // verify email
->>>>>>> parent of b3cda32 (edit form)
 export async function verifyEmail(token: string) {
   await connectToDatabase();
   const user = await User.findOne({ verificationToken: token });
@@ -112,16 +69,7 @@ export async function verifyEmail(token: string) {
   return { success: true, message: "Email verified. You are now logged in." };
 }
 
-<<<<<<< HEAD
-// 📌 Handle Google Sign-In
-=======
-=======
->>>>>>> parent of e5fb598 (Implement email verification)
-// Google Sign-In: Send Welcome Email If It's the First Time
->>>>>>> parent of e5fb598 (Implement email verification)
-=======
-// Google Sign-In: Send Welcome Email If It's the First Time
->>>>>>> parent of b3cda32 (edit form)
+// gogle sign-in
 export const handleGoogleUser = async () => {
   const session = await auth();
 
@@ -137,26 +85,16 @@ export const handleGoogleUser = async () => {
     existingUser = await User.create({
       name: session.user.name,
       email: session.user.email,
-<<<<<<< HEAD
-<<<<<<< HEAD
-      password: null, // Google users don't have a password
-      emailVerified: true,
-=======
-      password: null, // No password for Google sign-in users
-<<<<<<< HEAD
->>>>>>> parent of e5fb598 (Implement email verification)
-=======
->>>>>>> parent of e5fb598 (Implement email verification)
-=======
       password: null, // No password for Google sign-in users
       emailVerified: true, // Google users are automatically verified
->>>>>>> parent of b3cda32 (edit form)
     });
 
     try {
       await sendWelcomeEmail(existingUser.email, existingUser.name);
+      console.log(`✅ Welcome email sent to ${existingUser.email}`);
     } catch (error) {
-      console.error("Error sending welcome email:", error);
+      console.error("❌ Error sending welcome email:", error);
+      return { success: false, error: "Failed to send welcome email" };
     }
   }
 

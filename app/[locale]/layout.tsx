@@ -1,44 +1,21 @@
-import {
-  Inter,
-  Lato,
-  Montserrat,
-  Open_Sans,
-  Playfair_Display,
-  Poppins,
-  Roboto,
-} from "next/font/google";
+import { Lora } from "next/font/google";
 import "../globals.css";
 import ClientProviders from "@/components/shared/client-providers";
 import { getDirection } from "@/i18n-config";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { notFound, usePathname } from "next/navigation";
+import { notFound } from "next/navigation";
 import { getSetting } from "@/lib/actions/setting.actions";
 import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SessionProvider } from "next-auth/react";
-import Header from "@/components/shared/header";
 import Footer from "@/components/shared/footer";
-import { Toaster } from "sonner";
-<<<<<<< HEAD
-<<<<<<< HEAD
-import ClientLayout from "@/components/shared/client-layout";
-=======
->>>>>>> parent of a2eb42a (Fix layout)
-=======
-import PathnameProvider from "@/components/shared/pathname-provider";
->>>>>>> parent of c0e5785 (Fix layout)
+import Header from "@/components/shared/header";
+// import ProductToast from "@/components/shared/product/product-toast";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
+const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 export async function generateMetadata() {
   const {
@@ -97,7 +74,9 @@ export default async function AppLayout({
   const currencyCookie = (await cookies()).get("currency");
   const currency = currencyCookie ? currencyCookie.value : "KES";
 
-  const { locale } = params;
+  const { locale } = await params;
+  // Ensure that the incoming `locale` is valid
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
@@ -110,46 +89,22 @@ export default async function AppLayout({
       suppressHydrationWarning
     >
       <body
-        className={`min-h-screen ${inter.className} antialiased leading-relaxed tracking-wide`}
+        className={`min-h-screen ${lora.className} antialiased leading-relaxed tracking-wide`}
       >
         <SessionProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ClientProviders setting={{ ...setting, currency }}>
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <ClientLayout>{children}</ClientLayout>
-=======
               <div className="flex flex-col min-h-screen">
                 <Header />
                 <main className="flex-1 flex flex-col">{children}</main>
                 <Footer />
               </div>
->>>>>>> parent of a2eb42a (Fix layout)
-=======
-              <PathnameProvider>
-                {(pathname) => {
-                  const isAdminPage = pathname.startsWith("/admin");
-                  const isAuthPage =
-                    pathname.startsWith("/sign-in") ||
-                    pathname.startsWith("/sign-up") ||
-                    pathname.startsWith("/reset-password");
-
-                  return (
-                    <div className="flex flex-col min-h-screen">
-                      {!isAdminPage && !isAuthPage && <Header />}
-                      <main className="flex-1 flex flex-col">{children}</main>
-                      {!isAdminPage && !isAuthPage && <Footer />}
-                    </div>
-                  );
-                }}
-              </PathnameProvider>
->>>>>>> parent of c0e5785 (Fix layout)
-              <Toaster duration={4000} richColors closeButton />
             </ClientProviders>
           </NextIntlClientProvider>
         </SessionProvider>
         <Analytics />
         <SpeedInsights />
+        {/* <ProductToast /> */}
       </body>
     </html>
   );

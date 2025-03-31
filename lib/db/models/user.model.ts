@@ -1,10 +1,14 @@
-import { IUserInput } from "@/types";
-import { Document, Model, model, models, Schema, Types } from "mongoose";
+import { Document, model, models, Schema, Types } from "mongoose";
 
-export interface IUser extends Document, IUserInput {
+export interface IUser extends Document {
   _id: Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  email: string;
+  name: string;
+  role: string;
+  password?: string;
+  image?: string;
+  emailVerified: boolean;
+  verificationToken?: string;
   wishlist: Types.ObjectId[];
 }
 
@@ -16,12 +20,11 @@ const userSchema = new Schema<IUser>(
     password: { type: String },
     image: { type: String },
     emailVerified: { type: Boolean, default: false },
+    verificationToken: { type: String },
     wishlist: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const User = (models.User as Model<IUser>) || model<IUser>("User", userSchema);
+const User = models.User || model<IUser>("User", userSchema);
 export default User;
