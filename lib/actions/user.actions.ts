@@ -14,34 +14,39 @@ import { getSetting } from "./setting.actions";
 import { sendVerificationEmail, sendWelcomeEmail } from "@/emails";
 import crypto from "crypto";
 
-// CREATE
+// 📌 Register New User
 export async function registerUser(userSignUp: IUserSignUp) {
   try {
     const user = await UserSignUpSchema.parseAsync(userSignUp);
-
     await connectToDatabase();
+
+    const existingUser = await User.findOne({ email: user.email });
+    if (existingUser) {
+      return { success: false, error: "Email is already registered." };
+    }
+
     const verificationToken = crypto.randomBytes(32).toString("hex");
+    const hashedPassword = await bcrypt.hash(user.password, 10);
 
     const newUser = await User.create({
       ...user,
-      password: await bcrypt.hash(user.password, 5),
+      password: hashedPassword,
       emailVerified: false,
       verificationToken,
-      verificationTokenExpires: Date.now() + 24 * 60 * 60 * 1000, // Expires in 24 hours
+      verificationTokenExpires: Date.now() + 24 * 60 * 60 * 1000, // 24 Hours Expiry
     });
 
     await sendVerificationEmail(newUser.email, newUser.verificationToken);
-
     return {
       success: true,
       message: "User registered. Check email to verify.",
     };
   } catch (error) {
-    return { success: false, error: formatError(error) };
+    return { success: false, error: "Registration failed. Please try again." };
   }
 }
 
-// verify email
+// 📌 Verify Email
 export async function verifyEmail(token: string) {
   await connectToDatabase();
   const user = await User.findOne({ verificationToken: token });
@@ -59,16 +64,27 @@ export async function verifyEmail(token: string) {
   user.verificationTokenExpires = undefined;
   await user.save();
 
-  // Send welcome email
+  // Send Welcome Email
   await sendWelcomeEmail(user.email, user.name);
 
-  // Automatically sign in after verification
-  await signIn("credentials", { email: user.email, password: user.password });
+  // Auto Sign-In After Verification
+  const signInResponse = await signIn("credentials", {
+    email: user.email,
+    password: user.password,
+    redirect: false, // Prevent auto-redirect issues
+  });
+
+  if (!signInResponse.ok) {
+    return {
+      success: false,
+      message: "Verification successful, but auto-login failed.",
+    };
+  }
 
   return { success: true, message: "Email verified. You are now logged in." };
 }
 
-// Google Sign-In: Send Welcome Email If It's the First Time
+// 📌 Handle Google Sign-In
 export const handleGoogleUser = async () => {
   const session = await auth();
 
@@ -82,10 +98,10 @@ export const handleGoogleUser = async () => {
 
   if (!existingUser) {
     existingUser = await User.create({
-      name: session.user.name,
+      name: session.user.name || "Google User", // Prevent undefined names
       email: session.user.email,
-      password: null, // No password for Google sign-in users
-      emailVerified: true, // Google users are automatically verified
+      password: null, // Google users don't have a password
+      emailVerified: true,
     });
 
     try {
@@ -100,7 +116,7 @@ export const handleGoogleUser = async () => {
   return { success: true };
 };
 
-// DELETE
+// 📌 Delete User
 export async function deleteUser(id: string) {
   try {
     await connectToDatabase();
@@ -113,17 +129,20 @@ export async function deleteUser(id: string) {
   }
 }
 
-// UPDATE
+// 📌 Update User
 export async function updateUser(user: z.infer<typeof UserUpdateSchema>) {
   try {
     await connectToDatabase();
     const dbUser = await User.findById(user._id);
     if (!dbUser) throw new Error("User not found");
+
     dbUser.name = user.name;
     dbUser.email = user.email;
     dbUser.role = user.role;
+
     const updatedUser = await dbUser.save();
     revalidatePath("/admin/users");
+
     return {
       success: true,
       message: "User updated successfully",
@@ -134,14 +153,17 @@ export async function updateUser(user: z.infer<typeof UserUpdateSchema>) {
   }
 }
 
+// 📌 Update User Name
 export async function updateUserName(user: IUserName) {
   try {
     await connectToDatabase();
     const session = await auth();
     const currentUser = await User.findById(session?.user?.id);
     if (!currentUser) throw new Error("User not found");
+
     currentUser.name = user.name;
     const updatedUser = await currentUser.save();
+
     return {
       success: true,
       message: "User updated successfully",
@@ -152,28 +174,41 @@ export async function updateUserName(user: IUserName) {
   }
 }
 
+// 📌 Sign-In With Credentials
 export async function signInWithCredentials(user: IUserSignIn) {
-  return await signIn("credentials", { ...user, redirect: false });
+  try {
+    const response = await signIn("credentials", { ...user, redirect: false });
+    if (!response.ok) throw new Error("Invalid email or password.");
+    return response;
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
 }
 
+// 📌 Sign Out
 export const SignOut = async () => {
-  const redirectTo = await signOut({ redirect: false });
-  redirect(redirectTo.redirect);
+  try {
+    const redirectTo = await signOut({ redirect: false });
+    redirect(redirectTo.redirect);
+  } catch (error) {
+    console.error("❌ Error signing out:", error);
+    return { success: false, message: "Failed to sign out." };
+  }
 };
 
-// GET
+// 📌 Get All Users (Paginated)
 export async function getAllUsers({
   limit,
   page,
 }: {
   limit?: number;
   page: number;
-  search?: string;
 }) {
   const {
     common: { pageSize },
   } = await getSetting();
   limit = limit || pageSize;
+
   await connectToDatabase();
 
   const skipAmount = (Number(page) - 1) * limit;
@@ -182,12 +217,14 @@ export async function getAllUsers({
     .skip(skipAmount)
     .limit(limit);
   const usersCount = await User.countDocuments();
+
   return {
     data: JSON.parse(JSON.stringify(users)) as IUser[],
     totalPages: Math.ceil(usersCount / limit),
   };
 }
 
+// 📌 Get User By ID
 export async function getUserById(userId: string) {
   await connectToDatabase();
   const user = await User.findById(userId);

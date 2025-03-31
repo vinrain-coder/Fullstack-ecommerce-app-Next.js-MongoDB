@@ -1,6 +1,7 @@
 "use client";
 
-import { redirect, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -19,9 +20,7 @@ import { registerUser } from "@/lib/actions/user.actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSignUpSchema } from "@/lib/validator";
 import { Separator } from "@/components/ui/separator";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { toast } from "sonner";
-import { useState } from "react";
 import { Loader2, MailCheck } from "lucide-react";
 
 const signUpDefaultValues = {
@@ -49,30 +48,20 @@ export default function CredentialsSignUpForm() {
   const { control, handleSubmit, reset } = form;
 
   const onSubmit = async (data: IUserSignUp) => {
-    try {
-      setLoading(true);
+    setLoading(true);
+    const res = await registerUser(data);
 
-      const res = await registerUser(data);
-
-      if (!res.success) {
-        toast.error(res.error || "Registration failed. Please try again.");
-        setLoading(false);
-        return;
-      }
-
+    if (res.success) {
       toast.success(
         "Account created successfully! Check your email to verify."
       );
       setEmailSent(true);
-      reset(); // Reset form fields
-    } catch (error) {
-      if (isRedirectError(error)) {
-        throw error;
-      }
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      reset();
+    } else {
+      toast.error(res.error || "Registration failed. Please try again.");
     }
+
+    setLoading(false);
   };
 
   if (emailSent) {
