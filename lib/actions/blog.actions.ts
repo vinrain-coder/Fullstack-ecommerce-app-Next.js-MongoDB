@@ -6,6 +6,7 @@ import { z } from "zod";
 import { connectToDatabase } from "../db";
 import Blog, { IBlog } from "../db/models/blog.model";
 import { BlogInputSchema, BlogUpdateSchema } from "../validator";
+import { notFound } from "next/navigation";
 
 // 🔹 CREATE BLOG
 export async function createBlog(data: z.infer<typeof BlogInputSchema>) {
@@ -88,7 +89,7 @@ export async function getAllBlogs({
 
 export async function getBlogBySlug(slug: string): Promise<IBlog | null> {
   const blog = await Blog.findOne({ slug }).lean();
-  if (!blog) return null;
+  if (!blog) return notFound();
 
   return {
     ...blog,

@@ -14,6 +14,7 @@ import Product from "../db/models/product.model";
 import User from "../db/models/user.model";
 import mongoose from "mongoose";
 import { getSetting } from "./setting.actions";
+import { notFound } from "next/navigation";
 
 // CREATE
 export const createOrder = async (clientSideCart: Cart) => {
@@ -68,7 +69,7 @@ export async function updateOrderToPaid(orderId: string) {
     const order = await Order.findById(orderId).populate<{
       user: { email: string; name: string };
     }>("user", "name email");
-    if (!order) throw new Error("Order not found");
+    if (!order) return notFound();
     if (order.isPaid) throw new Error("Order is already paid");
     order.isPaid = true;
     order.paidAt = new Date();
@@ -94,11 +95,11 @@ const updateProductStock = async (orderId: string) => {
       { isPaid: true, paidAt: new Date() },
       opts
     );
-    if (!order) throw new Error("Order not found");
+    if (!order) return notFound();
 
     for (const item of order.items) {
       const product = await Product.findById(item.product).session(session);
-      if (!product) throw new Error("Product not found");
+      if (!product) return notFound();
 
       product.countInStock -= item.quantity;
       await Product.updateOne(
@@ -122,7 +123,7 @@ export async function deliverOrder(orderId: string) {
     const order = await Order.findById(orderId).populate<{
       user: { email: string; name: string };
     }>("user", "name email");
-    if (!order) throw new Error("Order not found");
+    if (!order) return notFound();
     if (!order.isPaid) throw new Error("Order is not paid");
     order.isDelivered = true;
     order.deliveredAt = new Date();

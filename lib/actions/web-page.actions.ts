@@ -8,6 +8,7 @@ import { formatError } from "@/lib/utils";
 
 import { WebPageInputSchema, WebPageUpdateSchema } from "../validator";
 import { z } from "zod";
+import { notFound } from "next/navigation";
 
 // CREATE
 export async function createWebPage(data: z.infer<typeof WebPageInputSchema>) {
@@ -72,6 +73,6 @@ export async function getWebPageById(webPageId: string) {
 export async function getWebPageBySlug(slug: string) {
   await connectToDatabase();
   const webPage = await WebPage.findOne({ slug, isPublished: true });
-  if (!webPage) throw new Error("WebPage not found");
+  if (!webPage) return notFound();
   return JSON.parse(JSON.stringify(webPage)) as IWebPage;
 }

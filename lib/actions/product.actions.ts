@@ -10,6 +10,7 @@ import { z } from "zod";
 import { getSetting } from "./setting.actions";
 import mongoose from "mongoose";
 import { UTApi } from "uploadthing/server";
+import { notFound } from "next/navigation";
 
 const utapi = new UTApi(); // Initialize UTApi instance
 
@@ -225,7 +226,7 @@ export async function getProductsByTag({
 export async function getProductBySlug(slug: string) {
   await connectToDatabase();
   const product = await Product.findOne({ slug, isPublished: true });
-  if (!product) throw new Error("Product not found");
+  if (!product) return notFound();
   return JSON.parse(JSON.stringify(product)) as IProduct;
 }
 // GET RELATED PRODUCTS: PRODUCTS WITH SAME CATEGORY

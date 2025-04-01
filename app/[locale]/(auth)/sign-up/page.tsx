@@ -32,7 +32,7 @@ export default async function SignUpPage(props: {
   }
 
   return (
-    <div className="w-full mt-24">
+    <div className="w-full">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Create account</CardTitle>
