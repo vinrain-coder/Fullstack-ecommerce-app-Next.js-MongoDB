@@ -7,7 +7,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex flex-col p-4">
+    <main className="flex flex-col">
       <Header />
       {children}
       <Footer />
