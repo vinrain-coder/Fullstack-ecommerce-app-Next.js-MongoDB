@@ -31,13 +31,24 @@ export default function VerifyEmailPage() {
         const email = searchParams.get("email");
 
         if (email) {
-          await signIn("credentials", { email, redirect: false });
-        }
+          const signInResult = await signIn("credentials", {
+            email,
+            redirect: false,
+          });
 
-        setTimeout(() => {
-          const callbackUrl = searchParams.get("callbackUrl") || "/";
-          router.replace(callbackUrl);
-        }, 2000);
+          if (signInResult?.error) {
+            setStatus({
+              message: "Sign-in failed. Please try again.",
+              success: false,
+            });
+          } else {
+            // If sign-in is successful, redirect to the desired page
+            setTimeout(() => {
+              const callbackUrl = searchParams.get("callbackUrl") || "/";
+              router.replace(callbackUrl);
+            }, 2000);
+          }
+        }
       }
     }
 
@@ -45,8 +56,8 @@ export default function VerifyEmailPage() {
   }, [token, router, searchParams]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="max-w-md bg-white p-6 rounded-lg shadow-lg text-center">
+    <div className="flex items-center justify-center">
+      <div className="max-w-md p-6 rounded-lg shadow-lg text-center">
         <h1
           className={`text-xl font-bold ${status.success ? "text-green-600" : "text-red-600"}`}
         >

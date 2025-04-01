@@ -1,11 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import NextAuth from "next-auth";
+import { ObjectId } from "mongoose";
 
 declare module "next-auth" {
   interface User {
     id: string;
     role: string;
-    wishlist: string[]; // Add wishlist property
+    wishlist: string[];
   }
 
   interface Session {
