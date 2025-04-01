@@ -12,7 +12,7 @@ export default function SocialLinks() {
       <p className="flex justify-center gap-3 mt-2">
         <Link href={instagramUrl} target="_blank">
           <Img
-            src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/instagram.svg"
+            src="https://img.icons8.com/?size=100&id=Xy10Jcu1L2Su&format=png&color=000000"
             alt="Instagram"
             width="24"
             height="24"
@@ -21,7 +21,7 @@ export default function SocialLinks() {
         </Link>
         <Link href={tiktokUrl} target="_blank">
           <Img
-            src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/tiktok.svg"
+            src="https://img.icons8.com/?size=100&id=118640&format=png&color=000000"
             alt="TikTok"
             width="24"
             height="24"
@@ -30,7 +30,7 @@ export default function SocialLinks() {
         </Link>
         <Link href={facebookUrl} target="_blank">
           <Img
-            src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/facebook.svg"
+            src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"
             alt="Facebook"
             width="24"
             height="24"
@@ -39,7 +39,7 @@ export default function SocialLinks() {
         </Link>
         <Link href={twitterUrl} target="_blank">
           <Img
-            src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/x.svg"
+            src="https://img.icons8.com/?size=100&id=phOKFKYpe00C&format=png&color=000000"
             alt="X/Twitter"
             width="24"
             height="24"

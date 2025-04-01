@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { verifyEmail } from "@/lib/actions/user.actions";
+import { signIn } from "next-auth/react";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
@@ -27,15 +28,21 @@ export default function VerifyEmailPage() {
       setStatus(result);
 
       if (result.success) {
+        const email = searchParams.get("email");
+
+        if (email) {
+          await signIn("credentials", { email, redirect: false });
+        }
+
         setTimeout(() => {
           const callbackUrl = searchParams.get("callbackUrl") || "/";
           router.replace(callbackUrl);
-        }, 2000); // Redirect after 2 seconds
+        }, 2000);
       }
     }
 
     verify();
-  }, [token, router, searchParams]); // ✅ Fix: Include searchParams in dependencies
+  }, [token, router, searchParams]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

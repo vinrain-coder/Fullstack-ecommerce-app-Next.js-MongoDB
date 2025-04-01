@@ -63,21 +63,7 @@ export async function verifyEmail(token: string) {
   // Send welcome email
   await sendWelcomeEmail(user.email, user.name);
 
-  // Automatically sign in user by setting session cookies
-  const loginResult = await signIn("credentials", {
-    email: user.email,
-    password: user.password,
-    redirect: false, // Important: Prevents unwanted redirect
-  });
-
-  if (loginResult?.error) {
-    return {
-      success: false,
-      message: "Verification successful, but auto-login failed.",
-    };
-  }
-
-  return { success: true, message: "Email verified! You are now logged in." };
+  return { success: true, message: "Email verified! Please wait..." };
 }
 
 // gogle sign-in

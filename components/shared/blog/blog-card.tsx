@@ -40,8 +40,9 @@ export default function BlogCard({
           <Image
             src={firstImageUrl || "/images/not-found.png"}
             alt={blog.title}
-            layout="fill"
-            objectFit="cover"
+            width={640} // You can define width and height
+            height={224} // Adjust these values based on your design
+            style={{ objectFit: "cover" }} // Using style for objectFit
             className="group-hover:scale-105 transition-transform duration-300"
           />
         </div>
