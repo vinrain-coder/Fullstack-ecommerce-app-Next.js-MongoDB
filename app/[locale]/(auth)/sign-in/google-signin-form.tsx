@@ -20,19 +20,13 @@ export function GoogleSignInForm() {
     <Button
       onClick={handleGoogleSignIn}
       disabled={loading}
-      className="w-full flex items-center gap-2"
+      className="w-full flex items-center gap-2 text-lg rounded-xl px-2 py-6 font-semibold"
       variant="outline"
     >
       {loading ? (
         <Loader2 className="animate-spin w-5 h-5" />
       ) : (
-        <Image
-          src={Google}
-          alt="Google Logo"
-          width={24}
-          height={24}
-          unoptimized
-        />
+        <Image src={Google} alt="Google Logo" width={32} height={32} />
       )}
       {loading ? "Redirecting to Google..." : "Sign in with Google"}
     </Button>

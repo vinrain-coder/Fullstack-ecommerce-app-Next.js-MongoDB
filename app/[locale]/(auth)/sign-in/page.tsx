@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
@@ -9,6 +8,11 @@ import { GoogleSignInForm } from "./google-signin-form";
 import { Button } from "@/components/ui/button";
 import { getSetting } from "@/lib/actions/setting.actions";
 import ForgotPasswordDialog from "@/components/shared/forgot-password-dialog";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign In",
+};
 
 export default async function SignInPage(props: {
   searchParams: Promise<{ callbackUrl: string }>;
@@ -23,22 +27,22 @@ export default async function SignInPage(props: {
   }
 
   return (
-    <div className="w-full">
-      <Card>
+    <div className="w-full mt-24">
+      <Card className="shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign In</CardTitle>
+          <CardTitle className="text-2xl text-center">Sign In</CardTitle>
         </CardHeader>
         <CardContent>
-          <div>
-            <CredentialsSignInForm />
-            <SeparatorWithOr />
-            <div className="mt-4">
-              <GoogleSignInForm />
-            </div>
-            <div className="mt-4 text-center">
-              <ForgotPasswordDialog />
-            </div>
+          {/* <div> */}
+          {/* <CredentialsSignInForm /> */}
+          {/* <SeparatorWithOr /> */}
+          <div className="mt-4">
+            <GoogleSignInForm />
           </div>
+          {/* <div className="mt-4 text-center">
+              <ForgotPasswordDialog />
+            </div> */}
+          {/* </div> */}
         </CardContent>
       </Card>
 
