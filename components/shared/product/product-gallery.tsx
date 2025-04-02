@@ -23,7 +23,7 @@ export default function ProductGallery({
     if (colorIndex !== -1) {
       setSelectedImage(colorIndex);
     }
-  }, [selectedColor, colors]); // ✅ Added 'colors' to the dependency array
+  }, [selectedColor, colors]);
 
   return (
     <div className="flex gap-2">
@@ -44,7 +44,6 @@ export default function ProductGallery({
               alt="product image"
               width={48}
               height={48}
-              quality={75}
             />
           </button>
         ))}
