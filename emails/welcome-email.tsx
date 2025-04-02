@@ -89,7 +89,15 @@ export default async function WelcomeEmail({ name }: WelcomeEmailProps) {
                 </Link>
                 .
               </Text>
-              <SocialLinks />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "10px",
+                }}
+              >
+                <SocialLinks />
+              </div>
               <Text className="text-gray-400 text-xs mt-4">
                 {site.name} | {site.copyright}
               </Text>

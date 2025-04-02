@@ -127,7 +127,15 @@ export default function StockSubscriptionNotificationEmail({
                 </Link>
                 .
               </Text>
-              <SocialLinks />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "10px",
+                }}
+              >
+                <SocialLinks />
+              </div>
               <Text className="text-gray-400 text-xs mt-4">
                 {siteName} . {siteCopyright}
               </Text>
