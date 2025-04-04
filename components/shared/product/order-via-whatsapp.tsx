@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+import WhatsApp from "@/public/icons/whatsapp.png";
+import Image from "next/image";
 
 interface OrderViaWhatsAppProps {
   productName: string;
@@ -58,7 +59,7 @@ Link: ${pageUrl}`
       className="bg-green-500 hover:bg-green-600 text-white rounded-full w-full"
     >
       <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-        <MessageCircle className="w-6 h-6" />
+        <Image src={WhatsApp} alt="WhatsApp" width={22} height={22} />
         Order via WhatsApp
       </a>
     </Button>

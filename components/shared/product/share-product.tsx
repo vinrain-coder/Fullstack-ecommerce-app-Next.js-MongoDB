@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Clipboard, ClipboardCheck, MessageCircle, Share2 } from "lucide-react";
+import { Clipboard, ClipboardCheck, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import WhatsApp from "@/public/icons/whatsapp.png";
+import Image from "next/image";
 
 function ShareProduct({ slug, name }: { slug: string; name: string }) {
   const [copied, setCopied] = useState(false);
@@ -56,9 +58,9 @@ function ShareProduct({ slug, name }: { slug: string; name: string }) {
         href={`https://api.whatsapp.com/send?text=Check out this product: ${encodeURIComponent(name)} ${encodeURIComponent(productUrl)}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-md flex items-center"
+        className="bg-green-500 hover:bg-green-600 text-white px-2 py-0 rounded-md flex items-center"
       >
-        <MessageCircle size={20} />
+        <Image src={WhatsApp} alt="WhatsApp" width={24} height={24} />
       </a>
     </div>
   );

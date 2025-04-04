@@ -5,13 +5,14 @@ import {
   Clipboard,
   ClipboardCheck,
   Facebook,
-  MessageCircle,
   Share2,
   Twitter,
   Linkedin,
   Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import WhatsApp from "@/public/icons/whatsapp.png";
+import Image from "next/image";
 
 function ShareBlog({ slug, title }: { slug: string; title: string }) {
   const [copied, setCopied] = useState(false);
@@ -92,7 +93,7 @@ function ShareBlog({ slug, title }: { slug: string; title: string }) {
             rel="noopener noreferrer"
             className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-md flex items-center"
           >
-            <MessageCircle size={20} />
+            <Image src={WhatsApp} alt="WhatsApp" width={24} height={24} />
           </a>
 
           <a

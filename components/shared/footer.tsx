@@ -5,7 +5,6 @@ import {
   Facebook,
   Instagram,
   Mail,
-  MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,6 +17,7 @@ import { usePathname, useRouter } from "@/i18n/routing";
 import { i18n } from "@/i18n-config";
 import XIcon from "@/public/icons/x.png";
 import Tiktok from "@/public/icons/tiktok.png";
+import WhatsApp from "@/public/icons/whatsapp.png";
 
 export default function Footer() {
   const router = useRouter();
@@ -206,7 +206,12 @@ export default function Footer() {
               target="_blank"
               className="hover:text-gray-300 flex items-center gap-1"
             >
-              <MessageCircle size={20} className="text-green-500" />
+              <Image
+                src={WhatsApp}
+                alt="WhatsApp"
+                width={24}
+                height={24}
+              />
               Ask on WhatsApp
             </Link>
           </div>
