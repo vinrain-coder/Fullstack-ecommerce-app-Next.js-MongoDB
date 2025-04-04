@@ -1,4 +1,4 @@
-import { Img, Link } from "@react-email/components";
+import { Img, Link, Section, Text } from "@react-email/components";
 
 export default function SocialLinks() {
   const twitterUrl = process.env.NEXT_PUBLIC_TWITTER_URL || "#";
@@ -7,46 +7,51 @@ export default function SocialLinks() {
   const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL || "#";
 
   return (
-    <div className="text-gray-500 text-md mt-4 text-center">
-      <p className="font-semibold">Follow us for the latest drops & deals:</p>
-      <p className="flex justify-center gap-4 mt-2">
+    <Section className="text-center mt-4">
+      <Text className="font-semibold text-gray-500 text-md">
+        Follow us for the latest drops & deals:
+      </Text>
+      <Section
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "16px", // Increased gap for better spacing
+          marginTop: "10px",
+        }}
+      >
         <Link href={instagramUrl} target="_blank">
           <Img
             src="https://img.icons8.com/?size=100&id=Xy10Jcu1L2Su&format=png&color=000000"
             alt="Instagram"
-            width="24"
-            height="24"
-            style={{ display: "inline-block", verticalAlign: "middle" }}
+            width="32"
+            height="32"
           />
         </Link>
         <Link href={tiktokUrl} target="_blank">
           <Img
             src="https://img.icons8.com/?size=100&id=118640&format=png&color=000000"
             alt="TikTok"
-            width="24"
-            height="24"
-            style={{ display: "inline-block", verticalAlign: "middle" }}
+            width="32"
+            height="32"
           />
         </Link>
         <Link href={facebookUrl} target="_blank">
           <Img
             src="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"
             alt="Facebook"
-            width="24"
-            height="24"
-            style={{ display: "inline-block", verticalAlign: "middle" }}
+            width="32"
+            height="32"
           />
         </Link>
         <Link href={twitterUrl} target="_blank">
           <Img
             src="https://img.icons8.com/?size=100&id=phOKFKYpe00C&format=png&color=000000"
             alt="X/Twitter"
-            width="24"
-            height="24"
-            style={{ display: "inline-block", verticalAlign: "middle" }}
+            width="32"
+            height="32"
           />
         </Link>
-      </p>
-    </div>
+      </Section>
+    </Section>
   );
 }
