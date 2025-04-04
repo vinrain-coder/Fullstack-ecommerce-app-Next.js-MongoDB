@@ -7,9 +7,9 @@ export default function SocialLinks() {
   const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL || "#";
 
   return (
-    <div className="text-gray-500 text-sm mt-4 text-center">
+    <div className="text-gray-500 text-md mt-4 text-center">
       <p className="font-semibold">Follow us for the latest drops & deals:</p>
-      <p className="flex justify-center gap-3 mt-2">
+      <p className="flex justify-center gap-4 mt-2">
         <Link href={instagramUrl} target="_blank">
           <Img
             src="https://img.icons8.com/?size=100&id=Xy10Jcu1L2Su&format=png&color=000000"

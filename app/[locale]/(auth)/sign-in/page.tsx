@@ -3,11 +3,11 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import SeparatorWithOr from "@/components/shared/separator-or";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CredentialsSignInForm from "./credentials-signin-form";
+// import CredentialsSignInForm from "./credentials-signin-form";
 import { GoogleSignInForm } from "./google-signin-form";
 import { Button } from "@/components/ui/button";
 import { getSetting } from "@/lib/actions/setting.actions";
-import ForgotPasswordDialog from "@/components/shared/forgot-password-dialog";
+// import ForgotPasswordDialog from "@/components/shared/forgot-password-dialog";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

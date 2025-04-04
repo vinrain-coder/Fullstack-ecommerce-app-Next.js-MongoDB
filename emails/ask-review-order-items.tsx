@@ -182,15 +182,9 @@ export default async function AskReviewOrderItemsEmail({
                 .
               </Text>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "10px",
-                }}
-              >
+              <Section className="text-center mt-4">
                 <SocialLinks />
-              </div>
+              </Section>
 
               <Text className="text-gray-400 text-xs mt-4">
                 {site.name}. {site.copyright}

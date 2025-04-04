@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import SignUpForm from "./signup-form";
+// import SignUpForm from "./signup-form";
 import { GoogleSignInForm } from "../sign-in/google-signin-form";
 import SeparatorWithOr from "@/components/shared/separator-or";
 import Link from "next/link";
